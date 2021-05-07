@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bottomSheetDialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_above="@id/textOne"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_top_card">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_logo_round"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Выбор должности"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textOne"
+        android:textColor="@color/black"
+        android:layout_above="@id/textTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:fontFamily="@font/montserrat_semi_bold"
+        android:text="Выбор должности"
+        android:layout_centerHorizontal="true"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textTwo"
+        android:textColor="@color/black"
+        android:layout_above="@id/textThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/montserrat_extra_light"
+        android:textSize="16sp"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:text="Выбор должности влияет на функционал, который будет доступен в приложении." />
+
+    <TextView
+        android:id="@+id/textThree"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/montserrat_extra_light"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:text="Вы можете сметь ее в любой момент."
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/cook"
+        style="@style/buttonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/waiter"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/bg_button_round"
+        android:text="Я повар" />
+
+    <Button
+        android:id="@+id/waiter"
+        android:layout_above="@id/administrator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/buttonStyle"
+        android:background="@drawable/bg_button_round"
+        android:layout_marginBottom="24dp"
+        android:text="Я официант" />
+
+    <Button
+        android:id="@+id/administrator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/buttonStyle"
+        android:background="@drawable/bg_button_round"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="36dp"
+        android:text="Я руководитель" />
+
+</RelativeLayout>
