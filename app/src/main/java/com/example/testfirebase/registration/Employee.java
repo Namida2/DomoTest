@@ -7,6 +7,8 @@ public class Employee {
     private String password;
     private String post;
 
+    public static Employee employee = new Employee();
+
     public void setName(String name) {
         this.name = name;
     }
@@ -34,4 +36,14 @@ public class Employee {
     public boolean anyFieldIsEmpty(){
         return name.isEmpty() || email.isEmpty() || password.isEmpty();
     }
+
+    public void setPost(String post) {
+        this.post = post;
+    }
+
+    public String getPost() {
+        return post;
+    }
 }
+
+
