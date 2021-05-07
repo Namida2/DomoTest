@@ -39,7 +39,7 @@ public class PostActivity extends Activity {
    private void registration (String post) {
         employee.setPost(post);
         db.runTransaction(transaction -> {
-            return transaction.get()
+            return transaction.get();
         });
    }
 }
