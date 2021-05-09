@@ -2,6 +2,7 @@ package com.example.testfirebase.registration;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -50,26 +51,23 @@ public class PostActivity extends Activity {
 
     private void registration (String post) {
         employee.setPost(post);
-        DocumentReference document = collectionReferenceEmployee.document(employee.getEmail());
-        db.runTransaction(transaction -> {
-            firebaseAuth.createUserWithEmailAndPassword(employee.getEmail(), employee.getPassword());
-            firebaseAuth.signInWithEmailAndPassword(employee.getEmail(), employee.getPassword()).addOnCompleteListener(task -> {
-                if(task.isSuccessful()){
-                    Log.d(TAG, "SUCCESS");
-                }
-                else Log.d(TAG, task.getException().toString());
-            });;
-            if( firebaseAuth.getCurrentUser() != null )
-                Log.d(TAG, firebaseAuth.getCurrentUser().toString());
-            else Log.d(TAG, "ERROR");
-
-            document.set(employee);
-            return true;
-        }).addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-
+        DocumentReference documentEmployee = collectionReferenceEmployee.document(employee.getEmail());
+        firebaseAuth.createUserWithEmailAndPassword(employee.getEmail(), employee.getPassword()).addOnCompleteListener(task -> {
+            if( task.isSuccessful() ){
+                Log.d(TAG, "The employee was registered.");
+                documentEmployee.set(employee).addOnCompleteListener(taskDocument -> {
+                    if(taskDocument.isSuccessful()){
+                        Log.d(TAG, "The employee was created.");
+                    }
+                    else {
+                        Log.d(TAG, task.getException().toString());
+                    }
+                });
             }
-            else Log.d(TAG, task.getException().toString());
+            else {
+                 Log.d(TAG, task.getException().toString());
+            }
         });
     }
 }
+

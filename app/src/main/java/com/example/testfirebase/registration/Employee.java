@@ -1,11 +1,14 @@
 package com.example.testfirebase.registration;
 
+import android.app.Activity;
+
 public class Employee {
 
     private String name;
     private String email;
     private String password;
     private String post;
+    public Activity a;
 
     public static Employee employee = new Employee();
 
