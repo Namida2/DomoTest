@@ -1,4 +1,4 @@
-package com.example.testfirebase.tools;
+package tools;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

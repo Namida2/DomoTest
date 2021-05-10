@@ -8,7 +8,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 
-import com.example.testfirebase.registration.LoginActivity;
+import registration.LogInActivity;
 
 public class HelloActivity extends Activity {
 
@@ -19,7 +19,7 @@ public class HelloActivity extends Activity {
         setContentView(R.layout.activity_hello);
 
         new Handler().postDelayed(() -> {
-            Intent mainIntent = new Intent(HelloActivity.this, LoginActivity.class);
+            Intent mainIntent = new Intent(HelloActivity.this, LogInActivity.class);
             HelloActivity.this.startActivity(mainIntent);
             HelloActivity.this.finish();
         }, 1600);

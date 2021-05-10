@@ -18,7 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-import static com.example.testfirebase.registration.LoginActivity.TAG;
+import static registration.LogInActivity.TAG;
 
 public class MyService extends Service {
 

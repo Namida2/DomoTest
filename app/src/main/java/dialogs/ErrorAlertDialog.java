@@ -1,4 +1,4 @@
-package com.example.testfirebase.tools;
+package dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.testfirebase.R;
 
@@ -23,6 +22,8 @@ public class ErrorAlertDialog extends DialogFragment {
     public static final int PASSWORD_CONFIRM_ERROR = 2;
     public static final int INTERNET_CONNECTION = 3;
     public static final int EMAIL_ALREADY_EXIST = 4;
+    public static final int WRONG_EMAIL_OR_PASSWORD = 5;
+    public static final int EMPTY_FIELD = 6;
 
     private static AtomicBoolean isExist = new AtomicBoolean(false);
     private static int dialogType;
@@ -67,6 +68,14 @@ public class ErrorAlertDialog extends DialogFragment {
             case EMAIL_ALREADY_EXIST:
                 title.setText(R.string.error_alert_dialog_email_already_exist_title);
                 text.setText(R.string.error_alert_dialog_email_already_exist_text);
+                break;
+            case WRONG_EMAIL_OR_PASSWORD:
+                title.setText(R.string.error_alert_dialog_wrong_email_or_password_title);
+                text.setText(R.string.error_alert_dialog_wrong_email_or_password_text);
+                break;
+            case EMPTY_FIELD:
+                title.setText(R.string.error_alert_dialog_empty_field_title);
+                text.setText(R.string.error_alert_dialog_empty_field_text);
                 break;
         }
         builder.setView(view);

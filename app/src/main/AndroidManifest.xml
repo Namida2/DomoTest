@@ -21,9 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".registration.LoginActivity" />
-        <activity android:name=".registration.PostActivity" />
-        <activity android:name=".registration.RegistrationActivity" />
+
+        <activity android:name=".MainActivity"/>
+        <activity android:name="registration.LogInActivity" />
+        <activity android:name="registration.PostActivity" />
+        <activity android:name="registration.RegistrationActivity" />
 
         <service
             android:name=".MyService"

@@ -1,29 +1,20 @@
-package com.example.testfirebase.registration;
+package registration;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.view.WindowManager;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.testfirebase.R;
-import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Transaction;
 import com.jakewharton.rxbinding4.view.RxView;
 
-import org.jetbrains.annotations.NotNull;
-
-import static com.example.testfirebase.registration.Employee.employee;
-import static com.example.testfirebase.registration.LoginActivity.TAG;
+import static registration.LogInActivity.TAG;
 
 public class PostActivity extends Activity {
 

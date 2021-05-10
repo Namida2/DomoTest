@@ -12,8 +12,12 @@
     <string name="error_alert_dialog_internet_connection_title">Соединение с сетью</string>
     <string name="error_alert_dialog_internet_connection_text">Пожалуйста, проверьте свое интернет соединение.</string>
 
-   <string name="error_alert_dialog_email_already_exist_title">Почта уже используется</string>
-   <string name="error_alert_dialog_email_already_exist_text">Пожалуйста,
-        используйте для регистрации новую почту или вернитесь на предыдущий экран, чтобы войти.</string>
+    <string name="error_alert_dialog_email_already_exist_title">Почта уже используется</string>
+    <string name="error_alert_dialog_email_already_exist_text">Пожалуйста,используйте для регистрации новую почту или вернитесь на предыдущий экран, чтобы войти.</string>
 
+    <string name="error_alert_dialog_wrong_email_or_password_title">Неверный пароль или почта</string>
+    <string name="error_alert_dialog_wrong_email_or_password_text">Пожалуйста, проверьте правильность пароля и почты.</string>
+
+    <string name="error_alert_dialog_empty_field_title">Пустое поле</string>
+    <string name="error_alert_dialog_empty_field_text">Пожалуйста, заполните все поля.</string>
 </resources>

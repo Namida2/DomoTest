@@ -1,6 +1,4 @@
-package com.example.testfirebase.registration;
-
-import android.app.Activity;
+package registration;
 
 public class Employee {
 
@@ -8,9 +6,8 @@ public class Employee {
     private String email;
     private String password;
     private String post;
-    public Activity a;
 
-    public static Employee employee = new Employee();
+    private static Employee employee = new Employee();
 
     public void setName(String name) {
         this.name = name;
@@ -46,6 +43,10 @@ public class Employee {
 
     public String getPost() {
         return post;
+    }
+
+    public static Employee getEmployee() {
+        return employee;
     }
 }
 
