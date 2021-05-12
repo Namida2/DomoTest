@@ -8,9 +8,10 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 
+import interfaces.LogIn;
 import registration.LogInActivity;
 
-public class HelloActivity extends Activity {
+public class SplashScreenActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -19,9 +20,9 @@ public class HelloActivity extends Activity {
         setContentView(R.layout.activity_hello);
 
         new Handler().postDelayed(() -> {
-            Intent mainIntent = new Intent(HelloActivity.this, LogInActivity.class);
-            HelloActivity.this.startActivity(mainIntent);
-            HelloActivity.this.finish();
+            Intent mainIntent = new Intent(SplashScreenActivity.this, LogInActivity.class);
+            SplashScreenActivity.this.startActivity(mainIntent);
+            SplashScreenActivity.this.finish();
         }, 1600);
 
     }
