@@ -7,6 +7,8 @@ public interface Post {
     interface View {
         void onSuccess ();
         void onError (int errorCode);
+        void checkNetworkConnection (String post);
+
 
     }
     interface Presenter {

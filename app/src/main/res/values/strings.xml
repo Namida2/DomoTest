@@ -18,6 +18,6 @@
     <string name="error_alert_dialog_wrong_email_or_password_title">Неверный пароль или почта</string>
     <string name="error_alert_dialog_wrong_email_or_password_text">Пожалуйста, проверьте правильность пароля и почты.</string>
 
-    <string name="error_alert_dialog_empty_field_title"></string>
-    <string name="error_alert_dialog_empty_field_text">Данная почта уже исползуется.</string>
+    <string name="error_alert_dialog_empty_field_title">Пустое поле</string>
+    <string name="error_alert_dialog_empty_field_text">Пожалуйста, заполните все поля.</string>
 </resources>

@@ -11,14 +11,22 @@ import interfaces.Post;
 import registration.Employee;
 
 import static registration.LogInActivity.TAG;
-import static tools.Network.isNetworkConnected;
 
 public class PostPresenter implements Post.Presenter{
 
     private final String COLLECTION_EMPLOYEES = "employees";
-    private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference collectionReferenceEmployee = db.collection(COLLECTION_EMPLOYEES);
+    private final FirebaseAuth firebaseAuth;
+    private final FirebaseFirestore db;
+    private final CollectionReference collectionReferenceEmployee;
+
+    private Post.View view;
+
+    public PostPresenter(Post.View view) {
+        this.view = view;
+        firebaseAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        collectionReferenceEmployee = db.collection(COLLECTION_EMPLOYEES);
+    }
 
     @Override
     public void registration(String post) {

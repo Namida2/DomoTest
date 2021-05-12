@@ -18,6 +18,8 @@ import presenters.LogInPresenter;
 
 import com.jakewharton.rxbinding4.view.RxView;
 
+import static tools.Network.isNetworkConnected;
+
 public class LogInActivity extends AppCompatActivity implements LogIn.View {
 
     private LogIn.Presenter presenter;
@@ -40,8 +42,14 @@ public class LogInActivity extends AppCompatActivity implements LogIn.View {
         RxView.clicks(findViewById(R.id.newAccountButton))
                 .subscribe( click -> this.startActivity( new Intent(this, RegistrationActivity.class)) );
         RxView.clicks(findViewById(R.id.logIn))
-                .subscribe(click -> presenter.logIn(email.getText().toString(), password.getText().toString()),
+                .subscribe(click -> checkNetworkConnection(),
                     error -> Log.d(TAG, error.getMessage()));
+    }
+
+    private void checkNetworkConnection () {
+        if( isNetworkConnected (this) )
+            presenter.logIn(email.getText().toString(), password.getText().toString());
+        else onError(ErrorAlertDialog.INTERNET_CONNECTION);
     }
 
     @Override
