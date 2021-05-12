@@ -21,11 +21,7 @@ public class PostActivity extends Activity {
     private final String COOK = "Повар";
     private final String WAITER = "Официант";
     private final String ADMINISTRATOR = "Администратор";
-    private final String COLLECTION_EMPLOYEES = "employees";
 
-    private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference collectionReferenceEmployee = db.collection(COLLECTION_EMPLOYEES);
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,25 +36,8 @@ public class PostActivity extends Activity {
                 .subscribe(item -> registration(ADMINISTRATOR));
     }
 
-    private void registration (String post) {
-        employee.setPost(post);
-        DocumentReference documentEmployee = collectionReferenceEmployee.document(employee.getEmail());
-        firebaseAuth.createUserWithEmailAndPassword(employee.getEmail(), employee.getPassword()).addOnCompleteListener(task -> {
-            if( task.isSuccessful() ){
-                Log.d(TAG, "The employee was registered.");
-                documentEmployee.set(employee).addOnCompleteListener(taskDocument -> {
-                    if(taskDocument.isSuccessful()){
-                        Log.d(TAG, "The employee was created.");
-                    }
-                    else {
-                        Log.d(TAG, task.getException().toString());
-                    }
-                });
-            }
-            else {
-                 Log.d(TAG, task.getException().toString());
-            }
-        });
+    private void isNetworkConnected (String post) {
+       if()
     }
 }
 

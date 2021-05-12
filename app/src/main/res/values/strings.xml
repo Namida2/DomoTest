@@ -4,7 +4,7 @@
     <string name="error_alert_dialog_wrong_password_text">Пароль должен состоять из 6 и больше стмволов.</string>
 
     <string name="error_alert_dialog_wrong_email_format_title">Неверная почта</string>
-    <string name="error_alert_dialog_wrong_email_format_text">Подалуйста, используйте существующий адрес электронной почти.</string>
+    <string name="error_alert_dialog_wrong_email_format_text">Пожалуйста, используйте существующий адрес электронной почты.</string>
 
     <string name="error_alert_dialog_wrong_confirm_password_title">Неверное подтвержение пароля</string>
     <string name="error_alert_dialog_wrong_confirm_password_text">Пароль в первом и во втором поле должны совпадать.</string>
@@ -13,11 +13,11 @@
     <string name="error_alert_dialog_internet_connection_text">Пожалуйста, проверьте свое интернет соединение.</string>
 
     <string name="error_alert_dialog_email_already_exist_title">Почта уже используется</string>
-    <string name="error_alert_dialog_email_already_exist_text">Пожалуйста,используйте для регистрации новую почту или вернитесь на предыдущий экран, чтобы войти.</string>
+    <string name="error_alert_dialog_email_already_exist_text">Пожалуйста,используйте для регистрации другую почту или вернитесь на предыдущий экран, чтобы войти.</string>
 
     <string name="error_alert_dialog_wrong_email_or_password_title">Неверный пароль или почта</string>
     <string name="error_alert_dialog_wrong_email_or_password_text">Пожалуйста, проверьте правильность пароля и почты.</string>
 
-    <string name="error_alert_dialog_empty_field_title">Пустое поле</string>
-    <string name="error_alert_dialog_empty_field_text">Пожалуйста, заполните все поля.</string>
+    <string name="error_alert_dialog_empty_field_title"></string>
+    <string name="error_alert_dialog_empty_field_text">Данная почта уже исползуется.</string>
 </resources>

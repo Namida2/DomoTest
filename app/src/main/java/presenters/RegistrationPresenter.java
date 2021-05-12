@@ -1,6 +1,5 @@
 package presenters;
 
-import android.content.Intent;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -11,9 +10,7 @@ import java.util.regex.Pattern;
 import dialogs.ErrorAlertDialog;
 import interfaces.Registration;
 import registration.Employee;
-import registration.PostActivity;
 
-import static registration.Employee.employee;
 import static registration.LogInActivity.TAG;
 
 public class RegistrationPresenter implements Registration.Presenter {
@@ -27,28 +24,31 @@ public class RegistrationPresenter implements Registration.Presenter {
     }
 
     @Override
-    public void createEmployee(String email, String password, String confirmPassword) {
-        firebaseAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                if (task.getResult().getSignInMethods().isEmpty()) {
-                    Log.d(TAG, "NEW EMAIL");
-                    Employee.getEmployee();
-                    employee.setName(nameString);
-                    employee.setEmail(emailString);
-                    employee.setPassword(passwordString);
-                    startActivity(new Intent(this, PostActivity.class));
+    public void createEmployee(String name, String email, String password, String confirmPassword) {
+        if( isValid(email, password, confirmPassword) ) {
+            firebaseAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    if (task.getResult().getSignInMethods().isEmpty()) {
+                        Log.d(TAG, "NEW EMAIL");
+                        Employee employee = Employee.getEmployee();
+                        employee.setName(name);
+                        employee.setEmail(email);
+                        employee.setPassword(password);
+                        view.onSuccess();
+                    } else {
+                        Log.d(TAG, "EXIST EMAIL");
+                        view.onError(ErrorAlertDialog.EMAIL_ALREADY_EXIST);
+                    }
                 } else {
-                    Log.d(TAG, "EXIST EMAIL");
+                    Log.d(TAG, task.getException().toString());
                 }
-            } else {
-                Log.d(TAG, task.getException().toString());
-            }
-        });
+            });
+        }
     }
 
     @Override
     public boolean isValid(String email, String password, String confirmPassword) {
-        if( isEmailValid(email) ) {
+        if( !isEmailValid(email) ) {
             Log.d(TAG, "Email is invalid");
             view.onError(ErrorAlertDialog.WRONG_EMAIL);
             return false;
@@ -63,7 +63,7 @@ public class RegistrationPresenter implements Registration.Presenter {
             view.onError(ErrorAlertDialog.PASSWORD_CONFIRM_ERROR);
             return false;
         }
-        return false;
+        return true;
     }
 
     public static boolean isEmailValid(String email) {

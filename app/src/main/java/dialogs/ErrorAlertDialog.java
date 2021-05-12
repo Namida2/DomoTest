@@ -82,12 +82,6 @@ public class ErrorAlertDialog extends DialogFragment {
         return builder.create();
     }
 
-    public void show (ErrorAlertDialog errorAlertDialog) {
-        if(isIsExist()) {
-            errorAlertDialog.show(getFragmentManager(), "");
-        }
-    }
-
     public static boolean isIsExist() {
         return isExist.get();
     }

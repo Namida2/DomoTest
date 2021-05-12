@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.EditText;
 
@@ -16,8 +17,6 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import presenters.LogInPresenter;
 
 import com.jakewharton.rxbinding4.view.RxView;
-
-import static registration.Employee.employee;
 
 public class LogInActivity extends AppCompatActivity implements LogIn.View {
 
@@ -33,7 +32,6 @@ public class LogInActivity extends AppCompatActivity implements LogIn.View {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        employee.a = this;
         setContentView(R.layout.activity_log_in);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         email = findViewById(R.id.email);
@@ -42,7 +40,8 @@ public class LogInActivity extends AppCompatActivity implements LogIn.View {
         RxView.clicks(findViewById(R.id.newAccountButton))
                 .subscribe( click -> this.startActivity( new Intent(this, RegistrationActivity.class)) );
         RxView.clicks(findViewById(R.id.logIn))
-                .subscribe(click -> presenter.login(email.getText().toString(), password.getText().toString()));
+                .subscribe(click -> presenter.logIn(email.getText().toString(), password.getText().toString()),
+                    error -> Log.d(TAG, error.getMessage()));
     }
 
     @Override

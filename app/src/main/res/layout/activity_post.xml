@@ -14,14 +14,6 @@
             android:src="@drawable/ic_logo_round"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
-        <TextView
-            android:textColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="Выбор должности"
-            android:layout_centerHorizontal="true"
-            android:textSize="18sp" />
     </RelativeLayout>
 
     <TextView

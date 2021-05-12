@@ -10,7 +10,7 @@ public interface LogIn {
     }
 
     interface Presenter {
-        void login (String email, String password);
+        void logIn(String email, String password);
         boolean isValid (String email, String password);
     }
 }

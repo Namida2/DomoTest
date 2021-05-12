@@ -34,9 +34,9 @@
             android:text="Пароль должен быть больше 6 символов."
             android:textColor="@color/black"
             android:fontFamily="@font/montserrat_extra_light"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textAlignment="center"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="16dp"/>
