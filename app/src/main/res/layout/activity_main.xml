@@ -14,13 +14,16 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/bg_bottom_navigation"
         app:menu="@menu/menu"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"/>
+        android:paddingBottom="8dp"
+        android:paddingTop="4dp"
+        app:labelVisibilityMode="labeled"/>
 
-    <RelativeLayout
-        android:layout_above="@id/bottomNavigation"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/main_navigation" />
 
 </RelativeLayout>

@@ -39,6 +39,7 @@ public class PostPresenter implements Post.Presenter{
                 documentEmployee.set(employee).addOnCompleteListener(taskDocument -> {
                     if(taskDocument.isSuccessful()) {
                         Log.d(TAG, "The employee was created.");
+                        view.onSuccess();
                     }
                     else {
                         Log.d(TAG, task.getException().toString());

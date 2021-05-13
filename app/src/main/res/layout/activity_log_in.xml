@@ -92,7 +92,7 @@
                 style="@style/buttonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="14dp"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/montserrat_extra_light"
                 android:text="Войти"
                 android:textAllCaps="false" />

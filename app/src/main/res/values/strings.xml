@@ -20,6 +20,4 @@
 
     <string name="error_alert_dialog_empty_field_title">Пустое поле</string>
     <string name="error_alert_dialog_empty_field_text">Пожалуйста, заполните все поля.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
