@@ -8,7 +8,6 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 
-import interfaces.LogIn;
 import registration.LogInActivity;
 
 public class SplashScreenActivity extends Activity {
@@ -17,7 +16,7 @@ public class SplashScreenActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_hello);
+        setContentView(R.layout.activity_splash_screen);
 
         new Handler().postDelayed(() -> {
             Intent mainIntent = new Intent(SplashScreenActivity.this, LogInActivity.class);

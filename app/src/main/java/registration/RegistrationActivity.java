@@ -54,7 +54,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         confirmPassword = findViewById(R.id.confirmPassword);
 
         next = findViewById(R.id.next);
-        next.setBackground(getDrawable(R.drawable.bg_button_not_enable));
+        next.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
         next.setEnabled(false);
 
         createFieldsObservables();
@@ -70,11 +70,11 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
             .subscribe(item -> {
                 if(name.getText().toString().isEmpty() || email.getText().toString().isEmpty()
                     || password.getText().toString().isEmpty() || confirmPassword.getText().toString().isEmpty()){
-                    next.setBackground(getDrawable(R.drawable.bg_button_not_enable));
+                    next.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
                     next.setEnabled(false);
                 }
                 else {
-                    next.setBackground(getDrawable(R.drawable.bg_button_round));
+                    next.setBackgroundColor(getResources().getColor(android.R.color.black));
                     next.setEnabled(true);
                 }
             }, error -> {

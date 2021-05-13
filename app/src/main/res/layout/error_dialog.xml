@@ -51,11 +51,11 @@
         android:background="@android:color/darker_gray"/>
     <Button
         android:id="@+id/ok"
+        style="@style/errorButtonStyle"
         android:textSize="18sp"
         android:layout_below="@id/line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/holo_blue_dark"
-        android:background="@drawable/bg_error_dialog_button"
         android:text="Ok"/>
 </RelativeLayout>

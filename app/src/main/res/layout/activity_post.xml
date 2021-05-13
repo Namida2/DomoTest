@@ -65,8 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/waiter"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/bg_button_round"
+        android:layout_marginBottom="20dp"
         android:text="Я повар" />
 
     <Button
@@ -75,8 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/buttonStyle"
-        android:background="@drawable/bg_button_round"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="20dp"
         android:text="Я официант" />
 
     <Button
@@ -84,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/buttonStyle"
-        android:background="@drawable/bg_button_round"
+
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="36dp"
         android:text="Я руководитель" />

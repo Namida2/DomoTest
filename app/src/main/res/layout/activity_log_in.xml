@@ -24,7 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -78,7 +77,8 @@
             android:fontFamily="@font/montserrat_extra_light"
             android:textColor="@color/black"
             android:text="Забыли пароль ?"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"
             android:layout_gravity="center"
             />
 
@@ -89,19 +89,20 @@
             android:gravity="bottom">
             <Button
                 android:id="@+id/logIn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/b"
-                android:text="Войти"
-                android:background="@drawable/bg_button_round"
-                android:layout_marginBottom="16dp"/>
-            <Button
-                android:id="@+id/newAccountButton"
                 style="@style/buttonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="42dp"
-                android:background="@drawable/bg_empty_bottom"
+                android:layout_marginBottom="14dp"
+                android:fontFamily="@font/montserrat_extra_light"
+                android:text="Войти"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/newAccountButton"
+                style="@style/emptyButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="36dp"
                 android:text="У меня еще нет аккаунта"
                 android:textColor="@color/black" />
             </LinearLayout>
