@@ -14,23 +14,21 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+     <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
     </style>
     <style name="ThemeOverlay.App.BottomNavigationView" parent="">
         <item name="colorOnPrimary">@color/white</item>
     </style>
 
-
     <style name="errorButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/bg_error_dialog_button</item>
-        <item name="rippleColor">@color/colorPrimaryDark</item>
+        <item name="rippleColor">@color/black</item>
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.ErrorButtonStyle</item>
     </style>
     <style name="ThemeOverlay.App.ErrorButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="colorPrimary">@color/white</item>
     </style>
-
 
     <style name="buttonStyle" parent="Widget.MaterialComponents.Button">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.Button</item>
@@ -69,8 +67,6 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">90dp</item>
     </style>
-
-
 
     <style name="editTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:minHeight">46dp</item>
