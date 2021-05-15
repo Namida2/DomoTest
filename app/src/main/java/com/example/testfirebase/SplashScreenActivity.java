@@ -9,6 +9,9 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 
+import com.example.testfirebase.R;
+
+import interfaces.LogIn;
 import io.grpc.internal.AbstractManagedChannelImplBuilder;
 import registration.LogInActivity;
 
@@ -21,7 +24,7 @@ public class SplashScreenActivity extends Activity {
         setContentView(R.layout.activity_splash_screen);
 
         new Handler().postDelayed(() -> {
-            Intent mainIntent = new Intent(SplashScreenActivity.this, LoginFilter.class);
+            Intent mainIntent = new Intent(SplashScreenActivity.this, LogInActivity.class);
             SplashScreenActivity.this.startActivity(mainIntent);
             SplashScreenActivity.this.finish();
         }, 1600);

@@ -46,6 +46,12 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_registration);
 
+        initialisation();
+        createFieldsObservables();
+        createButtonNextObservables();
+    }
+
+    private void initialisation() {
         presenter = new RegistrationPresenter(this);
         fragmentManager = getSupportFragmentManager();
         name = findViewById(R.id.name);
@@ -56,9 +62,6 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         next = findViewById(R.id.next);
         next.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
         next.setEnabled(false);
-
-        createFieldsObservables();
-        createButtonNextObservables();
     }
 
     private void createFieldsObservables() {

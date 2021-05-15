@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -26,10 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bottomNavigationView = findViewById(R.id.bottomNavigation);
-        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        navHostController = (NavHostController) navHostFragment.getNavController();
-
+        initialisation();
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.tablesFragment:
@@ -54,4 +52,11 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
     }
+
+    private void initialisation () {
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
+        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navHostController = (NavHostController) navHostFragment.getNavController();
+    }
+
 }
