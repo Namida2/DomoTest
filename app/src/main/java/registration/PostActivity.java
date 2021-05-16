@@ -1,9 +1,7 @@
 package registration;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
@@ -11,26 +9,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testfirebase.MainActivity;
 import com.example.testfirebase.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import dialogs.ErrorAlertDialog;
-import interfaces.Post;
+import interfaces.PostActivityInterface;
 import presenters.PostPresenter;
 
-import static registration.LogInActivity.TAG;
 import static tools.Network.isNetworkConnected;
 
-public class PostActivity extends AppCompatActivity implements Post.View {
+public class PostActivity extends AppCompatActivity implements PostActivityInterface.View {
 
     private final String COOK = "Повар";
     private final String WAITER = "Официант";
     private final String ADMINISTRATOR = "Администратор";
 
-    private Post.Presenter presenter;
+    private PostActivityInterface.Presenter presenter;
     
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

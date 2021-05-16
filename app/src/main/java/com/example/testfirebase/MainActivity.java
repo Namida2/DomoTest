@@ -1,7 +1,7 @@
 package com.example.testfirebase;
 
-
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initialisation();
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {

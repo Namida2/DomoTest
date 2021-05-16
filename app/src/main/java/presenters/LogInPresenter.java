@@ -2,18 +2,17 @@ package presenters;
 
 import android.util.Log;
 
-import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import dialogs.ErrorAlertDialog;
-import interfaces.LogIn;
+import interfaces.LogInActivityInterface;
 
-public class LogInPresenter implements LogIn.Presenter {
+public class LogInPresenter implements LogInActivityInterface.Presenter {
 
-    private LogIn.View view;
+    private LogInActivityInterface.View view;
     private FirebaseAuth firebaseAuth;
     private final String TAG = "myLogs";
-    public LogInPresenter (LogIn.View view) {
+    public LogInPresenter (LogInActivityInterface.View view) {
         this.view = view;
         firebaseAuth = FirebaseAuth.getInstance();
     }

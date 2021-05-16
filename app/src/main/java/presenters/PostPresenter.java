@@ -7,21 +7,21 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import interfaces.Post;
+import interfaces.PostActivityInterface;
 import registration.Employee;
 
 import static registration.LogInActivity.TAG;
 
-public class PostPresenter implements Post.Presenter{
+public class PostPresenter implements PostActivityInterface.Presenter{
 
     private final String COLLECTION_EMPLOYEES = "employees";
     private final FirebaseAuth firebaseAuth;
     private final FirebaseFirestore db;
     private final CollectionReference collectionReferenceEmployee;
 
-    private Post.View view;
+    private PostActivityInterface.View view;
 
-    public PostPresenter(Post.View view) {
+    public PostPresenter(PostActivityInterface.View view) {
         this.view = view;
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();

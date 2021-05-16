@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface LogIn {
+public interface LogInActivityInterface {
 
     interface Model {}
 

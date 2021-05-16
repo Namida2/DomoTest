@@ -19,7 +19,7 @@ import com.jakewharton.rxbinding4.widget.RxTextView;
 
 import java.util.concurrent.TimeUnit;
 
-import interfaces.Registration;
+import interfaces.RegistrationActivityInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
 import presenters.RegistrationPresenter;
@@ -27,7 +27,7 @@ import presenters.RegistrationPresenter;
 import static registration.LogInActivity.TAG;
 import static tools.Network.isNetworkConnected;
 
-public class RegistrationActivity extends AppCompatActivity implements Registration.View {
+public class RegistrationActivity extends AppCompatActivity implements RegistrationActivityInterface.View {
 
     private Disposable textFieldsDisposable;
     private Disposable buttonNextDisposable;
@@ -38,7 +38,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     private Button next;
     private FragmentManager fragmentManager;
 
-    private Registration.Presenter presenter;
+    private RegistrationActivityInterface.Presenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

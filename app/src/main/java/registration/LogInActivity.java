@@ -12,7 +12,7 @@ import com.example.testfirebase.MainActivity;
 import com.example.testfirebase.R;
 
 import dialogs.ErrorAlertDialog;
-import interfaces.LogIn;
+import interfaces.LogInActivityInterface;
 import io.reactivex.rxjava3.disposables.Disposable;
 import presenters.LogInPresenter;
 
@@ -20,9 +20,9 @@ import com.jakewharton.rxbinding4.view.RxView;
 
 import static tools.Network.isNetworkConnected;
 
-public class LogInActivity extends AppCompatActivity implements LogIn.View {
+public class LogInActivity extends AppCompatActivity implements LogInActivityInterface.View {
 
-    private LogIn.Presenter presenter;
+    private LogInActivityInterface.Presenter presenter;
     public static final String TAG = "myLogs";
 
     private EditText email;

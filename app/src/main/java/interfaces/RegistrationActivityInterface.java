@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface Registration {
+public interface RegistrationActivityInterface {
 
     interface Model {}
 

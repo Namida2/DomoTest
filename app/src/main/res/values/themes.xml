@@ -14,6 +14,11 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="tableStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:background">@drawable/bg_table</item>
+    </style>
+
      <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
     </style>

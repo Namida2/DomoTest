@@ -8,17 +8,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import dialogs.ErrorAlertDialog;
-import interfaces.Registration;
+import interfaces.RegistrationActivityInterface;
 import registration.Employee;
 
 import static registration.LogInActivity.TAG;
 
-public class RegistrationPresenter implements Registration.Presenter {
+public class RegistrationPresenter implements RegistrationActivityInterface.Presenter {
 
-    private Registration.View view;
+    private RegistrationActivityInterface.View view;
     private FirebaseAuth firebaseAuth;
 
-    public RegistrationPresenter (Registration.View view) {
+    public RegistrationPresenter (RegistrationActivityInterface.View view) {
         this.view = view;
         this.firebaseAuth = FirebaseAuth.getInstance();
     }

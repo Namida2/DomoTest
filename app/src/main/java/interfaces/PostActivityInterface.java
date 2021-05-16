@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface Post {
+public interface PostActivityInterface {
 
     interface Model { }
 
