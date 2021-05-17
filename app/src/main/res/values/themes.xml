@@ -80,7 +80,7 @@
         <item name="android:layout_marginStart">16sp</item>
         <item name="android:layout_marginEnd">16sp</item>
         <item name="android:drawablePadding">8sp</item>
-        <item name="android:fontFamily">@font/montserrat_extra_light</item>
+        <item name="android:fontFamily">@font/montserrat_semi_bold</item>
         <item name="android:textSize">18sp</item>
     </style>
 
