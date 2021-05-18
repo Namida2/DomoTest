@@ -1,5 +1,6 @@
 package com.example.testfirebase.mainActivityFragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -32,7 +33,7 @@ public class TablesFragment extends Fragment implements TablesFragmentInterface.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        presenter.prepare(inflater, container);
+        presenter.prepare(this, inflater, container);
         return view;
     }
 
@@ -49,5 +50,10 @@ public class TablesFragment extends Fragment implements TablesFragmentInterface.
     @Override
     public void setAdapter(TablesRecyclerViewAdapter adapter) {
         this.adapter = adapter;
+    }
+
+    @Override
+    public void startNewActivity(Class activity) {
+        getActivity().startActivity(new Intent(getActivity(), activity));
     }
 }

@@ -30,7 +30,7 @@ public class TablesFragmentPresenter implements TablesFragmentInterface.Presente
     }
 
     @Override
-    public void prepare(LayoutInflater inflater, ViewGroup container) {
+    public void prepare(TablesFragmentInterface.MyView view, LayoutInflater inflater, ViewGroup container) {
         View mView;
         RecyclerView recyclerView;
         if(model.getView() == null) {
@@ -41,7 +41,7 @@ public class TablesFragmentPresenter implements TablesFragmentInterface.Presente
         else mView = model.getView();
         if(model.getAdapter() == null) {
             Log.d(TAG, "Adapter is null");
-            model.setAdapter(new TablesRecyclerViewAdapter());
+            model.setAdapter(new TablesRecyclerViewAdapter(view));
         }
         if(model.getRecyclerView() == null) {
             Log.d(TAG, "RecyclerView is null");
