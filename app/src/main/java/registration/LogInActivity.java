@@ -14,7 +14,7 @@ import com.example.testfirebase.R;
 import dialogs.ErrorAlertDialog;
 import interfaces.LogInActivityInterface;
 import io.reactivex.rxjava3.disposables.Disposable;
-import presenters.LogInPresenter;
+import presenters.LogInActivityPresenter;
 
 import com.jakewharton.rxbinding4.view.RxView;
 
@@ -38,7 +38,7 @@ public class LogInActivity extends AppCompatActivity implements LogInActivityInt
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
-        presenter = new LogInPresenter(this);
+        presenter = new LogInActivityPresenter(this);
         RxView.clicks(findViewById(R.id.newAccountButton))
                 .subscribe( click -> this.startActivity( new Intent(this, RegistrationActivity.class)) );
         RxView.clicks(findViewById(R.id.logIn))

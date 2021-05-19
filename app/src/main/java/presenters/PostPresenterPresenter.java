@@ -12,7 +12,7 @@ import registration.Employee;
 
 import static registration.LogInActivity.TAG;
 
-public class PostPresenter implements PostActivityInterface.Presenter{
+public class PostPresenterPresenter implements PostActivityInterface.Presenter{
 
     private final String COLLECTION_EMPLOYEES = "employees";
     private final FirebaseAuth firebaseAuth;
@@ -21,7 +21,7 @@ public class PostPresenter implements PostActivityInterface.Presenter{
 
     private PostActivityInterface.View view;
 
-    public PostPresenter(PostActivityInterface.View view) {
+    public PostPresenterPresenter(PostActivityInterface.View view) {
         this.view = view;
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();

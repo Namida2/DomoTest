@@ -13,7 +13,7 @@ import com.jakewharton.rxbinding4.view.RxView;
 
 import dialogs.ErrorAlertDialog;
 import interfaces.PostActivityInterface;
-import presenters.PostPresenter;
+import presenters.PostPresenterPresenter;
 
 import static tools.Network.isNetworkConnected;
 
@@ -30,7 +30,7 @@ public class PostActivity extends AppCompatActivity implements PostActivityInter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        presenter = new PostPresenter(this);
+        presenter = new PostPresenterPresenter(this);
         RxView.clicks(findViewById(R.id.cook))
                 .subscribe(item -> checkNetworkConnection(COOK));
         RxView.clicks(findViewById(R.id.waiter))

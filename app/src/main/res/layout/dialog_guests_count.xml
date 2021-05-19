@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/black">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/white"
+        android:layout_marginStart="120dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginTop="12dp"
+       android:layout_gravity="center|top"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Укажите количество гостей"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:fontFamily="@font/montserrat_semi_bold"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="36dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/guests_count_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/layout_guests_count"
+        android:layout_marginTop="88dp"
+        />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

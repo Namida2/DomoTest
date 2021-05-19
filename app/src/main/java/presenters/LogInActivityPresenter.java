@@ -7,12 +7,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import dialogs.ErrorAlertDialog;
 import interfaces.LogInActivityInterface;
 
-public class LogInPresenter implements LogInActivityInterface.Presenter {
+public class LogInActivityPresenter implements LogInActivityInterface.Presenter {
 
     private LogInActivityInterface.View view;
     private FirebaseAuth firebaseAuth;
     private final String TAG = "myLogs";
-    public LogInPresenter (LogInActivityInterface.View view) {
+    public LogInActivityPresenter(LogInActivityInterface.View view) {
         this.view = view;
         firebaseAuth = FirebaseAuth.getInstance();
     }

@@ -54,6 +54,6 @@ public class TablesFragment extends Fragment implements TablesFragmentInterface.
 
     @Override
     public void startNewActivity(Class activity) {
-        getActivity().startActivity(new Intent(getActivity(), activity));
+        getActivity().startActivity(new Intent( getActivity(), activity) );
     }
 }
