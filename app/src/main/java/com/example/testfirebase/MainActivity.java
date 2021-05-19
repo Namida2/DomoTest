@@ -1,21 +1,21 @@
 package com.example.testfirebase;
 
+
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.NavHostController;
 import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.core.Observable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,29 +29,48 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initialisation();
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.tablesFragment:
-                    navHostController.navigate(R.id.tablesFragment,
-                            null,
-                            new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
-                    return true;
-                case R.id.ordersFragment:
-                    navHostController.navigate(R.id.ordersFragment,
-                            null,
-                            new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
-                    return true;
-                case R.id.checkFragment:
-                    navHostController.navigate(R.id.checkFragment,
-                            null, new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
-                    return true;
-                case R.id.profileFragment:
-                    navHostController.navigate(R.id.profileFragment,
-                            null, new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
-                    return true;
-            }
-            return false;
+
+        getBottomAppBarObservable()
+                .debounce(150, TimeUnit.MILLISECONDS)
+                .subscribe(itemId -> {
+                    NavDestination currentDestination = navHostController.getCurrentDestination();
+                    switch ( (Integer) itemId) {
+                        case R.id.tablesFragment:
+                            if(currentDestination.getId() != R.id.tablesFragment)
+                                navHostController.navigate(R.id.tablesFragment,
+                                        null,
+                                        new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
+                            break;
+                        case R.id.ordersFragment:
+                            if(currentDestination.getId() != R.id.ordersFragment)
+                                navHostController.navigate(R.id.ordersFragment,
+                                        null,
+                                        new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
+                            break;
+                        case R.id.checkFragment:
+                            if(currentDestination.getId() != R.id.checkFragment)
+                                navHostController.navigate(R.id.checkFragment,
+                                        null,
+                                        new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
+                            break;
+                        case R.id.profileFragment:
+                            if(currentDestination.getId() != R.id.profileFragment)
+                                navHostController.navigate(R.id.profileFragment,
+                                        null,
+                                        new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
+                            break;
+                    }
+                });
+    }
+
+    private Observable getBottomAppBarObservable () {
+        return Observable.create(emitter -> {
+            bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+                emitter.onNext(item.getItemId());
+                return true;
+            });
         });
+
     }
 
     private void initialisation () {

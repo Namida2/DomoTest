@@ -11,25 +11,27 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:backgroundTint="@color/black"
-        app:fabAnimationMode="scale"
         app:fabAlignmentMode="end"
-        app:menu="@menu/menu">
+        app:fabAnimationMode="scale"
+        app:navigationIcon="@drawable/ic_menu">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Принять заказ"
+            android:textSize="16sp"
+            android:fontFamily="@font/montserrat_semi_bold"
+            android:textColor="@color/white"/>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_check"
         app:layout_anchor="@id/a"
+        app:rippleColor="@color/white"
         app:srcCompat="@drawable/ic_add"
-        />
+        app:tint="@color/white" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
