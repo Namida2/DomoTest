@@ -25,6 +25,7 @@ public interface OrderActivityInterface {
     }
     interface GuestsCountDialogPresenter {
         Map<String, Object> getModelState();
+        void setState ();
     }
 
 }

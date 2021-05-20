@@ -29,4 +29,9 @@ public class GuestCountDialogPresenter implements OrderActivityInterface.GuestsC
         modelState.put(GUEST_COUNT_DIALOG_VIEW_KEY, guestsCountDialogModel.getGuestCountDialogView());
         return modelState;
     }
+
+    @Override
+    public void setState() {
+
+    }
 }
