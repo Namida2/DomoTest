@@ -22,8 +22,6 @@ public interface TablesFragmentInterface {
     }
     interface MyView {
         void setView(View view);
-        void setRecyclerView(RecyclerView recyclerView);
-        void setAdapter(TablesRecyclerViewAdapter adapter);
         void startNewActivity(Class activity);
     }
     interface Presenter {

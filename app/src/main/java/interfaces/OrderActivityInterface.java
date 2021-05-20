@@ -14,18 +14,30 @@ public interface OrderActivityInterface {
     String GUEST_COUNT_DIALOG_RECYCLER_VIEW_ADAPTER_KEY = "guestsCountRecyclerViewAdapter";
     String GUEST_COUNT_DIALOG_VIEW_KEY = "guestCountDialogView";
 
-    interface GuestsCountDialogModel {
+    interface Model {
         RecyclerView getGuestCountRecyclerView();
         GuestsCountRecyclerViewAdapter getGuestsCountRecyclerViewAdapter();
         View getGuestCountDialogView();
+    }
 
+    interface Activity {
+        interface MyView {
+            void setGuestsCount(int guestsCount);
+        }
+        interface Presenter {
+            Map<String, Object> getModelState();
+            void setModelState(Map<String, Object> modelState);
+            View getGuestCountDialogView ();
+        }
     }
-    interface MyView {
-        void setGuestsCount(int guestsCount);
-    }
-    interface GuestsCountDialogPresenter {
-        Map<String, Object> getModelState();
-        void setState ();
+
+    interface Dialog {
+        interface MyView {
+
+        }
+        interface Presenter {
+            View getDialogView ();
+        }
     }
 
 }

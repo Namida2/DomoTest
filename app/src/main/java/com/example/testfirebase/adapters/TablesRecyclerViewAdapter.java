@@ -45,7 +45,7 @@ public class TablesRecyclerViewAdapter extends RecyclerView.Adapter<TablesRecycl
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         holder.tableNumber.setText(Integer.toString(position));
         disposable = RxView.clicks(holder.container)
-                .debounce(150, TimeUnit.MICROSECONDS)
+                .debounce(150, TimeUnit.MILLISECONDS)
                 .subscribe(next -> {
                     view.startNewActivity(OrderActivity.class);
                 }, error -> {

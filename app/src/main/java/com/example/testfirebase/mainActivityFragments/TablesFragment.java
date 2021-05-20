@@ -20,9 +20,6 @@ import presenters.TablesFragmentPresenter;
 public class TablesFragment extends Fragment implements TablesFragmentInterface.MyView {
 
     private TablesFragmentInterface.Presenter presenter;
-
-    private RecyclerView recyclerView;
-    private TablesRecyclerViewAdapter adapter;
     private View view;
 
     @Override
@@ -40,16 +37,6 @@ public class TablesFragment extends Fragment implements TablesFragmentInterface.
     @Override
     public void setView(View view) {
         this.view = view;
-    }
-
-    @Override
-    public void setRecyclerView(RecyclerView recyclerView) {
-        this.recyclerView = recyclerView;
-    }
-
-    @Override
-    public void setAdapter(TablesRecyclerViewAdapter adapter) {
-        this.adapter = adapter;
     }
 
     @Override

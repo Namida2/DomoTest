@@ -21,10 +21,10 @@ import static registration.LogInActivity.TAG;
 public class TablesFragmentPresenter implements TablesFragmentInterface.Presenter {
 
     private static TablesFragmentInterface.Model model;
-    private TablesFragmentInterface.MyView view;
+    private final TablesFragmentInterface.MyView myView;
 
     public TablesFragmentPresenter (TablesFragmentInterface.MyView view) {
-        this.view = view;
+        this.myView = view;
         if (model == null)
             model = new TablesFragmentModel();
     }
@@ -50,8 +50,6 @@ public class TablesFragmentPresenter implements TablesFragmentInterface.Presente
             recyclerView.setAdapter(model.getAdapter());
             model.setRecyclerView(recyclerView);
         }
-        view.setView(model.getView());
-        view.setRecyclerView(model.getRecyclerView());
-        view.setAdapter(model.getAdapter());
+        myView.setView(model.getView());
     }
 }

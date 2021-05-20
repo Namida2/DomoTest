@@ -8,7 +8,7 @@ import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
 
 import interfaces.OrderActivityInterface;
 
-public class GuestCountDialogModel implements OrderActivityInterface.GuestsCountDialogModel {
+public class GuestCountDialogModel implements OrderActivityInterface.Model {
 
     private RecyclerView GuestsCountRecyclerView;
     private GuestsCountRecyclerViewAdapter guestsCountRecyclerViewAdapter;

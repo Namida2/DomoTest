@@ -13,11 +13,20 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment {
+import interfaces.OrderActivityInterface;
+
+public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment implements OrderActivityInterface.Dialog.MyView {
+
+    private OrderActivityInterface.Dialog.Presenter presenter;
+    private View contentView;
+    public GuestsCountBottomSheetDialog (View contentView) {
+        this.contentView = contentView;
+    }
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setCancelable(false);
     }
 
     @NonNull
@@ -25,7 +34,7 @@ public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         BottomSheetDialog dialog = new BottomSheetDialog(getContext(), R.style.bottomSheetDialogStyle);
-        View view = View.inflate(getContext(), R.layout.dialog_guests_count, null);
+        dialog.setContentView(contentView);
         return dialog;
     }
 }
