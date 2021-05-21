@@ -36,7 +36,7 @@ public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsC
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        holder.guests_count.setText(position);
+        holder.guests_count.setText(Integer.toString(position));
     }
 
     @Override

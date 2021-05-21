@@ -36,16 +36,15 @@ public class OrderActivityPresenter implements OrderActivityInterface.Activity.P
         return modelState;
     }
 
-
     @Override
     public void setModelState(Map<String, Object> modelState) {
+        View view = (android.view.View) modelState.get(GUEST_COUNT_DIALOG_VIEW_KEY);
         RecyclerView recyclerView = (RecyclerView) modelState.get(GUEST_COUNT_DIALOG_RECYCLER_VIEW_KEY);
         GuestsCountRecyclerViewAdapter adapter = (GuestsCountRecyclerViewAdapter) modelState.get(GUEST_COUNT_DIALOG_RECYCLER_VIEW_ADAPTER_KEY);
-        View view = (android.view.View) modelState.get(GUEST_COUNT_DIALOG_VIEW_KEY);
+        model.setGuestCountDialogView(view);
+        model.setGuestCountRecyclerView(recyclerView);
+        model.setGuestsCountRecyclerViewAdapter(adapter);
+        this.view.setDialogView(model.getGuestCountDialogView());
     }
 
-    @Override
-    public View getGuestCountDialogView() {
-        return model.getGuestCountDialogView();
-    }
 }

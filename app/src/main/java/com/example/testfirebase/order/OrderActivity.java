@@ -1,6 +1,7 @@
 package com.example.testfirebase.order;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
@@ -24,7 +25,7 @@ import static interfaces.OrderActivityInterface.GUEST_COUNT_DIALOG_VIEW_KEY;
 public class OrderActivity extends AppCompatActivity implements OrderActivityInterface.Activity.MyView {
 
     private OrderActivityInterface.Activity.Presenter presenter;
-
+    private View guestCountDialogView;
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +33,7 @@ public class OrderActivity extends AppCompatActivity implements OrderActivityInt
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         presenter = new OrderActivityPresenter(this);
         prepareGuestCountRecyclerView();
-        GuestsCountBottomSheetDialog dialog = new GuestsCountBottomSheetDialog(presenter.getGuestCountDialogView());
+        GuestsCountBottomSheetDialog dialog = new GuestsCountBottomSheetDialog(guestCountDialogView);
         dialog.show(getSupportFragmentManager(), "");
     }
 
@@ -46,15 +47,22 @@ public class OrderActivity extends AppCompatActivity implements OrderActivityInt
             recyclerView = view.findViewById(R.id.guests_count_recycler_view);
             adapter = new GuestsCountRecyclerViewAdapter();
             recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+            recyclerView.setAdapter(adapter);
             modelState.put(GUEST_COUNT_DIALOG_VIEW_KEY, view);
             modelState.put(GUEST_COUNT_DIALOG_RECYCLER_VIEW_KEY, recyclerView);
             modelState.put(GUEST_COUNT_DIALOG_RECYCLER_VIEW_ADAPTER_KEY, adapter);
-            presenter.setModelState(modelState);////// View
+            presenter.setModelState(modelState);
         }
+    }
+
+    @Override
+    public void setDialogView(View view) {
+        guestCountDialogView = view;
     }
 
     @Override
     public void setGuestsCount(int guestsCount) {
 
     }
+
 }

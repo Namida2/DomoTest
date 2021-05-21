@@ -18,16 +18,19 @@ public interface OrderActivityInterface {
         RecyclerView getGuestCountRecyclerView();
         GuestsCountRecyclerViewAdapter getGuestsCountRecyclerViewAdapter();
         View getGuestCountDialogView();
+        void setGuestCountRecyclerView(RecyclerView recyclerView);
+        void setGuestsCountRecyclerViewAdapter(GuestsCountRecyclerViewAdapter guestsCountRecyclerViewAdapter);
+        void setGuestCountDialogView(View view);
     }
 
     interface Activity {
         interface MyView {
             void setGuestsCount(int guestsCount);
+            void setDialogView(View view);
         }
         interface Presenter {
             Map<String, Object> getModelState();
             void setModelState(Map<String, Object> modelState);
-            View getGuestCountDialogView ();
         }
     }
 

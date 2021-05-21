@@ -10,13 +10,13 @@ import interfaces.OrderActivityInterface;
 
 public class GuestCountDialogModel implements OrderActivityInterface.Model {
 
-    private RecyclerView GuestsCountRecyclerView;
+    private RecyclerView guestsCountRecyclerView;
     private GuestsCountRecyclerViewAdapter guestsCountRecyclerViewAdapter;
-    private View GuestsCountDialogView;
+    private View guestsCountDialogView;
 
     @Override
     public RecyclerView getGuestCountRecyclerView() {
-        return GuestsCountRecyclerView;
+        return guestsCountRecyclerView;
     }
 
     @Override
@@ -26,18 +26,23 @@ public class GuestCountDialogModel implements OrderActivityInterface.Model {
 
     @Override
     public View getGuestCountDialogView() {
-        return GuestsCountDialogView;
+        return guestsCountDialogView;
     }
 
+    @Override
+    public void setGuestCountRecyclerView(RecyclerView guestsCountRecyclerView) {
+        this.guestsCountRecyclerView = guestsCountRecyclerView;
+    }
+
+    @Override
     public void setGuestsCountRecyclerViewAdapter(GuestsCountRecyclerViewAdapter guestsCountRecyclerViewAdapter) {
         this.guestsCountRecyclerViewAdapter = guestsCountRecyclerViewAdapter;
     }
 
-    public void setGuestsCountRecyclerView(RecyclerView guestsCountRecyclerView) {
-        GuestsCountRecyclerView = guestsCountRecyclerView;
+    @Override
+    public void setGuestCountDialogView(View guestsCountDialogView) {
+        this.guestsCountDialogView = guestsCountDialogView;
     }
 
-    public void setGuestsCountDialogView(View guestsCountDialogView) {
-        GuestsCountDialogView = guestsCountDialogView;
-    }
+
 }

@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/black">
+    android:background="@drawable/bg_guest_count_dialog">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="3dp"
         android:background="@color/white"
         android:layout_marginStart="120dp"
         android:layout_marginEnd="120dp"
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/layout_guests_count"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="82dp"
         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
