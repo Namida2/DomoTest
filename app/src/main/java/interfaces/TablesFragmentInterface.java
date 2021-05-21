@@ -22,9 +22,21 @@ public interface TablesFragmentInterface {
     }
     interface MyView {
         void setView(View view);
-        void startNewActivity(Class activity);
+        void startNewActivity(Class activity, int tableNumber);
     }
     interface Presenter {
         void prepare(TablesFragmentInterface.MyView view, LayoutInflater inflater, ViewGroup container);
     }
+
+
+    interface Adapter {
+        interface View {
+
+        }
+        interface Presenter {
+            void startNewActivity (int tableNumber);
+
+        }
+    }
+
 }

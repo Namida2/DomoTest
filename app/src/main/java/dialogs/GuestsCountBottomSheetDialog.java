@@ -15,9 +15,9 @@ import org.jetbrains.annotations.NotNull;
 
 import interfaces.OrderActivityInterface;
 
-public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment implements OrderActivityInterface.Dialog.MyView {
+public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment implements OrderActivityInterface.Adapter.MyView {
 
-    private OrderActivityInterface.Dialog.Presenter presenter;
+    private OrderActivityInterface.Adapter.Presenter presenter;
     private View contentView;
     public GuestsCountBottomSheetDialog (View contentView) {
         this.contentView = contentView;
@@ -26,7 +26,6 @@ public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment impl
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setCancelable(false);
     }
 
     @NonNull

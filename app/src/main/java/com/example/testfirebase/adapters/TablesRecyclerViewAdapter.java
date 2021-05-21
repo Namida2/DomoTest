@@ -23,7 +23,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 
 import static registration.LogInActivity.TAG;
 
-public class TablesRecyclerViewAdapter extends RecyclerView.Adapter<TablesRecyclerViewAdapter.ViewHolder> {
+public class TablesRecyclerViewAdapter extends RecyclerView.Adapter<TablesRecyclerViewAdapter.ViewHolder> implements TablesFragmentInterface.Adapter.Presenter {
 
     private int TABLES_COUNT = 17;
     private TablesFragmentInterface.MyView view;
@@ -32,22 +32,38 @@ public class TablesRecyclerViewAdapter extends RecyclerView.Adapter<TablesRecycl
         this.view = view;
     }
 
+    @Override
+    public void startNewActivity(int tableNumber) {
+        view.startNewActivity(OrderActivity.class, tableNumber);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements TablesFragmentInterface.Adapter.View {
+        public TextView tableNumber;
+        public ConstraintLayout container;
+        public TablesFragmentInterface.Adapter.Presenter presenter;
+        public ViewHolder(@NonNull @NotNull View itemView, TablesFragmentInterface.Adapter.Presenter presenter) {
+            super(itemView);
+            this.presenter = presenter;
+            tableNumber = itemView.findViewById(R.id.table_number);
+            container = itemView.findViewById(R.id.table_container);
+        }
+    }
+
     @NonNull
     @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType)  {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.layout_table, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(layoutInflater.inflate(R.layout.layout_table, parent, false), this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         holder.tableNumber.setText(Integer.toString(position));
         disposable = RxView.clicks(holder.container)
-                .debounce(150, TimeUnit.MILLISECONDS)
+                .debounce(200, TimeUnit.MILLISECONDS)
                 .subscribe(next -> {
-                    view.startNewActivity(OrderActivity.class);
+                    holder.presenter.startNewActivity(position);
                 }, error -> {
                     Log.d(TAG, error.getMessage());
                 }, () -> {
@@ -59,13 +75,4 @@ public class TablesRecyclerViewAdapter extends RecyclerView.Adapter<TablesRecycl
         return TABLES_COUNT;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tableNumber;
-        public ConstraintLayout container;
-        public ViewHolder(@NonNull @NotNull View itemView) {
-            super(itemView);
-            tableNumber = itemView.findViewById(R.id.table_number);
-            container = itemView.findViewById(R.id.table_container);
-        }
-    }
 }

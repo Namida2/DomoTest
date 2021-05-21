@@ -19,6 +19,7 @@ import presenters.TablesFragmentPresenter;
 
 public class TablesFragment extends Fragment implements TablesFragmentInterface.MyView {
 
+    public static final String EXTRA_TAG = "tableNumber";
     private TablesFragmentInterface.Presenter presenter;
     private View view;
 
@@ -40,7 +41,7 @@ public class TablesFragment extends Fragment implements TablesFragmentInterface.
     }
 
     @Override
-    public void startNewActivity(Class activity) {
-        getActivity().startActivity(new Intent( getActivity(), activity) );
+    public void startNewActivity(Class activity, int tableNumber) {
+        getActivity().startActivity(new Intent( getActivity(), activity).putExtra(EXTRA_TAG, tableNumber) );
     }
 }

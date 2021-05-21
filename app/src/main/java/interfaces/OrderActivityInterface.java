@@ -34,12 +34,12 @@ public interface OrderActivityInterface {
         }
     }
 
-    interface Dialog {
+    interface Adapter {
         interface MyView {
 
         }
         interface Presenter {
-            View getDialogView ();
+            void setGuestsCountToView(int guestsCount);
         }
     }
 
