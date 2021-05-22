@@ -11,7 +11,7 @@ import com.example.testfirebase.MainActivity;
 import com.example.testfirebase.R;
 import com.jakewharton.rxbinding4.view.RxView;
 
-import dialogs.ErrorAlertDialog;
+import dialogsTools.ErrorAlertDialog;
 import interfaces.PostActivityInterface;
 import presenters.PostPresenterPresenter;
 

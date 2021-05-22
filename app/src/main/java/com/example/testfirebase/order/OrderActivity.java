@@ -16,7 +16,6 @@ import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
 
 import java.util.Map;
 
-import dialogs.GuestsCountBottomSheetDialog;
 import interfaces.OrderActivityInterface;
 import presenters.OrderActivityPresenter;
 
@@ -42,6 +41,7 @@ public class OrderActivity extends AppCompatActivity implements OrderActivityInt
     }
 
     private void initialisation () {
+
         int number = getIntent().getIntExtra(EXTRA_TAG, 0);
         tableNumber = findViewById(R.id.table_number);
         tableNumber.setText(Integer.toString(number));
@@ -81,6 +81,10 @@ public class OrderActivity extends AppCompatActivity implements OrderActivityInt
     public void setGuestsCount(int guestsCount) {
         dialog.dismiss();
         this.guestsCount.setText(Integer.toString(guestsCount));
+    }
+
+    private void prepareModel() {
+
     }
 
 }

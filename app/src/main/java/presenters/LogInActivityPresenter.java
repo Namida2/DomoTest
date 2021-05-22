@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import dialogs.ErrorAlertDialog;
+import dialogsTools.ErrorAlertDialog;
 import interfaces.LogInActivityInterface;
 
 public class LogInActivityPresenter implements LogInActivityInterface.Presenter {

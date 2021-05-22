@@ -22,7 +22,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 import static registration.LogInActivity.TAG;
 
-public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsCountRecyclerViewAdapter.ViewHolder> implements OrderActivityInterface.Adapter.Presenter {
+public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsCountRecyclerViewAdapter.ViewHolder> implements OrderActivityInterface.GuestsCountAdapter.Presenter {
 
     private int GUESTS_COUNT = 8;
     private OrderActivityInterface.Activity.MyView view;
@@ -35,12 +35,12 @@ public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsC
         view.setGuestsCount(guestsCount);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements OrderActivityInterface.Adapter.MyView {
-        OrderActivityInterface.Adapter.Presenter presenter;
+    public class ViewHolder extends RecyclerView.ViewHolder implements OrderActivityInterface.GuestsCountAdapter.MyView {
+        OrderActivityInterface.GuestsCountAdapter.Presenter presenter;
         TextView guests_count;
         ConstraintLayout container;
 
-        public ViewHolder(@NonNull @NotNull View itemView, OrderActivityInterface.Adapter.Presenter presenter) {
+        public ViewHolder(@NonNull @NotNull View itemView, OrderActivityInterface.GuestsCountAdapter.Presenter presenter) {
             super(itemView);
             this.presenter = presenter;
             guests_count = itemView.findViewById(R.id.guests_count);

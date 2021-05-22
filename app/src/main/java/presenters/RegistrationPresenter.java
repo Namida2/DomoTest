@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dialogs.ErrorAlertDialog;
+import dialogsTools.ErrorAlertDialog;
 import interfaces.RegistrationActivityInterface;
 import registration.Employee;
 

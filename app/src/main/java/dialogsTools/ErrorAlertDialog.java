@@ -1,4 +1,4 @@
-package dialogs;
+package dialogsTools;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

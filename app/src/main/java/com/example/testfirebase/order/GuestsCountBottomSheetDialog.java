@@ -1,4 +1,4 @@
-package dialogs;
+package com.example.testfirebase.order;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -15,9 +15,9 @@ import org.jetbrains.annotations.NotNull;
 
 import interfaces.OrderActivityInterface;
 
-public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment implements OrderActivityInterface.Adapter.MyView {
+public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment implements OrderActivityInterface.GuestsCountAdapter.MyView {
 
-    private OrderActivityInterface.Adapter.Presenter presenter;
+    private OrderActivityInterface.GuestsCountAdapter.Presenter presenter;
     private View contentView;
     public GuestsCountBottomSheetDialog (View contentView) {
         this.contentView = contentView;

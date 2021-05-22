@@ -11,7 +11,7 @@ import android.widget.EditText;
 import com.example.testfirebase.MainActivity;
 import com.example.testfirebase.R;
 
-import dialogs.ErrorAlertDialog;
+import dialogsTools.ErrorAlertDialog;
 import interfaces.LogInActivityInterface;
 import io.reactivex.rxjava3.disposables.Disposable;
 import presenters.LogInActivityPresenter;
