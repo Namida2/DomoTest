@@ -44,7 +44,7 @@
                 android:fontFamily="@font/montserrat_light"
                 android:text="17"
                 android:textColor="@color/white"
-                android:textSize="36dp"
+                android:textSize="42dp"
                 app:layout_constraintEnd_toEndOf="@+id/textView"
                 app:layout_constraintStart_toStartOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -81,7 +81,7 @@
                 android:fontFamily="@font/montserrat_light"
                 android:text="1"
                 android:textColor="@color/white"
-                android:textSize="36dp"
+                android:textSize="42dp"
                 app:layout_constraintEnd_toEndOf="@+id/textView3"
                 app:layout_constraintStart_toStartOf="@+id/textView3"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
