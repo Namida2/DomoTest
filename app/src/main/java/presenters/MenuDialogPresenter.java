@@ -13,11 +13,7 @@ public class MenuDialogPresenter implements OrderActivityInterface.MenuDialog.Pr
     public MenuDialogPresenter (OrderActivityInterface.MenuDialog.View view) {
         this.view = view;
         this.model = new MenuDialogModel();
-        initialisationModel();
+
     }
 
-    @Override
-    public void initialisationModel() {
-        Dish dish = new Dish();
-    }
 }

@@ -2,6 +2,7 @@ package com.example.testfirebase.order;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -13,10 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
 import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
 
 import interfaces.OrderActivityInterface;
+import model.MenuDialogModel;
 import presenters.OrderActivityPresenter;
 
 import static com.example.testfirebase.mainActivityFragments.TablesFragment.EXTRA_TAG;
@@ -32,16 +41,20 @@ public class OrderActivity extends AppCompatActivity implements OrderActivityInt
     private TextView guestsCount;
     private TextView tableNumber;
 
+    private final String MENU_COLLECTION_NAME = "menu";
+    private final String TAG = "myLogs";
+
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initialisation();
+
+        MenuDialogModel model = new MenuDialogModel();
     }
 
     private void initialisation () {
-
         int number = getIntent().getIntExtra(EXTRA_TAG, 0);
         tableNumber = findViewById(R.id.table_number);
         tableNumber.setText(Integer.toString(number));

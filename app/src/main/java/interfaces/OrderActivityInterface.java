@@ -45,13 +45,12 @@ public interface OrderActivityInterface {
 
     interface MenuDialog {
         interface Model {
-
+            void initialisation();
         }
         interface View {
 
         }
         interface Presenter {
-            void initialisationModel();
         }
     }
 
