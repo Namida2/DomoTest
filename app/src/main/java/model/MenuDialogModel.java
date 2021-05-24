@@ -39,56 +39,33 @@ public class MenuDialogModel implements OrderActivityInterface.MenuDialog.Model 
 
     @Override
     public void initialisation() {
-//        categoryNameArrayList = new ArrayList<>();
-//        db.collection(MENU_COLLECTION_NAME).get().addOnCompleteListener(task -> {
-//            if(task.isSuccessful()) {
-//                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-//                    categoryNameArrayList.add(documentSnapshot.getId());
-//                }
-//                getCategoryNameObservable(categoryNameArrayList)
-//                    .subscribe(categoryName -> {
-//                        db.collection(MENU_COLLECTION_NAME)
-//                            .document(categoryName)
-//                            .collection(DISHES_COLLECTION_NAME)
-//                            .get().addOnCompleteListener(task1 -> {
-//                            if(task1.isSuccessful()) {
-//                                for(QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-//                                    Log.d(TAG, categoryName + ": " + documentSnapshot.getId() + ": " + documentSnapshot.getData());
-//                                }
-//                            }
-//                            else {
-//                                Log.d(TAG, "getCategoryNameObservable: " + task1.getException());
-//                            }
-//                        });
-//                    });
-//            }
-//            else {
-//                Log.d(TAG, task.getException().toString());
-//            }
-//        });
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signInWithEmailAndPassword("nikit.mahno@yandex.ru", "pppppp").addOnCompleteListener(task -> {
+        categoryNameArrayList = new ArrayList<>();
+        db.collection(MENU_COLLECTION_NAME).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-               ArrayList<Dish> arrayList = getDishesArrayList();
-                for(int i = 0; i < arrayList.size(); ++i){
-                    db.collection(MENU_COLLECTION_NAME)
-                        .document(arrayList.get(i).getCategoryName())
-                        .collection(DISHES_COLLECTION_NAME)
-                        .document(arrayList.get(i).getName()).set(arrayList.get(i)).addOnCompleteListener(task1 -> {
-                        if(task.isSuccessful()) {
-                            Log.d(TAG, "SUCCESS");
-                        }
-                        else Log.d(TAG, "getCategoryNameObservable: " + task1.getException());
-                    });
+                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                    categoryNameArrayList.add(documentSnapshot.getId());
                 }
-
+                getCategoryNameObservable(categoryNameArrayList)
+                    .subscribe(categoryName -> {
+                        db.collection(MENU_COLLECTION_NAME)
+                            .document(categoryName)
+                            .collection(DISHES_COLLECTION_NAME)
+                            .get().addOnCompleteListener(task1 -> {
+                            if(task1.isSuccessful()) {
+                                for(QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                                    Log.d(TAG, categoryName + ": " + documentSnapshot.getId() + ": " + documentSnapshot.getData());
+                                }
+                            }
+                            else {
+                                Log.d(TAG, "getCategoryNameObservable: " + task1.getException());
+                            }
+                        });
+                    });
             }
-            else
-                Log.d(TAG, "getCategoryNameObservable: " + task.getException());
+            else {
+                Log.d(TAG, task.getException().toString());
+            }
         });
-
-
     }
 
     private Observable<String> getCategoryNameObservable (ArrayList<String> categoryNameArrayList) {
@@ -99,46 +76,6 @@ public class MenuDialogModel implements OrderActivityInterface.MenuDialog.Model 
         });
     }
 
-    private ArrayList<Dish> getDishesArrayList () {
-        ArrayList<Dish> dishesArrayList = new ArrayList<>();
-        Dish dish = new Dish();
 
-        dish.setName("Эби-сию рамен");
-        dish.setCategoryName("Рамен");
-        dish.setWeight("600г");
-        dish.setCost("450₽");
-        dishesArrayList.add(dish);
-        dish = new Dish();
-
-        dish.setName("Ореховый сёю рамен");
-        dish.setCategoryName("Рамен");
-        dish.setWeight("600г");
-        dish.setCost("350₽");
-        dishesArrayList.add(dish);
-        dish = new Dish();
-
-        dish.setName("Мраморный гю-сию рамен");
-        dish.setCategoryName("Рамен");
-        dish.setWeight("600г");
-        dish.setCost("445₽");
-        dishesArrayList.add(dish);
-        dish = new Dish();
-
-        dish.setName("Сёю рамен");
-        dish.setCategoryName("Рамен");
-        dish.setWeight("600г");
-        dish.setCost("350₽");
-        dishesArrayList.add(dish);
-        dish = new Dish();
-
-        dish.setName("Томато мисо рамен с креветкой");
-        dish.setCategoryName("Рамен");
-        dish.setWeight("600г");
-        dish.setCost("450₽");
-        dishesArrayList.add(dish);
-        dish = new Dish();
-
-        return dishesArrayList;
-    }
 
 }

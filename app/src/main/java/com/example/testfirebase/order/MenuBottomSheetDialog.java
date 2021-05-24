@@ -24,12 +24,11 @@ public class MenuBottomSheetDialog extends BottomSheetDialogFragment implements 
         presenter = new MenuDialogPresenter(this);
     }
 
-
     @NonNull
     @NotNull
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        BottomSheetDialog dialog;
+        BottomSheetDialog dialog ;
         return super.onCreateDialog(savedInstanceState);
     }
 }
