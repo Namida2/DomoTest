@@ -50,8 +50,8 @@ public class OrderActivity extends AppCompatActivity implements OrderActivityInt
         setContentView(R.layout.activity_order);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initialisation();
-
         MenuDialogModel model = new MenuDialogModel();
+
     }
 
     private void initialisation () {
@@ -62,9 +62,9 @@ public class OrderActivity extends AppCompatActivity implements OrderActivityInt
         guestsCount = findViewById(R.id.guests_count);
         prepareGuestCountRecyclerView();
         dialog = new GuestsCountBottomSheetDialog(guestCountDialogView);
-        new Handler().postDelayed(() -> {
-            dialog.show(getSupportFragmentManager(), "");
-        }, 180);
+//        new Handler().postDelayed(() -> {
+//            dialog.show(getSupportFragmentManager(), "");
+//        }, 180);
     }
 
     private void prepareGuestCountRecyclerView() {
