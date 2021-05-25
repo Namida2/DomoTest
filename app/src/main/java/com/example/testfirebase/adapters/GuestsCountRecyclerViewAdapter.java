@@ -17,16 +17,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
-import interfaces.OrderActivityInterface;
+import interfaces.GuestCountDialogOrderActivityInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 import static registration.LogInActivity.TAG;
 
-public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsCountRecyclerViewAdapter.ViewHolder> implements OrderActivityInterface.GuestsCountAdapter.Presenter {
+public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsCountRecyclerViewAdapter.ViewHolder> implements GuestCountDialogOrderActivityInterface.GuestsCountAdapter.Presenter {
 
     private int GUESTS_COUNT = 8;
-    private OrderActivityInterface.Activity.MyView view;
-    public GuestsCountRecyclerViewAdapter (OrderActivityInterface.Activity.MyView view) {
+    private GuestCountDialogOrderActivityInterface.Activity.MyView view;
+    public GuestsCountRecyclerViewAdapter (GuestCountDialogOrderActivityInterface.Activity.MyView view) {
         this.view = view;
     }
 
@@ -35,12 +35,12 @@ public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsC
         view.setGuestsCount(guestsCount);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements OrderActivityInterface.GuestsCountAdapter.MyView {
-        OrderActivityInterface.GuestsCountAdapter.Presenter presenter;
+    public class ViewHolder extends RecyclerView.ViewHolder implements GuestCountDialogOrderActivityInterface.GuestsCountAdapter.MyView {
+        GuestCountDialogOrderActivityInterface.GuestsCountAdapter.Presenter presenter;
         TextView guests_count;
         ConstraintLayout container;
 
-        public ViewHolder(@NonNull @NotNull View itemView, OrderActivityInterface.GuestsCountAdapter.Presenter presenter) {
+        public ViewHolder(@NonNull @NotNull View itemView, GuestCountDialogOrderActivityInterface.GuestsCountAdapter.Presenter presenter) {
             super(itemView);
             this.presenter = presenter;
             guests_count = itemView.findViewById(R.id.guests_count);

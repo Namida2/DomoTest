@@ -8,7 +8,7 @@ import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
 
 import java.util.Map;
 
-public interface OrderActivityInterface {
+public interface GuestCountDialogOrderActivityInterface {
 
     String GUEST_COUNT_DIALOG_RECYCLER_VIEW_KEY = "guestCountRecyclerView";
     String GUEST_COUNT_DIALOG_RECYCLER_VIEW_ADAPTER_KEY = "guestsCountRecyclerViewAdapter";
@@ -36,21 +36,9 @@ public interface OrderActivityInterface {
 
     interface GuestsCountAdapter {
         interface MyView {
-
         }
         interface Presenter {
             void setGuestsCountToView(int guestsCount);
-        }
-    }
-
-    interface MenuDialog {
-        interface Model {
-            void initialisation();
-        }
-        interface View {
-
-        }
-        interface Presenter {
         }
     }
 

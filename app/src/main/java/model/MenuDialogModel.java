@@ -1,81 +1,85 @@
 package model;
 
-import android.util.Log;
+import android.view.View;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.order.Dish;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
-import interfaces.OrderActivityInterface;
-import io.reactivex.rxjava3.core.Observable;
+import interfaces.MenuDialogOrderActivityInterface;
+import tools.Pair;
 
-import static registration.LogInActivity.TAG;
+public class MenuDialogModel implements MenuDialogOrderActivityInterface.Model {
 
-public class MenuDialogModel implements OrderActivityInterface.MenuDialog.Model {
+    public static final String MENU_COLLECTION_NAME = "menu";
+    public static final String DISHES_COLLECTION_NAME = "dishes";
 
-    private final String MENU_COLLECTION_NAME = "menu";
-    private final String DISHES_COLLECTION_NAME = "dishes";
-    private Map<String, ArrayList<Dish>> dishesHashMap = new HashMap<>();
+    private View view;
+    private RecyclerView recyclerView;
+    private MenuRecyclerViewAdapter adapter;
 
-    private ArrayList<String> categoryNameArrayList;
+    private Map<String, List<Dish>> menu;
+    private ArrayList<Pair<String, Integer>> categoryNames;
 
     private FirebaseFirestore db;
 
     public MenuDialogModel () {
         db = FirebaseFirestore.getInstance();
-        initialisation();
-    }
-
-    public Map<String, ArrayList<Dish>> getDishesHashMap() {
-        return dishesHashMap;
     }
 
     @Override
-    public void initialisation() {
-        categoryNameArrayList = new ArrayList<>();
-        db.collection(MENU_COLLECTION_NAME).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                    categoryNameArrayList.add(documentSnapshot.getId());
-                }
-                getCategoryNameObservable(categoryNameArrayList)
-                    .subscribe(categoryName -> {
-                        db.collection(MENU_COLLECTION_NAME)
-                            .document(categoryName)
-                            .collection(DISHES_COLLECTION_NAME)
-                            .get().addOnCompleteListener(task1 -> {
-                            if(task1.isSuccessful()) {
-                                for(QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
-                                    Log.d(TAG, categoryName + ": " + documentSnapshot.getId() + ": " + documentSnapshot.getData());
-                                }
-                            }
-                            else {
-                                Log.d(TAG, "getCategoryNameObservable: " + task1.getException());
-                            }
-                        });
-                    });
-            }
-            else {
-                Log.d(TAG, task.getException().toString());
-            }
-        });
+    public Map<String, Object> getModelState() {
+        return null;
     }
-
-    private Observable<String> getCategoryNameObservable (ArrayList<String> categoryNameArrayList) {
-        return Observable.create(emitter -> {
-            for (int i = 0 ; i < categoryNameArrayList.size(); ++i) {
-                emitter.onNext(categoryNameArrayList.get(i));
-            }
-        });
+    @Override
+    public void setView(View view) {
+        this.view = view;
     }
-
-
+    @Override
+    public View getView() {
+        return view;
+    }
+    @Override
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+    @Override
+    public MenuRecyclerViewAdapter getMenuItemAdapter() {
+        return adapter;
+    }
+    @Override
+    public void setRecyclerView(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+    }
+    @Override
+    public void setMenuItemAdapter(MenuRecyclerViewAdapter adapter) {
+        this.adapter = adapter;
+    }
+    @Override
+    public FirebaseFirestore getDatabase() {
+        return db;
+    }
+    @Override
+    public Map<String, List<Dish>> getMenu() {
+        return menu;
+    }
+    @Override
+    public ArrayList<Pair<String, Integer>> getCategoryNames() {
+        return categoryNames;
+    }
+    @Override
+    public void setCategoryNames(ArrayList<Pair<String, Integer>> categoryNames) {
+        this.categoryNames = categoryNames;
+    }
+    @Override
+    public void setMenu(Map<String, List<Dish>> menu) {
+        this.menu = menu;
+    }
 
 }

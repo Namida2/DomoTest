@@ -36,7 +36,6 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     private EditText password;
     private EditText confirmPassword;
     private Button next;
-    private FragmentManager fragmentManager;
 
     private RegistrationActivityInterface.Presenter presenter;
 
@@ -47,13 +46,12 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         setContentView(R.layout.activity_registration);
 
         initialisation();
-        createFieldsObservables();
-        createButtonNextObservables();
+        createFieldsObservable();
+        createButtonNextObservable();
     }
 
     private void initialisation() {
         presenter = new RegistrationPresenter(this);
-        fragmentManager = getSupportFragmentManager();
         name = findViewById(R.id.name);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
@@ -64,7 +62,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         next.setEnabled(false);
     }
 
-    private void createFieldsObservables() {
+    private void createFieldsObservable() {
         textFieldsDisposable = RxTextView.afterTextChangeEvents(name).debounce(150, TimeUnit.MILLISECONDS)
             .mergeWith(RxTextView.afterTextChangeEvents(email)).debounce(150, TimeUnit.MILLISECONDS)
             .mergeWith(RxTextView.afterTextChangeEvents(confirmPassword)).debounce(150, TimeUnit.MILLISECONDS)
@@ -85,7 +83,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
             });
     }
 
-    private void createButtonNextObservables() {
+    private void createButtonNextObservable() {
         buttonNextDisposable = RxView.clicks(next)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(next -> {
@@ -112,9 +110,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
 
     @Override
     public void onError(int errorCode) {
-        if( !ErrorAlertDialog.isIsExist() ){
-            ErrorAlertDialog errorAlertDialog = ErrorAlertDialog.getNewInstance(errorCode);
-            errorAlertDialog.show(fragmentManager, "");
-        }
+        if( !ErrorAlertDialog.isIsExist() )
+            ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
     }
 }

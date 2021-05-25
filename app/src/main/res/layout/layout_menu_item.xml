@@ -8,7 +8,7 @@
     android:layout_marginBottom="8dp">
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/dish_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -31,12 +31,12 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="8dp"
         android:gravity="end"
-        app:layout_constraintBottom_toBottomOf="@+id/textView4"
+        app:layout_constraintBottom_toBottomOf="@+id/dish_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView4">
+        app:layout_constraintTop_toTopOf="@+id/dish_name">
 
         <TextView
-            android:id="@+id/dishes_weight"
+            android:id="@+id/dish_weight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -48,11 +48,11 @@
             android:id="@+id/line"
             android:layout_width="80dp"
             android:layout_height="1dp"
-            android:layout_below="@id/dishes_weight"
+            android:layout_below="@id/dish_weight"
             android:background="@color/black" />
 
         <TextView
-            android:id="@+id/dishes_cost"
+            android:id="@+id/dish_cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/line"

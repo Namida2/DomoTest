@@ -11,17 +11,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-import interfaces.OrderActivityInterface;
-import presenters.MenuDialogPresenter;
+import interfaces.GuestCountDialogOrderActivityInterface;
 
-public class MenuBottomSheetDialog extends BottomSheetDialogFragment implements OrderActivityInterface.MenuDialog.View {
-
-    private OrderActivityInterface.MenuDialog.Presenter presenter;
+public class MenuBottomSheetDialog extends BottomSheetDialogFragment {
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new MenuDialogPresenter(this);
+
     }
 
     @NonNull

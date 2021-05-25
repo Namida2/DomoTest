@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
 
-import interfaces.OrderActivityInterface;
+import interfaces.GuestCountDialogOrderActivityInterface;
 
-public class GuestCountDialogModel implements OrderActivityInterface.Model {
+public class GuestCountDialogModel implements GuestCountDialogOrderActivityInterface.Model {
 
     private RecyclerView guestsCountRecyclerView;
     private GuestsCountRecyclerViewAdapter guestsCountRecyclerViewAdapter;

@@ -10,19 +10,19 @@ import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
 import java.util.HashMap;
 import java.util.Map;
 
-import interfaces.OrderActivityInterface;
+import interfaces.GuestCountDialogOrderActivityInterface;
 import model.GuestCountDialogModel;
 
-import static interfaces.OrderActivityInterface.GUEST_COUNT_DIALOG_RECYCLER_VIEW_ADAPTER_KEY;
-import static interfaces.OrderActivityInterface.GUEST_COUNT_DIALOG_RECYCLER_VIEW_KEY;
-import static interfaces.OrderActivityInterface.GUEST_COUNT_DIALOG_VIEW_KEY;
+import static interfaces.GuestCountDialogOrderActivityInterface.GUEST_COUNT_DIALOG_RECYCLER_VIEW_ADAPTER_KEY;
+import static interfaces.GuestCountDialogOrderActivityInterface.GUEST_COUNT_DIALOG_RECYCLER_VIEW_KEY;
+import static interfaces.GuestCountDialogOrderActivityInterface.GUEST_COUNT_DIALOG_VIEW_KEY;
 
-public class OrderActivityPresenter implements OrderActivityInterface.Activity.Presenter {
+public class OrderActivityPresenter implements GuestCountDialogOrderActivityInterface.Activity.Presenter {
 
-    private OrderActivityInterface.Activity.MyView view;
-    private OrderActivityInterface.Model model;
+    private GuestCountDialogOrderActivityInterface.Activity.MyView view;
+    private GuestCountDialogOrderActivityInterface.Model model;
 
-    public OrderActivityPresenter(OrderActivityInterface.Activity.MyView view) {
+    public OrderActivityPresenter(GuestCountDialogOrderActivityInterface.Activity.MyView view) {
         this.view = view;
         model = new GuestCountDialogModel();
     }

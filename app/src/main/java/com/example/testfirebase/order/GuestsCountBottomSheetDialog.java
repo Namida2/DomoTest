@@ -13,11 +13,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-import interfaces.OrderActivityInterface;
+import interfaces.GuestCountDialogOrderActivityInterface;
 
-public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment implements OrderActivityInterface.GuestsCountAdapter.MyView {
+public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment implements GuestCountDialogOrderActivityInterface.GuestsCountAdapter.MyView {
 
-    private OrderActivityInterface.GuestsCountAdapter.Presenter presenter;
+    private GuestCountDialogOrderActivityInterface.GuestsCountAdapter.Presenter presenter;
     private View contentView;
     public GuestsCountBottomSheetDialog (View contentView) {
         this.contentView = contentView;
