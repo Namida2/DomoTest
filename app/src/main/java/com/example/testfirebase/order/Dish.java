@@ -1,13 +1,21 @@
 package com.example.testfirebase.order;
 
-
 public class Dish {
+    public static int position = 0;
+    public int myPosition;
     private String name;
     private String categoryName;
     private String cost;
     private String weight;
     private String description;
 
+    public Dish () {
+        this.myPosition = ++position;
+    }
+
+    public static void incrementPosition () {
+        ++position;
+    }
 
     public String getCategoryName() {
         return categoryName;

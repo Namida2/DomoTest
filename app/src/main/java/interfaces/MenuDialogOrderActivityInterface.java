@@ -11,7 +11,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+
+import com.example.testfirebase.order.DishCategoryInfo;
 
 import tools.Pair;
 
@@ -28,16 +29,17 @@ public interface MenuDialogOrderActivityInterface {
         Map<String, List<Dish>> getMenu();
         Map<String, Object> getModelState();
         void setMenu(Map<String, List<Dish>> menu);
-        ArrayList<Pair<String, Integer>> getCategoryNames();
-        void setCategoryNames(ArrayList<Pair<String, Integer>> categoryNames);
+        ArrayList<DishCategoryInfo<String, Integer>> getCategoryNames();
+        void setCategoryNames(ArrayList<DishCategoryInfo<String, Integer>> categoryNames);
     }
     interface View {
-        RecyclerView prepareRecyclerView();
         void onError(int errorCode);
-        android.view.View onDataFillingComplete(MenuDialogOrderActivityInterface.Model model);
+        void onModelComplete(android.view.View menuDialogView);
+        Pair<android.view.View, MenuRecyclerViewAdapter> onDataFillingComplete(MenuDialogOrderActivityInterface.Model model);
     }
     interface Presenter {
-        void initialization();
+        void setModelDataState();
+        void setModelViewState();
     }
 
 }

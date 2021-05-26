@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_menu_item"
+    style="@style/dishesItemStyle"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp">
 
@@ -11,13 +11,14 @@
         android:id="@+id/dish_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/montserrat_semi_bold"
         android:text="Томато писо рамен с креветкой"
         android:textColor="@color/black"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/relativeLayout2"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:gravity="end"
         app:layout_constraintBottom_toBottomOf="@+id/dish_name"
@@ -42,7 +43,8 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/montserrat_light"
             android:text="600г"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="16dp" />
 
         <View
             android:id="@+id/line"
@@ -59,7 +61,8 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/montserrat_light"
             android:text="450р"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="16dp" />
 
     </RelativeLayout>
 

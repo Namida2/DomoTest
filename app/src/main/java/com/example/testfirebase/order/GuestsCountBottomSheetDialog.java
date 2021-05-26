@@ -17,7 +17,6 @@ import interfaces.GuestCountDialogOrderActivityInterface;
 
 public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment implements GuestCountDialogOrderActivityInterface.GuestsCountAdapter.MyView {
 
-    private GuestCountDialogOrderActivityInterface.GuestsCountAdapter.Presenter presenter;
     private View contentView;
     public GuestsCountBottomSheetDialog (View contentView) {
         this.contentView = contentView;

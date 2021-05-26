@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.testfirebase.R;
+import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.order.Dish;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -18,6 +19,8 @@ import io.reactivex.rxjava3.core.Observable;
 import model.MenuDialogModel;
 import tools.Pair;
 
+import com.example.testfirebase.order.DishCategoryInfo;
+
 import static model.MenuDialogModel.DISHES_COLLECTION_NAME;
 import static model.MenuDialogModel.MENU_COLLECTION_NAME;
 import static registration.LogInActivity.TAG;
@@ -26,24 +29,35 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
 
     private static MenuDialogOrderActivityInterface.Model model;
     private MenuDialogOrderActivityInterface.View view;
+    private ArrayList<Integer> categoryNamesPosition;
 
     public MenuDialogPresenter (MenuDialogOrderActivityInterface.View view) {
         this.view = view;
-        if (model == null)
+        if (model == null) {
             model = new MenuDialogModel();
-        initialization();
+            setModelDataState();
+        } else view.onModelComplete(model.getView());
     }
 
     @Override
-    public void initialization() {
-        ArrayList<Pair<String, Integer>> categoryNames = new ArrayList<>();
+    public void setModelViewState() {
+        Pair<View, MenuRecyclerViewAdapter> pair = view.onDataFillingComplete(model);
+        model.setView(pair.first);
+        model.setMenuItemAdapter(pair.second);
+        model.setRecyclerView(pair.first.findViewById(R.id.menu_recycler_view));
+        view.onModelComplete(model.getView());
+    }
+
+    @Override
+    public void setModelDataState() {
+        ArrayList<DishCategoryInfo<String, Integer>> categoryNames = new ArrayList<>();
         Map<String, List<Dish>> menu = new HashMap<>();
         model.setCategoryNames(categoryNames);
         model.setMenu(menu);
         model.getDatabase().collection(MENU_COLLECTION_NAME).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot documentSnapshot : task.getResult())
-                    categoryNames.add(new Pair<>(documentSnapshot.getId(), 0));
+                    categoryNames.add(new DishCategoryInfo<>(documentSnapshot.getId(), 0));
                 getCategoryNameObservable(categoryNames)
                     .subscribe(categoryNameItem -> {
                         model.getDatabase().collection(MENU_COLLECTION_NAME)
@@ -52,27 +66,26 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
                             .get().addOnCompleteListener(task1 -> {
                             if(task1.isSuccessful()) {
                                 List<Dish> dishesArrayList = task1.getResult().toObjects(Dish.class);
-                                menu.put(categoryNameItem.categoryName, task1.getResult().toObjects(Dish.class));
+                                Dish.incrementPosition();
+                                menu.put(categoryNameItem.categoryName, dishesArrayList);
                                 categoryNameItem.categorySize = dishesArrayList.size();
                                 for(int i = 0; i < categoryNames.size(); ++i) {
                                     int numberOfAllDishesBefore = 0;
-                                    if (categoryNames.get(i).categorySize != 0 && categoryNames.get(i).numberOfAllDishesBefore != null) continue;
+                                    if (categoryNames.get(i).categorySize != 0
+                                        && categoryNames.get(i).categoryNamePosition != null) continue;
                                     if (categoryNames.get(i).categorySize == 0) break;
-                                    for(int j = 0; j < i; ++j)
+                                    for(int j = 0; j <= i; ++j) {
+                                        if (i == j) continue;
                                         numberOfAllDishesBefore += categoryNames.get(j).categorySize;
-                                    categoryNames.get(i).numberOfAllDishesBefore = numberOfAllDishesBefore;
-                                    if (i == categoryNames.size()-1) {
-                                        View dialogView = view.onDataFillingComplete(model);
-                                        model.setRecyclerView(dialogView.findViewById(R.id.menu_recycler_view));
-                                        //ADAPTER
                                     }
+                                    categoryNames.get(i).categoryNamePosition = numberOfAllDishesBefore + i;
+                                    if (i == categoryNames.size()-1)
+                                        setModelViewState();
                                 }
                             }
-                            else { Log.d(TAG, "MenuDialogPresenter.initialization: " + task1.getException());
-                            }
+                            else  Log.d(TAG, "MenuDialogPresenter.initialization: " + task1.getException());
                         });
                     }, error -> {
-                        Log.d(TAG,"MenuDialogPresenter.initialization: " + error.getMessage());
                     }, () -> {
                     });
             }
@@ -82,8 +95,7 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
             }
         });
     }
-
-    private Observable<Pair<String, Integer>> getCategoryNameObservable (ArrayList<Pair<String, Integer>> categoryNameArrayList) {
+    private Observable<DishCategoryInfo<String, Integer>> getCategoryNameObservable (ArrayList<DishCategoryInfo<String, Integer>> categoryNameArrayList) {
         return Observable.create(emitter -> {
             for (int i = 0 ; i < categoryNameArrayList.size(); ++i) {
                 emitter.onNext(categoryNameArrayList.get(i));

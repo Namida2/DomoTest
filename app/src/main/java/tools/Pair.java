@@ -1,14 +1,13 @@
 package tools;
 
 public class Pair<F, S> {
-
-    public F categoryName;
-    public S categorySize;
-    public S numberOfAllDishesBefore;
+    public F first;
+    public S second;
 
     public Pair(F first, S second) {
-        this.categoryName = first;
-        this.categorySize = second;
+        this.first = first;
+        this.second = second;
     }
+
 
 }

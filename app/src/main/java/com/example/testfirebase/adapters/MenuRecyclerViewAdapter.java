@@ -19,33 +19,37 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import interfaces.MenuDialogOrderActivityInterface;
-import model.MenuDialogModel;
+import com.example.testfirebase.order.DishCategoryInfo;
+
 import tools.Pair;
 
 
 public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
-    private ArrayList<Pair<String, Integer>> categoryName;
+    private ArrayList<DishCategoryInfo<String, Integer>> categoryNames;
     private Map<String, List<Dish>> menu;
+    private ArrayList<Object> menuItems;
 
-    private String lastCategoryName;
+    private Pair<DishCategoryInfo<String, Integer>, Integer> currentCategoryNameInfo;
 
-    public MenuRecyclerViewAdapter (Map<String, List<Dish>> menu, ArrayList<Pair<String, Integer>> categoryName) {
+    public MenuRecyclerViewAdapter (Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames) {
         this.menu = menu;
-        this.categoryName = categoryName;
+        this.categoryNames = categoryNames;
+        menuItems = new ArrayList<>();
+        for( int i = 0; i < this.categoryNames.size(); ++i){
+            DishCategoryInfo <String, Integer> categoryNameInfo = categoryNames.get(i);
+            menuItems.add(categoryNameInfo);
+            menuItems.addAll(menu.get(categoryNameInfo.categoryName));
+        }
     }
-
     class CategoryNameViewHolder extends RecyclerView.ViewHolder {
-        private Button categoryName;
+        private TextView categoryName;
         public CategoryNameViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             categoryName = itemView.findViewById(R.id.category_name);
         }
     }
-
     class MenuItemViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
         private TextView weight;
@@ -57,17 +61,13 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             cost = itemView.findViewById(R.id.dish_cost);
         }
     }
-
     @Override
     public int getItemViewType(int position) {
         if (position == 0 ) return 0;
-        for(int i = 0; i < categoryName.size()-1; ++i) {
-            if(position == menu.get( categoryName.get(i)).size() )
-                return 0;
-        }
+        for(int i = 0; i < categoryNames.size(); ++i)
+            if(position == categoryNames.get(i).categoryNamePosition) return 0;
         return 1;
     }
-
     @NonNull
     @NotNull
     @Override
@@ -76,7 +76,7 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         View view;
         switch (viewType) {
             case 0:
-                view = inflater.inflate(R.layout.layout_category, parent, false);
+                view = inflater.inflate(R.layout.layout_menu_category, parent, false);
                 return new CategoryNameViewHolder(view);
             case 1:
                 view = inflater.inflate(R.layout.layout_menu_item, parent, false);
@@ -84,30 +84,27 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
         return null;
     }
-
     @Override
     public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case 0:
-                lastCategoryName = categoryName.get(position).categoryName;
                 CategoryNameViewHolder categoryNameViewHolder = (CategoryNameViewHolder) holder;
-                categoryNameViewHolder.categoryName.setText(categoryName.get(position).categoryName);
+                DishCategoryInfo<String, Integer> dishCategoryInfo = (DishCategoryInfo<String, Integer>) menuItems.get(position);
+                categoryNameViewHolder.categoryName.setText(dishCategoryInfo.categoryName);
                 break;
             case 1:
                 MenuItemViewHolder menuItemViewHolder = (MenuItemViewHolder) holder;
-                //menuItemViewHolder.name.setText( menu.get(lastCategoryName).get().getName() );
+                Dish dish = (Dish) menuItems.get(position);
+                menuItemViewHolder.name.setText(dish.getName());
+                menuItemViewHolder.weight.setText(dish.getWeight());
+                menuItemViewHolder.cost.setText(dish.getCost());
+                break;
         }
     }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public int getItemCount() {
-        AtomicInteger itemCount = new AtomicInteger();
-        categoryName.forEach(item -> {
-            itemCount.incrementAndGet(); //for category
-            itemCount.addAndGet(item.categorySize); //for dishes in category
-        });
-        return itemCount.get();
+        return menuItems.size();
     }
 
 

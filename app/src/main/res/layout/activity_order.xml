@@ -102,7 +102,7 @@
 
     </RelativeLayout>
         <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/a"
+            android:id="@+id/bottom_app_bar"
             style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -121,10 +121,10 @@
         </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_action_button"
+        android:id="@+id/menu_floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_anchor="@id/a"
+        app:layout_anchor="@id/bottom_app_bar"
         app:rippleColor="@color/white"
         app:srcCompat="@drawable/ic_add"
         app:tint="@color/white" />

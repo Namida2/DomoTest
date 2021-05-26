@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import interfaces.MenuDialogOrderActivityInterface;
-import tools.Pair;
+import com.example.testfirebase.order.DishCategoryInfo;
 
 public class MenuDialogModel implements MenuDialogOrderActivityInterface.Model {
 
@@ -25,7 +25,7 @@ public class MenuDialogModel implements MenuDialogOrderActivityInterface.Model {
     private MenuRecyclerViewAdapter adapter;
 
     private Map<String, List<Dish>> menu;
-    private ArrayList<Pair<String, Integer>> categoryNames;
+    private ArrayList<DishCategoryInfo<String, Integer>> categoryNames;
 
     private FirebaseFirestore db;
 
@@ -70,11 +70,11 @@ public class MenuDialogModel implements MenuDialogOrderActivityInterface.Model {
         return menu;
     }
     @Override
-    public ArrayList<Pair<String, Integer>> getCategoryNames() {
+    public ArrayList<DishCategoryInfo<String, Integer>> getCategoryNames() {
         return categoryNames;
     }
     @Override
-    public void setCategoryNames(ArrayList<Pair<String, Integer>> categoryNames) {
+    public void setCategoryNames(ArrayList<DishCategoryInfo<String, Integer>> categoryNames) {
         this.categoryNames = categoryNames;
     }
     @Override
