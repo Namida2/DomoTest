@@ -1,6 +1,7 @@
 package com.example.testfirebase.order;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 
@@ -34,5 +35,10 @@ public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment impl
         BottomSheetDialog dialog = new BottomSheetDialog(getContext(), R.style.bottomSheetDialogStyle);
         dialog.setContentView(contentView);
         return dialog;
+    }
+
+    @Override
+    public void onDismiss(@NonNull @NotNull DialogInterface dialog) {
+        super.onDismiss(dialog);
     }
 }

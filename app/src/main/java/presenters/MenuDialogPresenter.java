@@ -6,6 +6,8 @@ import android.view.View;
 import com.example.testfirebase.R;
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.order.Dish;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -52,6 +54,16 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
     public void setModelDataState() {
         ArrayList<DishCategoryInfo<String, Integer>> categoryNames = new ArrayList<>();
         Map<String, List<Dish>> menu = new HashMap<>();
+
+//        FirebaseAuth auth = FirebaseAuth.getInstance();
+//        auth.signInWithEmailAndPassword("nikit.mahno@yandex.ru", "pppppp").addOnCompleteListener(task -> {
+//            if (task.isSuccessful())
+//                Log.d(TAG, "Registered");
+//            else
+//                Log.d(TAG, task.getException().toString());
+//
+//        });
+
         model.setCategoryNames(categoryNames);
         model.setMenu(menu);
         model.getDatabase().collection(MENU_COLLECTION_NAME).get().addOnCompleteListener(task -> {

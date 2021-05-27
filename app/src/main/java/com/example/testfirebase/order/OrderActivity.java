@@ -1,6 +1,7 @@
 package com.example.testfirebase.order;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,6 +17,8 @@ import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Map;
 
@@ -56,7 +59,6 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initialisation();
 
-        //floatingActionButton
     }
 
     private void initialisation () {
@@ -69,9 +71,9 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         prepareGuestCountModel();
 
         guestCountDialog = new GuestsCountBottomSheetDialog(guestCountDialogView);
-//        new Handler().postDelayed(() -> {
-//            dialog.show(getSupportFragmentManager(), "");
-//        }, 180);
+        new Handler().postDelayed(() -> {
+            guestCountDialog.show(getSupportFragmentManager(), "");
+        }, 10);
 
         MenuDialogModel model = new MenuDialogModel();
         menuDialogPresenter = new MenuDialogPresenter(this);
