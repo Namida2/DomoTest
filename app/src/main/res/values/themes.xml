@@ -102,7 +102,7 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="errorAlertDialogStyle"
+    <style name="alertDialogStyle"
         parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@style/animErrorAlertDialogStyle</item>

@@ -35,11 +35,10 @@ public class ErrorAlertDialog extends DialogFragment {
         errorAlertDialog.setCancelable(false);
         return errorAlertDialog;
     }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.errorAlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.alertDialogStyle);
         View view = View.inflate(getActivity(), R.layout.dialog_error, null);
         TextView title = view.findViewById(R.id.responseCode);
         TextView text = view.findViewById(R.id.text);
@@ -81,7 +80,6 @@ public class ErrorAlertDialog extends DialogFragment {
         builder.setView(view);
         return builder.create();
     }
-
     public static boolean isIsExist() {
         return isExist.get();
     }

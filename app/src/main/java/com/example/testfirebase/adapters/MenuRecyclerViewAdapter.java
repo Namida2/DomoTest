@@ -1,6 +1,7 @@
 package com.example.testfirebase.adapters;
 
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
+import com.example.testfirebase.order.AddDishAlertDialog;
 import com.example.testfirebase.order.Dish;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,10 +22,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.example.testfirebase.order.DishCategoryInfo;
+import com.jakewharton.rxbinding4.view.RxView;
 
 import tools.Pair;
+
+import static registration.LogInActivity.TAG;
 
 
 public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
@@ -54,11 +61,13 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         private TextView name;
         private TextView weight;
         private TextView cost;
+        private ConstraintLayout menuItemContainer;
         public MenuItemViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.dish_name);
             weight = itemView.findViewById(R.id.dish_weight);
             cost = itemView.findViewById(R.id.dish_cost);
+            menuItemContainer = itemView.findViewById(R.id.menu_item_container);
         }
     }
     @Override
@@ -98,6 +107,18 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 menuItemViewHolder.name.setText(dish.getName());
                 menuItemViewHolder.weight.setText(dish.getWeight());
                 menuItemViewHolder.cost.setText(dish.getCost());
+                RxView.clicks(menuItemViewHolder.menuItemContainer)
+                    .debounce(150, TimeUnit.MILLISECONDS)
+                    .subscribe(item -> {
+                        if(AddDishAlertDialog.isExit()) {
+                            //////
+                        }
+                    }, error -> {
+                        Log.d(TAG, "MenuRecyclerViewAdapter.onBindViewHolder: " + error.getMessage());
+                    }, () -> {
+
+                    });
+
                 break;
         }
     }

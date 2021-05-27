@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     style="@style/dishesItemStyle"
     android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp">
+    android:layout_marginBottom="8dp"
+    android:id="@+id/menu_item_container">
 
     <TextView
         android:id="@+id/dish_name"

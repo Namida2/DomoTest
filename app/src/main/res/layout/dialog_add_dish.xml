@@ -6,21 +6,29 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_add_dish_dialog">
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/dish_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="12dp"
         android:layout_marginEnd="64dp"
         android:fontFamily="@font/montserrat_semi_bold"
+        android:gravity="center"
         android:text="Гёдза с мраморной говядиной "
         android:textColor="@color/black"
         android:textSize="16dp"
-        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <ImageView
         android:layout_width="wrap_content"
