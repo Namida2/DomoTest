@@ -77,24 +77,25 @@
 
     <EditText
         android:id="@+id/commentary"
+        style="@style/editTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/bg_edit_text"
-        android:inputType="text"
-        style="@style/editTextStyle"
         android:hint="Комментарий"
+        android:inputType="text"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/add_to_order_button"
         style="@style/buttonStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -122,7 +123,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2"
+        app:layout_constraintTop_toBottomOf="@+id/add_to_order_button"
         android:drawableEnd="@drawable/ic_arrow_right_black"/>
 
 

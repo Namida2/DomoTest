@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import com.example.testfirebase.order.DishCategoryInfo;
 import com.jakewharton.rxbinding4.view.RxView;
@@ -113,7 +114,9 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     .debounce(150, TimeUnit.MILLISECONDS)
                     .subscribe(item -> {
                         if(!AddDishAlertDialog.isExit()) {
-                            AddDishAlertDialog dialog = AddDishAlertDialog.getNewInstance(dish);
+                            AddDishAlertDialog dialog = AddDishAlertDialog.getNewInstance(dish, order -> {
+                                p
+                            });
                             dialog.show(fragmentManager, "");
                         }
                     }, error -> {

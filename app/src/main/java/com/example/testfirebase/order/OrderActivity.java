@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -19,8 +20,10 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.jakewharton.rxbinding4.view.RxView;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import dialogsTools.ErrorAlertDialog;
 import interfaces.GuestCountDialogOrderActivityInterface;
@@ -81,7 +84,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         bottomAppBar = findViewById(R.id.bottom_app_bar);
         fba = findViewById(R.id.menu_floating_action_button);
         fba.setOnClickListener(view -> {
-            if(menuDialogView != null)
+            if(menuDialogView != null) // add isExist
                 menuDialog.show(getSupportFragmentManager(), "");
         });
     }

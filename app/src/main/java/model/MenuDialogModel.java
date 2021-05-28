@@ -11,8 +11,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import interfaces.MenuDialogOrderActivityInterface;
+import tools.Pair;
+
 import com.example.testfirebase.order.DishCategoryInfo;
 
 public class MenuDialogModel implements MenuDialogOrderActivityInterface.Model {
@@ -77,6 +80,7 @@ public class MenuDialogModel implements MenuDialogOrderActivityInterface.Model {
     public void setCategoryNames(ArrayList<DishCategoryInfo<String, Integer>> categoryNames) {
         this.categoryNames = categoryNames;
     }
+
     @Override
     public void setMenu(Map<String, List<Dish>> menu) {
         this.menu = menu;

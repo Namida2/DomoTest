@@ -7,7 +7,6 @@
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     android:id="@+id/menu_item_container">
-
     <TextView
         android:id="@+id/dish_name"
         android:layout_width="0dp"
@@ -19,12 +18,11 @@
         android:fontFamily="@font/montserrat_semi_bold"
         android:text="Томато писо рамен с креветкой"
         android:textColor="@color/black"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/relativeLayout2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
     <RelativeLayout
         android:id="@+id/relativeLayout2"
         android:layout_width="wrap_content"
@@ -36,7 +34,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/dish_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dish_name">
-
         <TextView
             android:id="@+id/dish_weight"
             android:layout_width="wrap_content"
@@ -45,15 +42,13 @@
             android:fontFamily="@font/montserrat_light"
             android:text="600г"
             android:textColor="@color/black"
-            android:textSize="16dp" />
-
+            android:textSize="16sp" />
         <View
             android:id="@+id/line"
             android:layout_width="80dp"
             android:layout_height="1dp"
             android:layout_below="@id/dish_weight"
             android:background="@color/black" />
-
         <TextView
             android:id="@+id/dish_cost"
             android:layout_width="wrap_content"
@@ -63,8 +58,7 @@
             android:fontFamily="@font/montserrat_light"
             android:text="450р"
             android:textColor="@color/black"
-            android:textSize="16dp" />
-
+            android:textSize="16sp" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

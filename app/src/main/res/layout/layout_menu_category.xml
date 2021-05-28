@@ -18,7 +18,7 @@
         android:paddingStart="48dp"
         android:paddingTop="8dp"
         android:paddingEnd="48dp"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:paddingRight="24dp"
         android:paddingBottom="8dp"
         android:text="Рамен"
