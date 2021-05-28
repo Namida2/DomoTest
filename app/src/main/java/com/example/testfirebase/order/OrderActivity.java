@@ -103,7 +103,6 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             guestsCountDialogPresenter.setModelState(modelState);
         }
     }
-
     @Override
     public void setGuestsCount(int guestsCount) {
         guestCountDialog.dismiss();

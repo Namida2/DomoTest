@@ -104,10 +104,8 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 categoryNameViewHolder.categoryName.setText(dishCategoryInfo.categoryName);
                 break;
             case 1:
-
                 MenuItemViewHolder menuItemViewHolder = (MenuItemViewHolder) holder;
                 Dish dish = (Dish) menuItems.get(position);
-
                 menuItemViewHolder.name.setText (dish.getName());
                 menuItemViewHolder.weight.setText(dish.getWeight());
                 menuItemViewHolder.cost.setText(dish.getCost());
@@ -123,7 +121,6 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }, () -> {
 
                     });
-
                 break;
         }
     }
