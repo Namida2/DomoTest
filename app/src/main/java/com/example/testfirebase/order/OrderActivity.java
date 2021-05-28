@@ -119,7 +119,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     public Pair<View, MenuRecyclerViewAdapter> onDataFillingComplete(MenuDialogOrderActivityInterface.Model model) {
         View view = View.inflate(this, R.layout.dialog_menu, null);
         RecyclerView recyclerView = view.findViewById(R.id.menu_recycler_view);
-        MenuRecyclerViewAdapter adapter = new MenuRecyclerViewAdapter(model.getMenu(), model.getCategoryNames());
+        MenuRecyclerViewAdapter adapter = new MenuRecyclerViewAdapter(getSupportFragmentManager(), model.getMenu(), model.getCategoryNames());
         recyclerView.setAdapter(adapter);
         return new Pair<>(view, adapter);
     }

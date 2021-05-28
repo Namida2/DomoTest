@@ -19,13 +19,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AddDishAlertDialog extends DialogFragment {
 
     private static AtomicBoolean isExist = new AtomicBoolean(false);
-    private Dish dish;
+    private static Dish dish;
 
-    public AddDishAlertDialog getNewInstance (Dish dish) {
-        isExist.set(true);
-        this.dish = dish;
+    public static AddDishAlertDialog getNewInstance (Dish dish) {
+        //isExist.set(true);
+        AddDishAlertDialog.dish = dish;
         AddDishAlertDialog dialog = new AddDishAlertDialog();
-        dialog.setCancelable(false);
+        //dialog.setCancelable(false);
         return dialog;
     }
     @NonNull
@@ -35,7 +35,9 @@ public class AddDishAlertDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.alertDialogStyle);
         View contentView = View.inflate(getContext(), R.layout.dialog_add_dish, null);
         TextView dishName = contentView.findViewById(R.id.dish_name);
-        dishName.setText(dish.getName());
+        dishName.setText(dish.getName().length() > 26 ?
+            dish.getName().substring(0, 26) + "..."
+            :dish.getName());
         builder.setView(contentView);
         return builder.create();
     }

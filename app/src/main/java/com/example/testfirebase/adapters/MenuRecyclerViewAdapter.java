@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
@@ -38,9 +39,10 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Map<String, List<Dish>> menu;
     private ArrayList<Object> menuItems;
 
-    private Pair<DishCategoryInfo<String, Integer>, Integer> currentCategoryNameInfo;
+    private FragmentManager fragmentManager;
 
-    public MenuRecyclerViewAdapter (Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames) {
+    public MenuRecyclerViewAdapter (FragmentManager fragmentManager, Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames) {
+        this.fragmentManager = fragmentManager;
         this.menu = menu;
         this.categoryNames = categoryNames;
         menuItems = new ArrayList<>();
@@ -102,16 +104,19 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 categoryNameViewHolder.categoryName.setText(dishCategoryInfo.categoryName);
                 break;
             case 1:
+
                 MenuItemViewHolder menuItemViewHolder = (MenuItemViewHolder) holder;
                 Dish dish = (Dish) menuItems.get(position);
-                menuItemViewHolder.name.setText(dish.getName());
+
+                menuItemViewHolder.name.setText (dish.getName());
                 menuItemViewHolder.weight.setText(dish.getWeight());
                 menuItemViewHolder.cost.setText(dish.getCost());
                 RxView.clicks(menuItemViewHolder.menuItemContainer)
                     .debounce(150, TimeUnit.MILLISECONDS)
                     .subscribe(item -> {
-                        if(AddDishAlertDialog.isExit()) {
-                            //////
+                        if(!AddDishAlertDialog.isExit()) {
+                            AddDishAlertDialog dialog = AddDishAlertDialog.getNewInstance(dish);
+                            dialog.show(fragmentManager, "");
                         }
                     }, error -> {
                         Log.d(TAG, "MenuRecyclerViewAdapter.onBindViewHolder: " + error.getMessage());
