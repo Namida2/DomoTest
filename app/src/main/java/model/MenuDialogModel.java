@@ -35,7 +35,6 @@ public class MenuDialogModel implements MenuDialogOrderActivityInterface.Model {
     public MenuDialogModel () {
         db = FirebaseFirestore.getInstance();
     }
-
     @Override
     public Map<String, Object> getModelState() {
         return null;
@@ -80,7 +79,6 @@ public class MenuDialogModel implements MenuDialogOrderActivityInterface.Model {
     public void setCategoryNames(ArrayList<DishCategoryInfo<String, Integer>> categoryNames) {
         this.categoryNames = categoryNames;
     }
-
     @Override
     public void setMenu(Map<String, List<Dish>> menu) {
         this.menu = menu;

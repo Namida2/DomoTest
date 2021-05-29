@@ -115,7 +115,7 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     .subscribe(item -> {
                         if(!AddDishAlertDialog.isExit()) {
                             AddDishAlertDialog dialog = AddDishAlertDialog.getNewInstance(dish, order -> {
-                                p
+
                             });
                             dialog.show(fragmentManager, "");
                         }

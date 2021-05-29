@@ -26,14 +26,13 @@ public interface GuestCountDialogOrderActivityInterface {
     interface Activity {
         interface MyView {
             void setGuestsCount(int guestsCount);
-            void setDialogView(View view);
+            void setGuestCountDialogView(View view);
         }
         interface Presenter {
-            Map<String, Object> getModelState();
-            void setModelState(Map<String, Object> modelState);
+            Map<String, Object> getGuestCountModelState();
+            void setGuestCountModelState(Map<String, Object> modelState);
         }
     }
-
     interface GuestsCountAdapter {
         interface MyView {
         }

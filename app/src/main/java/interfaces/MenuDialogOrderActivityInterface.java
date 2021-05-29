@@ -32,8 +32,8 @@ public interface MenuDialogOrderActivityInterface {
         void setCategoryNames(ArrayList<DishCategoryInfo<String, Integer>> categoryNames);
     }
     interface View {
-        void onError(int errorCode);
-        void onModelComplete(android.view.View menuDialogView);
+        void onMenuDialogError(int errorCode);
+        void onMenuDialogModelComplete(android.view.View menuDialogView);
         Pair<android.view.View, MenuRecyclerViewAdapter> onDataFillingComplete(MenuDialogOrderActivityInterface.Model model);
     }
     interface Presenter {

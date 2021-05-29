@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_add_dish_dialog">
+    android:background="@drawable/bg_add_dish_dialog_inset">
 
     <View
         android:id="@+id/view"
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:fontFamily="@font/montserrat_light"
-        android:text="Кол-во порций:"
+        android:text="Количествово порций:"
         android:textColor="@color/black"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/editText"

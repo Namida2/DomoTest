@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -18,12 +17,8 @@ import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.jakewharton.rxbinding4.view.RxView;
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import dialogsTools.ErrorAlertDialog;
 import interfaces.GuestCountDialogOrderActivityInterface;
@@ -51,9 +46,6 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     private MenuBottomSheetDialog menuDialog;
     private BottomAppBar bottomAppBar;
     private FloatingActionButton fba;
-
-    private final String MENU_COLLECTION_NAME = "menu";
-    private final String TAG = "myLogs";
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -93,7 +85,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         RecyclerView recyclerView = null;
         GuestsCountRecyclerViewAdapter adapter = null;
         android.view.View view = null;
-        Map<String, Object> modelState = guestsCountDialogPresenter.getModelState();
+        Map<String, Object> modelState = guestsCountDialogPresenter.getGuestCountModelState();
         if(modelState.containsValue(null)) {
             view = android.view.View.inflate(this, R.layout.dialog_guests_count, null);
             recyclerView = view.findViewById(R.id.guests_count_recycler_view);
@@ -103,7 +95,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             modelState.put(GUEST_COUNT_DIALOG_VIEW_KEY, view);
             modelState.put(GUEST_COUNT_DIALOG_RECYCLER_VIEW_KEY, recyclerView);
             modelState.put(GUEST_COUNT_DIALOG_RECYCLER_VIEW_ADAPTER_KEY, adapter);
-            guestsCountDialogPresenter.setModelState(modelState);
+            guestsCountDialogPresenter.setGuestCountModelState(modelState);
         }
     }
     @Override
@@ -112,7 +104,11 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         this.guestsCount.setText(Integer.toString(guestsCount));
     }
     @Override
-    public void onModelComplete(View menuDialogView) {
+    public void setGuestCountDialogView(View view) {
+        guestCountDialogView = view;
+    }
+    @Override
+    public void onMenuDialogModelComplete(View menuDialogView) {
         this.menuDialogView = menuDialogView;
         menuDialog = new MenuBottomSheetDialog(menuDialogView);
         Log.d(TAG, "COMPLETE");
@@ -126,12 +122,8 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         return new Pair<>(view, adapter);
     }
     @Override
-    public void onError(int errorCode) {
+    public void onMenuDialogError(int errorCode) {
         if(!ErrorAlertDialog.isIsExist())
             ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
-    }
-    @Override
-    public void setDialogView(View view) {
-        guestCountDialogView = view;
     }
 }

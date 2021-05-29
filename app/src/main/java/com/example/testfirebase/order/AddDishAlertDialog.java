@@ -2,8 +2,11 @@ package com.example.testfirebase.order;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -43,8 +46,8 @@ public class AddDishAlertDialog extends DialogFragment {
         View contentView = View.inflate(getContext(), R.layout.dialog_add_dish, null);
         TextView dishName = contentView.findViewById(R.id.dish_name);
         Button addToOrderButton = contentView.findViewById(R.id.add_to_order_button);
-        dishName.setText(dish.getName().length() > 26 ?
-            dish.getName().substring(0, 26) + "..."
+        dishName.setText(dish.getName().length() > 36 ?
+            dish.getName().substring(0, 36) + "..."
             :dish.getName());
 
         RxView.clicks(addToOrderButton)
@@ -56,6 +59,17 @@ public class AddDishAlertDialog extends DialogFragment {
         builder.setView(contentView);
         return builder.create();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Window window = getDialog().getWindow();
+        if (window == null) return;
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(layoutParams);
+    }
+
     public static boolean isExit () {
         return isExist.get();
     }

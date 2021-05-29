@@ -6,8 +6,6 @@ import android.view.View;
 import com.example.testfirebase.R;
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.order.Dish;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -38,7 +36,7 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
         if (model == null) {
             model = new MenuDialogModel();
             setModelDataState();
-        } else view.onModelComplete(model.getView());
+        } else view.onMenuDialogModelComplete(model.getView());
     }
 
     @Override
@@ -47,7 +45,7 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
         model.setView(pair.first);
         model.setMenuItemAdapter(pair.second);
         model.setRecyclerView(pair.first.findViewById(R.id.menu_recycler_view));
-        view.onModelComplete(model.getView());
+        view.onMenuDialogModelComplete(model.getView());
     }
 
     @Override
@@ -103,7 +101,7 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
             }
             else {
                 Log.d(TAG, "MenuDialogPresenter.initialization: " + task.getException().toString());
-                view.onError(ErrorAlertDialog.INTERNET_CONNECTION);
+                view.onMenuDialogError(ErrorAlertDialog.INTERNET_CONNECTION);
             }
         });
     }
