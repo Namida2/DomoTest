@@ -102,6 +102,7 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
             else {
                 Log.d(TAG, "MenuDialogPresenter.initialization: " + task.getException().toString());
                 view.onMenuDialogError(ErrorAlertDialog.INTERNET_CONNECTION);
+                // add a category "SOMETHING WRONG"
             }
         });
     }

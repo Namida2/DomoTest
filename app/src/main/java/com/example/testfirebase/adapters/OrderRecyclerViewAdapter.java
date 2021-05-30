@@ -14,12 +14,18 @@ import com.example.testfirebase.order.Dish;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import tools.Pair;
 
 public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<Pair<Dish, Pair<Integer, String>>> dishesArrayList;
+    private ArrayList<Pair<Dish, Pair<String, Integer>>> ordersArrayList;
+    private Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer;
+
+    public OrderRecyclerViewAdapter (Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer) {
+        this.notifyOrderAdapterConsumer = notifyOrderAdapterConsumer;
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView categoryName;
@@ -46,18 +52,18 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     }
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        holder.categoryName.setText(dishesArrayList.get(position).first.getCategoryName());
-        holder.name.setText(dishesArrayList.get(position).first.getName());
-        holder.weight.setText(dishesArrayList.get(position).first.getWeight());
-        holder.cost.setText(dishesArrayList.get(position).first.getCost());
-        holder.count.setText(dishesArrayList.get(position).second.first.toString());
+        holder.categoryName.setText(ordersArrayList.get(position).first.getCategoryName());
+        holder.name.setText(ordersArrayList.get(position).first.getName());
+        holder.weight.setText(ordersArrayList.get(position).first.getWeight());
+        holder.cost.setText(ordersArrayList.get(position).first.getCost());
+        holder.count.setText(ordersArrayList.get(position).second.first);
     }
     @Override
     public int getItemCount() {
-        return dishesArrayList.size();
+        return ordersArrayList.size();
     }
-    public void addDish(Pair<Dish, Pair<Integer, String>> order) {
-        this.dishesArrayList.add(order);
+    public void addOrder(Pair<Dish, Pair<String, Integer>> order) {
+        this.ordersArrayList.add(order);
         this.notifyDataSetChanged();
     }
 

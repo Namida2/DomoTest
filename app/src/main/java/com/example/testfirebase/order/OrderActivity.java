@@ -1,9 +1,13 @@
 package com.example.testfirebase.order;
 
+import android.app.LauncherActivity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -15,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.testfirebase.R;
 import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
+import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -23,8 +28,10 @@ import java.util.Map;
 import dialogsTools.ErrorAlertDialog;
 import interfaces.GuestCountDialogOrderActivityInterface;
 import interfaces.MenuDialogOrderActivityInterface;
+import interfaces.OrderActivityInterface;
 import model.MenuDialogModel;
 import presenters.MenuDialogPresenter;
+import presenters.GuestCountDialogOrderActivityPresenter;
 import presenters.OrderActivityPresenter;
 import tools.Pair;
 
@@ -34,7 +41,10 @@ import static interfaces.GuestCountDialogOrderActivityInterface.GUEST_COUNT_DIAL
 import static interfaces.GuestCountDialogOrderActivityInterface.GUEST_COUNT_DIALOG_VIEW_KEY;
 import static registration.LogInActivity.TAG;
 
-public class OrderActivity extends AppCompatActivity implements GuestCountDialogOrderActivityInterface.Activity.MyView, MenuDialogOrderActivityInterface.View {
+public class OrderActivity extends AppCompatActivity implements GuestCountDialogOrderActivityInterface.Activity.MyView,
+    MenuDialogOrderActivityInterface.View, OrderActivityInterface.View {
+
+    private OrderActivityInterface.Presenter orderPresenter;
 
     private GuestCountDialogOrderActivityInterface.Activity.Presenter guestsCountDialogPresenter;
     private MenuDialogOrderActivityInterface.Presenter menuDialogPresenter;
@@ -61,7 +71,10 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         tableNumber = findViewById(R.id.table_number);
         tableNumber.setText(Integer.toString(number));
 
-        guestsCountDialogPresenter = new OrderActivityPresenter(this);
+        orderPresenter = new OrderActivityPresenter(this);
+
+
+        guestsCountDialogPresenter = new GuestCountDialogOrderActivityPresenter(this);
         guestsCount = findViewById(R.id.guests_count);
         prepareGuestCountModel();
 
@@ -125,5 +138,13 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     public void onMenuDialogError(int errorCode) {
         if(!ErrorAlertDialog.isIsExist())
             ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
+    }
+
+    @Override
+    public Pair<RecyclerView, OrderRecyclerViewAdapter> prepareOrderRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.order_items_container);
+        OrderRecyclerViewAdapter adapter = new OrderRecyclerViewAdapter(orderPresenter.getNotifyOrderAdapterConsumer());
+
+        return null;
     }
 }

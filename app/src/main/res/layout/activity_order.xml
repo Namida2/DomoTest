@@ -98,7 +98,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/order_container"
+        android:id="@+id/order_items_container"
         android:layout_marginTop="189dp"
         android:layout_marginBottom="55dp"
         android:layout_width="match_parent"
