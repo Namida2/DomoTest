@@ -41,7 +41,7 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
 
     @Override
     public void setModelViewState() {
-        Pair<View, MenuRecyclerViewAdapter> pair = view.onDataFillingComplete(model);
+        Pair<View, MenuRecyclerViewAdapter> pair = view.onMenuDialogDataFillingComplete(model);
         model.setView(pair.first);
         model.setMenuItemAdapter(pair.second);
         model.setRecyclerView(pair.first.findViewById(R.id.menu_recycler_view));

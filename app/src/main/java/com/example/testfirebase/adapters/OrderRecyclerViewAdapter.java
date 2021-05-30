@@ -21,10 +21,9 @@ import tools.Pair;
 public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<Pair<Dish, Pair<String, Integer>>> ordersArrayList;
-    private Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer;
 
-    public OrderRecyclerViewAdapter (Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer) {
-        this.notifyOrderAdapterConsumer = notifyOrderAdapterConsumer;
+    public OrderRecyclerViewAdapter() {
+        ordersArrayList = new ArrayList<>();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

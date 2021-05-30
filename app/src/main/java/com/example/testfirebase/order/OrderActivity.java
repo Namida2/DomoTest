@@ -24,6 +24,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 import dialogsTools.ErrorAlertDialog;
 import interfaces.GuestCountDialogOrderActivityInterface;
@@ -45,10 +46,12 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     MenuDialogOrderActivityInterface.View, OrderActivityInterface.View {
 
     private OrderActivityInterface.Presenter orderPresenter;
+    private Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer;
 
     private GuestCountDialogOrderActivityInterface.Activity.Presenter guestsCountDialogPresenter;
     private MenuDialogOrderActivityInterface.Presenter menuDialogPresenter;
     private GuestsCountBottomSheetDialog guestCountDialog;
+
     private View guestCountDialogView;
     private TextView guestsCount;
     private TextView tableNumber;
@@ -71,9 +74,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         tableNumber = findViewById(R.id.table_number);
         tableNumber.setText(Integer.toString(number));
 
-        orderPresenter = new OrderActivityPresenter(this);
-
-
+        // First - GuestCountDialog, Second - OrderRecyclerView, Third - menuDialog
         guestsCountDialogPresenter = new GuestCountDialogOrderActivityPresenter(this);
         guestsCount = findViewById(R.id.guests_count);
         prepareGuestCountModel();
@@ -83,6 +84,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             guestCountDialog.show(getSupportFragmentManager(), "");
         }, 10);
 
+        orderPresenter = new OrderActivityPresenter(this);
         MenuDialogModel model = new MenuDialogModel();
         menuDialogPresenter = new MenuDialogPresenter(this);
 
@@ -93,7 +95,6 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
                 menuDialog.show(getSupportFragmentManager(), "");
         });
     }
-
     private void prepareGuestCountModel() {
         RecyclerView recyclerView = null;
         GuestsCountRecyclerViewAdapter adapter = null;
@@ -127,10 +128,15 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         Log.d(TAG, "COMPLETE");
     }
     @Override
-    public Pair<View, MenuRecyclerViewAdapter> onDataFillingComplete(MenuDialogOrderActivityInterface.Model model) {
+    public Pair<View, MenuRecyclerViewAdapter> onMenuDialogDataFillingComplete(MenuDialogOrderActivityInterface.Model model) {
         View view = View.inflate(this, R.layout.dialog_menu, null);
         RecyclerView recyclerView = view.findViewById(R.id.menu_recycler_view);
-        MenuRecyclerViewAdapter adapter = new MenuRecyclerViewAdapter(getSupportFragmentManager(), model.getMenu(), model.getCategoryNames());
+        MenuRecyclerViewAdapter adapter = new MenuRecyclerViewAdapter(
+            getSupportFragmentManager(),
+            model.getMenu(),
+            model.getCategoryNames(),
+            notifyOrderAdapterConsumer
+        );
         recyclerView.setAdapter(adapter);
         return new Pair<>(view, adapter);
     }
@@ -139,12 +145,16 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         if(!ErrorAlertDialog.isIsExist())
             ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
     }
+    @Override
+    public RecyclerView prepareOrderRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.order_items_container);
+        OrderRecyclerViewAdapter adapter = new OrderRecyclerViewAdapter();
+        recyclerView.setAdapter(adapter);
+        return recyclerView;
+    }
 
     @Override
-    public Pair<RecyclerView, OrderRecyclerViewAdapter> prepareOrderRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.order_items_container);
-        OrderRecyclerViewAdapter adapter = new OrderRecyclerViewAdapter(orderPresenter.getNotifyOrderAdapterConsumer());
-
-        return null;
+    public void setOrderRecyclerViewConsumer(Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer) {
+        this.notifyOrderAdapterConsumer = notifyOrderAdapterConsumer;
     }
 }

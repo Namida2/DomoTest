@@ -29,6 +29,7 @@ import java.util.function.Consumer;
 import com.example.testfirebase.order.DishCategoryInfo;
 import com.jakewharton.rxbinding4.view.RxView;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import tools.Pair;
 
 import static registration.LogInActivity.TAG;
@@ -36,13 +37,15 @@ import static registration.LogInActivity.TAG;
 
 public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
+    private Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer;
     private ArrayList<DishCategoryInfo<String, Integer>> categoryNames;
     private Map<String, List<Dish>> menu;
     private ArrayList<Object> menuItems;
-
+    private AddDishAlertDialog addDishAlertDialog;
     private FragmentManager fragmentManager;
 
-    public MenuRecyclerViewAdapter (FragmentManager fragmentManager, Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames) {
+    public MenuRecyclerViewAdapter (FragmentManager fragmentManager, Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames, Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer) {
+        addDishAlertDialog = AddDishAlertDialog.getNewInstance(notifyOrderAdapterConsumer);
         this.fragmentManager = fragmentManager;
         this.menu = menu;
         this.categoryNames = categoryNames;
@@ -112,18 +115,15 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 menuItemViewHolder.cost.setText(dish.getCost());
                 RxView.clicks(menuItemViewHolder.menuItemContainer)
                     .debounce(150, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(item -> {
                         if(!AddDishAlertDialog.isExit()) {
-                            AddDishAlertDialog dialog = AddDishAlertDialog.getNewInstance(dish, order -> {
-
-                            });
-                            dialog.show(fragmentManager, "");
+                            addDishAlertDialog.setDish(dish);
+                            addDishAlertDialog.show(fragmentManager, "");
                         }
                     }, error -> {
                         Log.d(TAG, "MenuRecyclerViewAdapter.onBindViewHolder: " + error.getMessage());
-                    }, () -> {
-
-                    });
+                    }, () -> { });
                 break;
         }
     }

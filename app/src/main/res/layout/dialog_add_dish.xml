@@ -51,12 +51,12 @@
         android:text="Количествово порций:"
         android:textColor="@color/black"
         android:textSize="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintBottom_toBottomOf="@+id/dish_count"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText" />
+        app:layout_constraintTop_toTopOf="@+id/dish_count" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/dish_count"
         style="@style/editTextStyle"
         android:layout_width="103dp"
         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/dish_count" />
 
     <Button
         android:id="@+id/add_to_order_button"

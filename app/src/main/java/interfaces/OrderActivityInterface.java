@@ -25,9 +25,11 @@ public interface OrderActivityInterface {
         Consumer<Pair<Dish, Pair<String, Integer>>> getNotifyOrderAdapterConsumer ();
     }
     interface View {
-        Pair<RecyclerView, OrderRecyclerViewAdapter> prepareOrderRecyclerView();
+        RecyclerView prepareOrderRecyclerView();
+        void setOrderRecyclerViewConsumer(Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer);
     }
     interface Presenter {
         void setViewModelState();
+        Consumer<Pair<Dish, Pair<String, Integer>>> getNotifyOrderAdapterConsumer ();
     }
 }
