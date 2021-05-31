@@ -23,11 +23,6 @@ public class MenuBottomSheetDialog extends BottomSheetDialogFragment {
         this.contentView = view;
     }
 
-    @Override
-    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @NonNull
     @NotNull
     @Override

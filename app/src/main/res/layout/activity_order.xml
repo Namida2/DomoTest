@@ -97,16 +97,21 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/order_items_container"
-        android:layout_marginTop="189dp"
-        android:layout_marginBottom="55dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/layout_order_item"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/order_recycler_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="189dp"
+            android:layout_marginBottom="55dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/order_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/layout_order_item" />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
 
-     </RelativeLayout>
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
             style="@style/Widget.MaterialComponents.BottomAppBar.Colored"

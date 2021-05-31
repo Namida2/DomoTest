@@ -33,7 +33,7 @@ public interface MenuDialogOrderActivityInterface {
     }
     interface View {
         void onMenuDialogError(int errorCode);
-        void onMenuDialogModelComplete(android.view.View menuDialogView);
+        void onMenuDialogModelComplete(android.view.View menuDialogView, MenuRecyclerViewAdapter adapter);
         Pair<android.view.View, MenuRecyclerViewAdapter> onMenuDialogDataFillingComplete(MenuDialogOrderActivityInterface.Model model);
     }
     interface Presenter {

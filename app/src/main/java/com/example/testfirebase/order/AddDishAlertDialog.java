@@ -34,15 +34,15 @@ import static registration.LogInActivity.TAG;
 
 public class AddDishAlertDialog extends DialogFragment {
 
-    private static Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer;
+    private static Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
+    private int tableNumber;
     private Dish dish;
 
-    public static AddDishAlertDialog getNewInstance (Consumer<Pair<Dish, Pair<String, Integer>>> consumer) {
+    public static AddDishAlertDialog getNewInstance (Consumer<Pair<OrderItem, String>> consumer, int tableNumber) {
         //isExist.set(true);
         AddDishAlertDialog.notifyOrderAdapterConsumer = consumer;
         AddDishAlertDialog dialog = new AddDishAlertDialog();
-        //dialog.setCancelable(false);
         return dialog;
     }
     public void setDish(Dish dish) {
@@ -67,13 +67,12 @@ public class AddDishAlertDialog extends DialogFragment {
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
-                Pair<Dish, Pair<String, Integer>> order = new Pair<>(dish,
-                    new Pair<>(commentary.getText().toString(),
-                        Integer.parseInt(dishCount.getText().toString())));
-                notifyOrderAdapterConsumer.accept(order);
-                Log.d(TAG, Thread.currentThread().getName());
+                notifyOrderAdapterConsumer.accept( // crearte Pair<Order, String>
+                    new OrderItem(dish,
+                    commentary.getText().toString(),
+                    Integer.parseInt(dishCount.getText().toString())));
+                this.dismiss();
             });
-
         builder.setView(contentView);
         return builder.create();
     }

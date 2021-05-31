@@ -1,18 +1,16 @@
 package com.example.testfirebase.order;
 
-import android.app.LauncherActivity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,7 +44,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     MenuDialogOrderActivityInterface.View, OrderActivityInterface.View {
 
     private OrderActivityInterface.Presenter orderPresenter;
-    private Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer;
+    private Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer;
 
     private GuestCountDialogOrderActivityInterface.Activity.Presenter guestsCountDialogPresenter;
     private MenuDialogOrderActivityInterface.Presenter menuDialogPresenter;
@@ -54,25 +52,49 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
 
     private View guestCountDialogView;
     private TextView guestsCount;
-    private TextView tableNumber;
+    private TextView tableNumberTextView;
     private View menuDialogView;
     private MenuBottomSheetDialog menuDialog;
     private BottomAppBar bottomAppBar;
     private FloatingActionButton fba;
+    private int tableNumber;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
         setContentView(R.layout.activity_order);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+//        Dish dish = new Dish();
+//        dish.setCost("999r");
+//        dish.setWeight("9000g");
+//        dish.setCategoryName("category");
+//        dish.setName("name");
+//        dish.setDescription("description");
+//
+//        OrderItem orderItem = new OrderItem(dish, "my commentary", 71);
+//
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("orders")
+//            .document("table_1")
+//            .collection("order_items")
+//            .document("name + commentary")
+//            .set(orderItem).addOnCompleteListener(task -> {
+//                if(task.isSuccessful()) {
+//                    Log.d(TAG, "Success");
+//                }
+//                else  Log.d(TAG, task.getException().toString());
+//        });
+
         initialisation();
 
     }
 
     private void initialisation () {
-        int number = getIntent().getIntExtra(EXTRA_TAG, 0);
-        tableNumber = findViewById(R.id.table_number);
-        tableNumber.setText(Integer.toString(number));
+        tableNumber = getIntent().getIntExtra(EXTRA_TAG, 0);
+        tableNumberTextView = findViewById(R.id.table_number);
+        tableNumberTextView.setText(Integer.toString(tableNumber));
 
         // First - GuestCountDialog, Second - OrderRecyclerView, Third - menuDialog
         guestsCountDialogPresenter = new GuestCountDialogOrderActivityPresenter(this);
@@ -93,6 +115,11 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         fba.setOnClickListener(view -> {
             if(menuDialogView != null) // add isExist
                 menuDialog.show(getSupportFragmentManager(), "");
+        });
+        bottomAppBar.setNavigationOnClickListener(view -> {
+            // add isExist
+            OrderMenuBottomSheetDialog dialog = new OrderMenuBottomSheetDialog();
+            dialog.show(getSupportFragmentManager(), "");
         });
     }
     private void prepareGuestCountModel() {
@@ -122,8 +149,9 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         guestCountDialogView = view;
     }
     @Override
-    public void onMenuDialogModelComplete(View menuDialogView) {
+    public void onMenuDialogModelComplete(View menuDialogView, MenuRecyclerViewAdapter adapter) {
         this.menuDialogView = menuDialogView;
+        adapter.setFragmentManager(getSupportFragmentManager());
         menuDialog = new MenuBottomSheetDialog(menuDialogView);
         Log.d(TAG, "COMPLETE");
     }
@@ -135,7 +163,8 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             getSupportFragmentManager(),
             model.getMenu(),
             model.getCategoryNames(),
-            notifyOrderAdapterConsumer
+            notifyOrderAdapterConsumer,
+            tableNumber
         );
         recyclerView.setAdapter(adapter);
         return new Pair<>(view, adapter);
@@ -146,15 +175,25 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
     }
     @Override
+    public void setOrderRecyclerView(RecyclerView orderRecyclerView) {
+        CoordinatorLayout coordinatorLayout = findViewById(R.id.order_recycler_view_container);
+        coordinatorLayout.removeView(findViewById(R.id.order_recycler_view));
+        coordinatorLayout.addView(orderRecyclerView);
+    }
+    @Override
     public RecyclerView prepareOrderRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.order_items_container);
+        RecyclerView recyclerView = findViewById(R.id.order_recycler_view);
         OrderRecyclerViewAdapter adapter = new OrderRecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
         return recyclerView;
     }
-
     @Override
-    public void setOrderRecyclerViewConsumer(Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer) {
+    public void setOrderRecyclerViewConsumer(Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer) {
         this.notifyOrderAdapterConsumer = notifyOrderAdapterConsumer;
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        orderPresenter.orderRecyclerViewOnActivityDestroy();
     }
 }

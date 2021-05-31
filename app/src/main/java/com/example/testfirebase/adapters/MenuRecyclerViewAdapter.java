@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import com.example.testfirebase.order.DishCategoryInfo;
+import com.example.testfirebase.order.OrderItem;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -37,15 +38,14 @@ import static registration.LogInActivity.TAG;
 
 public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
-    private Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer;
     private ArrayList<DishCategoryInfo<String, Integer>> categoryNames;
     private Map<String, List<Dish>> menu;
     private ArrayList<Object> menuItems;
     private AddDishAlertDialog addDishAlertDialog;
     private FragmentManager fragmentManager;
 
-    public MenuRecyclerViewAdapter (FragmentManager fragmentManager, Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames, Consumer<Pair<Dish, Pair<String, Integer>>> notifyOrderAdapterConsumer) {
-        addDishAlertDialog = AddDishAlertDialog.getNewInstance(notifyOrderAdapterConsumer);
+    public MenuRecyclerViewAdapter (FragmentManager fragmentManager, Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames, Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer, int tableNumber) {
+        addDishAlertDialog = AddDishAlertDialog.getNewInstance(notifyOrderAdapterConsumer, tableNumber);
         this.fragmentManager = fragmentManager;
         this.menu = menu;
         this.categoryNames = categoryNames;
@@ -55,6 +55,9 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             menuItems.add(categoryNameInfo);
             menuItems.addAll(menu.get(categoryNameInfo.categoryName));
         }
+    }
+    public void setFragmentManager(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
     }
     class CategoryNameViewHolder extends RecyclerView.ViewHolder {
         private TextView categoryName;
@@ -132,6 +135,4 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public int getItemCount() {
         return menuItems.size();
     }
-
-
 }

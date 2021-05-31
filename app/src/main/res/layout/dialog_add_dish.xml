@@ -24,7 +24,7 @@
         android:layout_marginEnd="36dp"
         android:fontFamily="@font/montserrat_semi_bold"
         android:gravity="center"
-        android:maxLength="30"
+        android:maxLength="39"
         android:text="Гёдза с мраморной говядиной "
         android:textColor="@color/black"
         android:textSize="16dp"
@@ -33,6 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <ImageView
+        android:id="@+id/imageView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@id/dish_name"
@@ -48,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:fontFamily="@font/montserrat_light"
-        android:text="Количествово порций:"
+        android:text="Порций:"
         android:textColor="@color/black"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/dish_count"
@@ -58,21 +59,18 @@
     <EditText
         android:id="@+id/dish_count"
         style="@style/editTextStyle"
-        android:layout_width="103dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
+        android:gravity="center"
         android:inputType="number"
         android:maxLength="2"
-        android:paddingStart="36dp"
-        android:paddingEnd="36dp"
-        android:gravity="center"
+        android:paddingStart="42dp"
+        android:paddingEnd="42dp"
         android:text="1"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="@+id/dish_name"
+        app:layout_constraintStart_toStartOf="@+id/dish_name"
         app:layout_constraintTop_toBottomOf="@+id/dish_name" />
 
     <EditText

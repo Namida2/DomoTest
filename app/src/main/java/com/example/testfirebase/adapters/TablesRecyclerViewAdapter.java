@@ -59,11 +59,11 @@ public class TablesRecyclerViewAdapter extends RecyclerView.Adapter<TablesRecycl
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        holder.tableNumber.setText(Integer.toString(position));
+        holder.tableNumber.setText(Integer.toString(position + 1));
         disposable = RxView.clicks(holder.container)
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .subscribe(next -> {
-                    holder.presenter.startNewActivity(position);
+                    holder.presenter.startNewActivity(position + 1);
                 }, error -> {
                     Log.d(TAG, error.getMessage());
                 }, () -> {

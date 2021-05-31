@@ -5,9 +5,12 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
-import com.example.testfirebase.order.Dish;
+import com.example.testfirebase.order.OrderActivity;
+import com.example.testfirebase.order.OrderItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import interfaces.OrderActivityInterface;
@@ -15,22 +18,29 @@ import tools.Pair;
 
 public class OrderActivityModel implements OrderActivityInterface.Model {
 
-    private ArrayList<Pair<Dish, Pair<String, Integer>>> orderItemArrayList;
+    private Map<String, ArrayList<OrderItem>> ordersList;
 
     private View view;
     private RecyclerView orderRecyclerView;
     private OrderRecyclerViewAdapter adapter;
 
+    public OrderActivityModel () {
+        this.ordersList = new HashMap<>();
+    }
+
     @Override
-    public Consumer<Pair<Dish, Pair<String, Integer>>> getNotifyOrderAdapterConsumer() {
+    public Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer() {
         return order -> {
-            adapter.addOrder(order);
+            if (ordersList.containsKey(order.second)) ordersList.get(order.second).add(order.first);
+            else {
+                ArrayList<OrderItem> arrayList = new ArrayList<>();
+                arrayList.add(order.first);
+                ordersList.put(order.second, arrayList);
+            }
+            adapter.addOrder(order.first);
         };
     }
-    @Override
-    public void setOrderItemArrayList(ArrayList<Pair<Dish, Pair<String, Integer>>> orderItemArrayList) {
-        this.orderItemArrayList = orderItemArrayList;
-    }
+
     @Override
     public void setOrderRecyclerView(RecyclerView orderRecyclerView) {
         this.orderRecyclerView = orderRecyclerView;
@@ -42,10 +52,6 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     @Override
     public void setView(View view) {
         this.view = view;
-    }
-    @Override
-    public ArrayList<Pair<Dish, Pair<String, Integer>>> getOrderItemArrayList() {
-        return orderItemArrayList;
     }
     @Override
     public OrderRecyclerViewAdapter getAdapter() {

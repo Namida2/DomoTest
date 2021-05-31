@@ -29,7 +29,6 @@ public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsC
     public GuestsCountRecyclerViewAdapter (GuestCountDialogOrderActivityInterface.Activity.MyView view) {
         this.view = view;
     }
-
     @Override
     public void setGuestsCountToView(int guestsCount) {
         view.setGuestsCount(guestsCount);
@@ -39,7 +38,6 @@ public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsC
         GuestCountDialogOrderActivityInterface.GuestsCountAdapter.Presenter presenter;
         TextView guests_count;
         ConstraintLayout container;
-
         public ViewHolder(@NonNull @NotNull View itemView, GuestCountDialogOrderActivityInterface.GuestsCountAdapter.Presenter presenter) {
             super(itemView);
             this.presenter = presenter;
@@ -47,7 +45,6 @@ public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsC
             container = itemView.findViewById(R.id.container);
         }
     }
-
     @NonNull
     @NotNull
     @Override
@@ -55,20 +52,18 @@ public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsC
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return new ViewHolder( inflater.inflate(R.layout.layout_guests_count, parent, false), this );
     }
-
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        holder.guests_count.setText(Integer.toString(position));
+        holder.guests_count.setText(Integer.toString(position + 1));
         RxView.clicks(holder.container)
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(unit -> {
-                    holder.presenter.setGuestsCountToView(position);
+                    holder.presenter.setGuestsCountToView( position + 1 );
                 }, error -> {
                     Log.d(TAG, error.getMessage());
                 }, () -> { });
     }
-
     @Override
     public int getItemCount() {
         return GUESTS_COUNT;

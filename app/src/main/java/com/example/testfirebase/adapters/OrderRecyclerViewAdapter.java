@@ -9,23 +9,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
-import com.example.testfirebase.order.Dish;
+import com.example.testfirebase.order.OrderItem;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
-import tools.Pair;
 
 public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<Pair<Dish, Pair<String, Integer>>> ordersArrayList;
+    private ArrayList<OrderItem> ordersArrayList;
 
     public OrderRecyclerViewAdapter() {
         ordersArrayList = new ArrayList<>();
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView categoryName;
         public TextView name;
@@ -51,19 +48,21 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     }
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        holder.categoryName.setText(ordersArrayList.get(position).first.getCategoryName());
-        holder.name.setText(ordersArrayList.get(position).first.getName());
-        holder.weight.setText(ordersArrayList.get(position).first.getWeight());
-        holder.cost.setText(ordersArrayList.get(position).first.getCost());
-        holder.count.setText(ordersArrayList.get(position).second.first);
+        holder.categoryName.setText(ordersArrayList.get(position).getCategoryName());
+        holder.name.setText(ordersArrayList.get(position).getName());
+        holder.weight.setText(ordersArrayList.get(position).getWeight());
+        holder.cost.setText(ordersArrayList.get(position).getCost());
+        holder.count.setText(ordersArrayList.get(position).getCount() + " шт");
     }
     @Override
     public int getItemCount() {
         return ordersArrayList.size();
     }
-    public void addOrder(Pair<Dish, Pair<String, Integer>> order) {
+    public void addOrder(OrderItem order) {
         this.ordersArrayList.add(order);
         this.notifyDataSetChanged();
     }
-
+    public void setOrdersArrayList (ArrayList<OrderItem> ordersArrayList) {
+        this.ordersArrayList = ordersArrayList;
+    }
 }
