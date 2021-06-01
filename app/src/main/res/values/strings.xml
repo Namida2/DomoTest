@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Test Firebase</string>
+    <string name="app_name">Domo</string>
     <string name="error_alert_dialog_wrong_password_title">Пароль слишком короткий</string>
     <string name="error_alert_dialog_wrong_password_text">Пароль должен состоять из 6 и больше стмволов.</string>
 

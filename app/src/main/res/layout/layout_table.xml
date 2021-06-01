@@ -41,8 +41,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/ic_profile"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.testfirebase.R;
+import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,11 +37,12 @@ public class AddDishAlertDialog extends DialogFragment {
 
     private static Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
-    private int tableNumber;
+    private static int tableNumber;
     private Dish dish;
 
     public static AddDishAlertDialog getNewInstance (Consumer<Pair<OrderItem, String>> consumer, int tableNumber) {
         //isExist.set(true);
+        AddDishAlertDialog.tableNumber = tableNumber;
         AddDishAlertDialog.notifyOrderAdapterConsumer = consumer;
         AddDishAlertDialog dialog = new AddDishAlertDialog();
         return dialog;
@@ -67,12 +69,13 @@ public class AddDishAlertDialog extends DialogFragment {
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
-                notifyOrderAdapterConsumer.accept( // crearte Pair<Order, String>
-                    new OrderItem(dish,
-                    commentary.getText().toString(),
-                    Integer.parseInt(dishCount.getText().toString())));
+                OrderItem orderItem = new OrderItem(
+                    dish, commentary.getText().toString(),
+                    Integer.parseInt(dishCount.getText().toString()));
+                notifyOrderAdapterConsumer.accept(new Pair<>( orderItem, Integer.toString(tableNumber)));
                 this.dismiss();
             });
+
         builder.setView(contentView);
         return builder.create();
     }

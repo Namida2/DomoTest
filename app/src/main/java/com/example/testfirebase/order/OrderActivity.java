@@ -51,13 +51,17 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     private GuestsCountBottomSheetDialog guestCountDialog;
 
     private View guestCountDialogView;
-    private TextView guestsCount;
+    private TextView guestsCountTextView;
     private TextView tableNumberTextView;
     private View menuDialogView;
     private MenuBottomSheetDialog menuDialog;
     private BottomAppBar bottomAppBar;
     private FloatingActionButton fba;
+
     private int tableNumber;
+    private int guestsCount;
+
+    private boolean orderWasAccepted;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -90,15 +94,15 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         initialisation();
 
     }
-
     private void initialisation () {
+        orderWasAccepted = false;
         tableNumber = getIntent().getIntExtra(EXTRA_TAG, 0);
         tableNumberTextView = findViewById(R.id.table_number);
         tableNumberTextView.setText(Integer.toString(tableNumber));
 
         // First - GuestCountDialog, Second - OrderRecyclerView, Third - menuDialog
         guestsCountDialogPresenter = new GuestCountDialogOrderActivityPresenter(this);
-        guestsCount = findViewById(R.id.guests_count);
+        guestsCountTextView = findViewById(R.id.guests_count);
         prepareGuestCountModel();
 
         guestCountDialog = new GuestsCountBottomSheetDialog(guestCountDialogView);
@@ -106,7 +110,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             guestCountDialog.show(getSupportFragmentManager(), "");
         }, 10);
 
-        orderPresenter = new OrderActivityPresenter(this);
+        orderPresenter = new OrderActivityPresenter(this, tableNumber);
         MenuDialogModel model = new MenuDialogModel();
         menuDialogPresenter = new MenuDialogPresenter(this);
 
@@ -118,7 +122,10 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         });
         bottomAppBar.setNavigationOnClickListener(view -> {
             // add isExist
-            OrderMenuBottomSheetDialog dialog = new OrderMenuBottomSheetDialog();
+            OrderMenuBottomSheetDialog dialog = OrderMenuBottomSheetDialog.getNewInstance(orderWasAccepted -> {
+                this.orderWasAccepted = orderWasAccepted;
+                orderPresenter.writeOrderToDb(tableNumber, guestsCount);
+            });
             dialog.show(getSupportFragmentManager(), "");
         });
     }
@@ -140,9 +147,10 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         }
     }
     @Override
-    public void setGuestsCount(int guestsCount) {
+    public void setGuestsCountTextView(int guestsCount) {
+        this.guestsCount = guestsCount;
         guestCountDialog.dismiss();
-        this.guestsCount.setText(Integer.toString(guestsCount));
+        this.guestsCountTextView.setText(Integer.toString(guestsCount));
     }
     @Override
     public void setGuestCountDialogView(View view) {
@@ -194,6 +202,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        orderPresenter.orderRecyclerViewOnActivityDestroy();
+        orderPresenter.orderRecyclerViewOnActivityDestroy(orderWasAccepted, tableNumber);
     }
+
 }

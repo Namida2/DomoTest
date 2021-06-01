@@ -25,7 +25,7 @@ public interface GuestCountDialogOrderActivityInterface {
 
     interface Activity {
         interface MyView {
-            void setGuestsCount(int guestsCount);
+            void setGuestsCountTextView(int guestsCountTextView);
             void setGuestCountDialogView(View view);
         }
         interface Presenter {

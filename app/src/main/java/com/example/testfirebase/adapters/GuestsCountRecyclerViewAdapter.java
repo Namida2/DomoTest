@@ -31,7 +31,7 @@ public class GuestsCountRecyclerViewAdapter extends RecyclerView.Adapter<GuestsC
     }
     @Override
     public void setGuestsCountToView(int guestsCount) {
-        view.setGuestsCount(guestsCount);
+        view.setGuestsCountTextView(guestsCount);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements GuestCountDialogOrderActivityInterface.GuestsCountAdapter.MyView {

@@ -31,7 +31,6 @@ public class MenuBottomSheetDialog extends BottomSheetDialogFragment {
         dialog.setContentView(contentView);
         return dialog;
     }
-
     @Override
     public void onDismiss(@NonNull @NotNull DialogInterface dialog) {
         super.onDismiss(dialog);
