@@ -1,5 +1,7 @@
 package tools;
 
+import androidx.annotation.Nullable;
+
 public class Pair<F, S> {
     public F first;
     public S second;
@@ -8,4 +10,5 @@ public class Pair<F, S> {
         this.first = first;
         this.second = second;
     }
+
 }

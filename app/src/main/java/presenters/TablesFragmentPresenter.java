@@ -52,4 +52,10 @@ public class TablesFragmentPresenter implements TablesFragmentInterface.Presente
         }
         myView.setView(model.getView());
     }
+
+    @Override
+    public void onResume() {
+        model.getAdapter().resetIsPressed();
+    }
+
 }

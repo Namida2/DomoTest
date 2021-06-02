@@ -36,12 +36,10 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
         if (model == null) {
             model = new MenuDialogModel();
             setModelDataState();
-        } else {
-            view.onMenuDialogModelComplete(model.getView(), model.getMenuItemAdapter());
-
-        }
+        } else if(model.getView() == null) {
+            setModelDataState();
+        } else view.onMenuDialogModelComplete(model.getView(), model.getMenuItemAdapter());
     }
-
     @Override
     public void setModelViewState() {
         Pair<View, MenuRecyclerViewAdapter> pair = view.onMenuDialogDataFillingComplete(model);
@@ -50,20 +48,10 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
         model.setRecyclerView(pair.first.findViewById(R.id.menu_recycler_view));
         view.onMenuDialogModelComplete(model.getView(), model.getMenuItemAdapter());
     }
-
     @Override
     public void setModelDataState() {
         ArrayList<DishCategoryInfo<String, Integer>> categoryNames = new ArrayList<>();
         Map<String, List<Dish>> menu = new HashMap<>();
-
-//        FirebaseAuth auth = FirebaseAuth.getInstance();
-//        auth.signInWithEmailAndPassword("nikit.mahno@yandex.ru", "pppppp").addOnCompleteListener(task -> {
-//            if (task.isSuccessful())
-//                Log.d(TAG, "Registered");
-//            else
-//                Log.d(TAG, task.getException().toString());
-//
-//        });
 
         model.setCategoryNames(categoryNames);
         model.setMenu(menu);

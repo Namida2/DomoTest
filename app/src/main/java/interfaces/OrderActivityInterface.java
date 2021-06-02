@@ -22,9 +22,9 @@ public interface OrderActivityInterface {
         RecyclerView getOrderRecyclerView();
         android.view.View getView();
         Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer ();
-        ArrayList<OrderItem> getOrderArrayList (int tableNumber);
-        Map<String, ArrayList<OrderItem>> getOrdersList();
-        FirebaseFirestore getDb();
+        public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber);
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap();
+        FirebaseFirestore getDatabase();
     }
     interface View {
         void setOrderRecyclerView(RecyclerView orderRecyclerView);
@@ -32,10 +32,9 @@ public interface OrderActivityInterface {
         void setOrderRecyclerViewConsumer(Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer);
     }
     interface Presenter {
-        void orderRecyclerViewOnActivityDestroy(boolean orderWasAccepted, int tableNumber);
+        void orderRecyclerViewOnActivityDestroy(int tableNumber);
         void setViewModelState();
         Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer ();
-        void writeOrderToDb(int tableNumber, int guestCount);
+        void acceptAndWriteOrderToDb(int tableNumber, int guestCount);
     }
-
 }

@@ -3,6 +3,7 @@ package com.example.testfirebase.order;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,7 @@ import static registration.LogInActivity.TAG;
 public class AddDishAlertDialog extends DialogFragment {
 
     private static Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer;
+    private static  Consumer<Boolean> resetIsPressed;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
     private static int tableNumber;
     private Dish dish;
@@ -47,7 +49,7 @@ public class AddDishAlertDialog extends DialogFragment {
         AddDishAlertDialog dialog = new AddDishAlertDialog();
         return dialog;
     }
-    public void setDish(Dish dish) {
+    public void setData(Dish dish, Consumer<Boolean> resetIsPressed) {
         this.dish = dish;
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -79,6 +81,14 @@ public class AddDishAlertDialog extends DialogFragment {
         builder.setView(contentView);
         return builder.create();
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onDismiss(@NonNull @NotNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (resetIsPressed != null) resetIsPressed.accept(false);
+    }
+
     @Override
     public void onResume() {
         super.onResume();

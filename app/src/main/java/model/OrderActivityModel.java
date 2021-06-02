@@ -5,7 +5,6 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
-import com.example.testfirebase.order.OrderActivity;
 import com.example.testfirebase.order.OrderItem;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -19,48 +18,46 @@ import tools.Pair;
 
 public class OrderActivityModel implements OrderActivityInterface.Model {
 
-    private Map<String, ArrayList<OrderItem>> ordersList;
-    private Map<Pair<String, Boolean>, ArrayList<OrderItem>> newOrdersList;
+    private Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap;
 
     private View view;
     private RecyclerView orderRecyclerView;
     private OrderRecyclerViewAdapter adapter;
 
     private FirebaseFirestore db;
-    public static final String COLLECTION_ORDERS = "orders";
-    public static final String COLLECTION_ORDER_ITEMS = "order_items";
+    public static final String COLLECTION_ORDERS_NAME = "orders";
+    public static final String COLLECTION_ORDER_ITEMS_NAME = "order_items";
     public static final String DOCUMENT_TABLE = "table_";
     public static final String DOCUMENT_NAME_DELIMITER = "_";
     public static final String DOCUMENT_GUEST_COUNT_FIELD = "guestCount";
 
-
     public OrderActivityModel () {
-        this.ordersList = new HashMap<>();
+        this.ordersHashMap = new HashMap<>();
         db = FirebaseFirestore.getInstance();
-    }
-    @Override
-    public ArrayList<OrderItem> getOrderArrayList (int tableNumber) {
-        String key = Integer.toString(tableNumber);
-        if (ordersList.containsKey(key)) return ordersList.get(key);
-        else {
-            ArrayList<OrderItem> arrayList = new ArrayList<>();
-            ordersList.put(key, arrayList);
-            return arrayList;
-        }
-    }
-    @Override
-    public Map<String, ArrayList<OrderItem>> getOrdersList() {
-        return ordersList;
-    }
-    @Override
-    public FirebaseFirestore getDb() {
-        return db;
     }
     @Override
     public Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer() {
         return order -> {
             adapter.addOrder(order.first);
         };
+    }
+    @Override
+    public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber) {
+        String key = DOCUMENT_TABLE + tableNumber;
+        if (ordersHashMap.containsKey(key)) return ordersHashMap.get(key);
+        else {
+            Pair<ArrayList<OrderItem>, Boolean> orderInfo = new Pair<>(new ArrayList<>(), false);
+            ordersHashMap.put(key, orderInfo);
+            return orderInfo;
+        }
+    }
+    @Override
+    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap() {
+        return ordersHashMap;
+    }
+    @Override
+    public FirebaseFirestore getDatabase() {
+        return db;
     }
     @Override
     public void setOrderRecyclerView(RecyclerView orderRecyclerView) {

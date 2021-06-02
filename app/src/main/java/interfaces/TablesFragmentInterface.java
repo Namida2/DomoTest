@@ -26,16 +26,15 @@ public interface TablesFragmentInterface {
     }
     interface Presenter {
         void prepare(TablesFragmentInterface.MyView view, LayoutInflater inflater, ViewGroup container);
+        void onResume();
     }
 
 
     interface Adapter {
         interface View {
-
         }
         interface Presenter {
             void startNewActivity (int tableNumber);
-
         }
     }
 

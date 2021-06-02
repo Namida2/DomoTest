@@ -28,20 +28,22 @@ public class TablesFragment extends Fragment implements TablesFragmentInterface.
         super.onCreate(savedInstanceState);
         presenter = new TablesFragmentPresenter(this);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         presenter.prepare(this, inflater, container);
         return view;
     }
-
     @Override
     public void setView(View view) {
         this.view = view;
     }
-
     @Override
     public void startNewActivity(Class activity, int tableNumber) {
         getActivity().startActivity(new Intent( getActivity(), activity).putExtra(EXTRA_TAG, tableNumber) );
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.onResume();
     }
 }

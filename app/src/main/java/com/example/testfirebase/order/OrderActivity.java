@@ -61,8 +61,6 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     private int tableNumber;
     private int guestsCount;
 
-    private boolean orderWasAccepted;
-
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,32 +68,10 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         setContentView(R.layout.activity_order);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-//        Dish dish = new Dish();
-//        dish.setCost("999r");
-//        dish.setWeight("9000g");
-//        dish.setCategoryName("category");
-//        dish.setName("name");
-//        dish.setDescription("description");
-//
-//        OrderItem orderItem = new OrderItem(dish, "my commentary", 71);
-//
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("orders")
-//            .document("table_1")
-//            .collection("order_items")
-//            .document("name + commentary")
-//            .set(orderItem).addOnCompleteListener(task -> {
-//                if(task.isSuccessful()) {
-//                    Log.d(TAG, "Success");
-//                }
-//                else  Log.d(TAG, task.getException().toString());
-//        });
-
         initialisation();
 
     }
     private void initialisation () {
-        orderWasAccepted = false;
         tableNumber = getIntent().getIntExtra(EXTRA_TAG, 0);
         tableNumberTextView = findViewById(R.id.table_number);
         tableNumberTextView.setText(Integer.toString(tableNumber));
@@ -110,9 +86,10 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             guestCountDialog.show(getSupportFragmentManager(), "");
         }, 10);
 
-        orderPresenter = new OrderActivityPresenter(this, tableNumber);
         MenuDialogModel model = new MenuDialogModel();
         menuDialogPresenter = new MenuDialogPresenter(this);
+
+        orderPresenter = new OrderActivityPresenter(this, tableNumber);
 
         bottomAppBar = findViewById(R.id.bottom_app_bar);
         fba = findViewById(R.id.menu_floating_action_button);
@@ -123,8 +100,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         bottomAppBar.setNavigationOnClickListener(view -> {
             // add isExist
             OrderMenuBottomSheetDialog dialog = OrderMenuBottomSheetDialog.getNewInstance(orderWasAccepted -> {
-                this.orderWasAccepted = orderWasAccepted;
-                orderPresenter.writeOrderToDb(tableNumber, guestsCount);
+                orderPresenter.acceptAndWriteOrderToDb(tableNumber, guestsCount);
             });
             dialog.show(getSupportFragmentManager(), "");
         });
@@ -202,7 +178,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        orderPresenter.orderRecyclerViewOnActivityDestroy(orderWasAccepted, tableNumber);
+        orderPresenter.orderRecyclerViewOnActivityDestroy(tableNumber);
     }
 
 }

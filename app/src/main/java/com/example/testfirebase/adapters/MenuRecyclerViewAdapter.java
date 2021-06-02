@@ -44,6 +44,8 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     private AddDishAlertDialog addDishAlertDialog;
     private FragmentManager fragmentManager;
 
+    private boolean isPressed = false;
+
     public MenuRecyclerViewAdapter (FragmentManager fragmentManager, Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames, Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer, int tableNumber) {
         addDishAlertDialog = AddDishAlertDialog.getNewInstance(notifyOrderAdapterConsumer, tableNumber);
         this.fragmentManager = fragmentManager;
@@ -120,8 +122,9 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     .debounce(150, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(item -> {
-                        if(!AddDishAlertDialog.isExit()) {
-                            addDishAlertDialog.setDish(dish);
+                        if(!AddDishAlertDialog.isExit() && !isPressed) {
+                            isPressed = true;
+                            addDishAlertDialog.setData(dish, resetIsPressed -> { isPressed = false; });
                             addDishAlertDialog.show(fragmentManager, "");
                         }
                     }, error -> {
