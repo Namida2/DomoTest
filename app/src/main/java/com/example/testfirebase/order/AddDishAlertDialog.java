@@ -37,7 +37,7 @@ import static registration.LogInActivity.TAG;
 public class AddDishAlertDialog extends DialogFragment {
 
     private static Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer;
-    private static  Consumer<Boolean> resetIsPressed;
+    private  Consumer<Boolean> resetIsPressed;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
     private static int tableNumber;
     private Dish dish;
@@ -51,6 +51,7 @@ public class AddDishAlertDialog extends DialogFragment {
     }
     public void setData(Dish dish, Consumer<Boolean> resetIsPressed) {
         this.dish = dish;
+        this.resetIsPressed = resetIsPressed;
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
@@ -86,8 +87,9 @@ public class AddDishAlertDialog extends DialogFragment {
     @Override
     public void onDismiss(@NonNull @NotNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (resetIsPressed != null) resetIsPressed.accept(false);
+        resetIsPressed.accept(false);
     }
+
 
     @Override
     public void onResume() {
