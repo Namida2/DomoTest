@@ -1,7 +1,6 @@
 package interfaces;
 
 
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.order.Dish;
@@ -13,28 +12,21 @@ import java.util.Map;
 
 import com.example.testfirebase.order.DishCategoryInfo;
 
-import tools.Pair;
-
 public interface MenuDialogOrderActivityInterface {
 
     interface Model {
-        void setView (android.view.View view);
-        android.view.View getView();
-        RecyclerView getRecyclerView();
         MenuRecyclerViewAdapter getMenuItemAdapter();
-        void setRecyclerView(RecyclerView recyclerView);
         void setMenuItemAdapter(MenuRecyclerViewAdapter adapter);
         FirebaseFirestore getDatabase();
         Map<String, List<Dish>> getMenu();
-        Map<String, Object> getModelState();
         void setMenu(Map<String, List<Dish>> menu);
         ArrayList<DishCategoryInfo<String, Integer>> getCategoryNames();
         void setCategoryNames(ArrayList<DishCategoryInfo<String, Integer>> categoryNames);
     }
     interface View {
         void onMenuDialogError(int errorCode);
-        void onMenuDialogModelComplete(android.view.View menuDialogView, MenuRecyclerViewAdapter adapter);
-        Pair<android.view.View, MenuRecyclerViewAdapter> onMenuDialogDataFillingComplete(MenuDialogOrderActivityInterface.Model model);
+        void onMenuDialogModelComplete(MenuRecyclerViewAdapter adapter);
+        MenuRecyclerViewAdapter onMenuDialogDataFillingComplete(MenuDialogOrderActivityInterface.Model model);
     }
     interface Presenter {
         void setModelDataState();

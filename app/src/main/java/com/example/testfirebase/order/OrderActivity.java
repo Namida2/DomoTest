@@ -75,20 +75,18 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         tableNumber = getIntent().getIntExtra(EXTRA_TAG, 0);
         tableNumberTextView = findViewById(R.id.table_number);
         tableNumberTextView.setText(Integer.toString(tableNumber));
+        guestsCountTextView = findViewById(R.id.guests_count);
 
         // First - GuestCountDialog, Second - OrderRecyclerView, Third - menuDialog
         guestsCountDialogPresenter = new GuestCountDialogOrderActivityPresenter(this);
-        guestsCountTextView = findViewById(R.id.guests_count);
-        prepareGuestCountModel();
-
+        setGuestCountDialogView();
         guestCountDialog = new GuestsCountBottomSheetDialog(guestCountDialogView);
+
         new Handler().postDelayed(() -> {
             guestCountDialog.show(getSupportFragmentManager(), "");
         }, 10);
 
-        MenuDialogModel model = new MenuDialogModel();
         menuDialogPresenter = new MenuDialogPresenter(this);
-
         orderPresenter = new OrderActivityPresenter(this, tableNumber);
 
         bottomAppBar = findViewById(R.id.bottom_app_bar);
@@ -105,44 +103,32 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             dialog.show(getSupportFragmentManager(), "");
         });
     }
-    private void prepareGuestCountModel() {
-        RecyclerView recyclerView = null;
-        GuestsCountRecyclerViewAdapter adapter = null;
-        android.view.View view = null;
-        Map<String, Object> modelState = guestsCountDialogPresenter.getGuestCountModelState();
-        if(modelState.containsValue(null)) {
-            view = android.view.View.inflate(this, R.layout.dialog_guests_count, null);
-            recyclerView = view.findViewById(R.id.guests_count_recycler_view);
-            adapter = new GuestsCountRecyclerViewAdapter(this);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-            recyclerView.setAdapter(adapter);
-            modelState.put(GUEST_COUNT_DIALOG_VIEW_KEY, view);
-            modelState.put(GUEST_COUNT_DIALOG_RECYCLER_VIEW_KEY, recyclerView);
-            modelState.put(GUEST_COUNT_DIALOG_RECYCLER_VIEW_ADAPTER_KEY, adapter);
-            guestsCountDialogPresenter.setGuestCountModelState(modelState);
-        }
-    }
+
     @Override
     public void setGuestsCountTextView(int guestsCount) {
         this.guestsCount = guestsCount;
-        guestCountDialog.dismiss();
         this.guestsCountTextView.setText(Integer.toString(guestsCount));
+        guestCountDialog.dismiss();
     }
     @Override
-    public void setGuestCountDialogView(View view) {
+    public void setGuestCountDialogView() {
+        View view = View.inflate(this, R.layout.dialog_guests_count, null);
+        RecyclerView recyclerView = view.findViewById(R.id.guests_count_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        recyclerView.setAdapter(guestsCountDialogPresenter.getGuestCountAdapter());
         guestCountDialogView = view;
     }
     @Override
-    public void onMenuDialogModelComplete(View menuDialogView, MenuRecyclerViewAdapter adapter) {
-        this.menuDialogView = menuDialogView;
+    public void onMenuDialogModelComplete(MenuRecyclerViewAdapter adapter) {
+        View contentView = View.inflate(this, R.layout.dialog_menu, null);
+        RecyclerView recyclerView = contentView.findViewById(R.id.menu_recycler_view);
         adapter.setFragmentManager(getSupportFragmentManager());
-        menuDialog = new MenuBottomSheetDialog(menuDialogView);
-        Log.d(TAG, "COMPLETE");
+        recyclerView.setAdapter(adapter);
+        menuDialog = new MenuBottomSheetDialog(contentView);
+        this.menuDialogView = contentView;
     }
     @Override
-    public Pair<View, MenuRecyclerViewAdapter> onMenuDialogDataFillingComplete(MenuDialogOrderActivityInterface.Model model) {
-        View view = View.inflate(this, R.layout.dialog_menu, null);
-        RecyclerView recyclerView = view.findViewById(R.id.menu_recycler_view);
+    public MenuRecyclerViewAdapter onMenuDialogDataFillingComplete(MenuDialogOrderActivityInterface.Model model) {
         MenuRecyclerViewAdapter adapter = new MenuRecyclerViewAdapter(
             getSupportFragmentManager(),
             model.getMenu(),
@@ -150,8 +136,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             notifyOrderAdapterConsumer,
             tableNumber
         );
-        recyclerView.setAdapter(adapter);
-        return new Pair<>(view, adapter);
+        return adapter;
     }
     @Override
     public void onMenuDialogError(int errorCode) {
@@ -180,5 +165,4 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         super.onDestroy();
         orderPresenter.orderRecyclerViewOnActivityDestroy(tableNumber);
     }
-
 }

@@ -2,13 +2,21 @@ package presenters;
 
 import android.util.Log;
 
+import com.example.testfirebase.order.OrderItem;
+import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import interfaces.SplashScreenInterface;
+import io.reactivex.rxjava3.core.Observable;
+import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
+import tools.Pair;
 
 import static registration.LogInActivity.TAG;
 
@@ -25,6 +33,10 @@ public class SplashScreenActivityPresenter implements SplashScreenInterface.Pres
     @Override
     public void getCurrentUserPost() {
         FirebaseUser currentUser = model.gerAuth().getCurrentUser();
+        if(currentUser == null || currentUser.getEmail() == null) {
+            view.createNewUser();
+            return;
+        }
         model.getDatabase()
             .collection(SplashScreenActivityModel.COLLECTION_EMPLOYEES_NAME)
             .document(currentUser.getEmail()).get().addOnCompleteListener(task -> {
@@ -39,4 +51,5 @@ public class SplashScreenActivityPresenter implements SplashScreenInterface.Pres
                 }
         });
     }
+
 }

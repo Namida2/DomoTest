@@ -36,17 +36,12 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
         if (model == null) {
             model = new MenuDialogModel();
             setModelDataState();
-        } else if(model.getView() == null) {
-            setModelDataState();
-        } else view.onMenuDialogModelComplete(model.getView(), model.getMenuItemAdapter());
+        } else view.onMenuDialogModelComplete(model.getMenuItemAdapter());
     }
     @Override
     public void setModelViewState() {
-        Pair<View, MenuRecyclerViewAdapter> pair = view.onMenuDialogDataFillingComplete(model);
-        model.setView(pair.first);
-        model.setMenuItemAdapter(pair.second);
-        model.setRecyclerView(pair.first.findViewById(R.id.menu_recycler_view));
-        view.onMenuDialogModelComplete(model.getView(), model.getMenuItemAdapter());
+        model.setMenuItemAdapter(view.onMenuDialogDataFillingComplete(model)) ;
+        view.onMenuDialogModelComplete(model.getMenuItemAdapter());
     }
     @Override
     public void setModelDataState() {

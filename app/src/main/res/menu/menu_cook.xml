@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/ordersFragment"
+        android:id="@+id/cookOrdersFragment"
         android:icon="@drawable/ic_orders"
         android:title="Заказы"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/checkFragment"
+        android:id="@+id/cookChecksFragment"
         android:icon="@drawable/ic_check"
         android:title="На чек"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/profileFragment"
+        android:id="@+id/cookProfileFragment"
         android:icon="@drawable/ic_profile"
         android:title="Профиль"
         app:showAsAction="always"/>

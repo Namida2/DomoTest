@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import interfaces.GuestCountDialogOrderActivityInterface;
 
-public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment implements GuestCountDialogOrderActivityInterface.GuestsCountAdapter.MyView {
+public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment {
 
     private View contentView;
     public GuestsCountBottomSheetDialog (View contentView) {

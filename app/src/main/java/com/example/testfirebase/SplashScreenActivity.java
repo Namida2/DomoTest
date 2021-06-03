@@ -11,6 +11,7 @@ import cook.CookMainActivity;
 import interfaces.SplashScreenInterface;
 import model.SplashScreenActivityModel;
 import presenters.SplashScreenActivityPresenter;
+import registration.LogInActivity;
 
 public class SplashScreenActivity extends Activity implements SplashScreenInterface.View {
 
@@ -24,17 +25,22 @@ public class SplashScreenActivity extends Activity implements SplashScreenInterf
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         presenter = new SplashScreenActivityPresenter(this);
         presenter.getCurrentUserPost();
-
     }
-
     @Override
     public void setCurrentUserPost(String post) {
         this.post = post;
         switch (post) {
             case SplashScreenActivityModel.COOK_POST_NAME:
                 startNewActivity(CookMainActivity.class);
+                break;
+            case SplashScreenActivityModel.WAITER_POST_NAME:
+                startNewActivity(MainActivity.class);
+                break;
         }
-
+    }
+    @Override
+    public void createNewUser() {
+        startNewActivity(LogInActivity.class);
     }
     private void startNewActivity(Class newActivity) {
         new Handler().postDelayed(() -> {

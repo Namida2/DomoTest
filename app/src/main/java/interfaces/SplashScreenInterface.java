@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public interface SplashScreenInterface {
     interface View {
         void setCurrentUserPost(String post);
+        void createNewUser();
     }
     interface Model {
         FirebaseFirestore getDatabase();

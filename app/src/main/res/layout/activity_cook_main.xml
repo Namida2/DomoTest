@@ -44,6 +44,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/main_navigation" />
+        app:navGraph="@navigation/cook_navigation" />
 
 </RelativeLayout>

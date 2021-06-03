@@ -48,10 +48,8 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
             view.setOrderRecyclerView(model.getOrderRecyclerView());
         }
     }
-
     public void setModelDataState() {
         ArrayList<TableInfo> tables = new ArrayList<>();
-
         model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
 

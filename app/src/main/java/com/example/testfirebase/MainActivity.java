@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
     }
-
     private Observable<Integer> getBottomAppBarObservable () {
         return Observable.create(emitter -> {
             bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -74,13 +73,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
     private void initialisation () {
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         navHostController = (NavHostController) navHostFragment.getNavController();
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
