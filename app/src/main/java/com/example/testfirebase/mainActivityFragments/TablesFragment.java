@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.testfirebase.R;
-import com.example.testfirebase.adapters.TablesRecyclerViewAdapter;
+
 
 import interfaces.TablesFragmentInterface;
 import presenters.TablesFragmentPresenter;
@@ -21,7 +21,6 @@ public class TablesFragment extends Fragment implements TablesFragmentInterface.
 
     public static final String EXTRA_TAG = "tableNumber";
     private TablesFragmentInterface.Presenter presenter;
-    private View view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,16 +29,18 @@ public class TablesFragment extends Fragment implements TablesFragmentInterface.
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        presenter.prepare(this, inflater, container);
-        return view;
-    }
-    @Override
-    public void setView(View view) {
-        this.view = view;
+        View contentView = presenter.getView();
+        if(contentView != null) return contentView;
+        contentView = inflater.inflate(R.layout.fragment_tables, container, false);
+        RecyclerView recyclerView = contentView.findViewById(R.id.tables_recycle_view);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setAdapter(presenter.getAdapter());
+        presenter.setModelState(contentView);
+        return contentView;
     }
     @Override
     public void startNewActivity(Class activity, int tableNumber) {
-        getActivity().startActivity(new Intent( getActivity(), activity).putExtra(EXTRA_TAG, tableNumber) );
+        getActivity().startActivity(new Intent( getContext(), activity).putExtra(EXTRA_TAG, tableNumber) );
     }
     @Override
     public void onResume() {

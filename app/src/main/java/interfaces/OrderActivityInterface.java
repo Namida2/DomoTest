@@ -15,26 +15,24 @@ import tools.Pair;
 
 public interface OrderActivityInterface {
     interface Model {
-        void setOrderRecyclerView(RecyclerView orderRecyclerView);
+        ArrayList<OrderItem> getOrderItemsArrayList(int tableNumber);
         void setAdapter(OrderRecyclerViewAdapter adapter);
-        void setView(android.view.View view);
         OrderRecyclerViewAdapter getAdapter();
-        RecyclerView getOrderRecyclerView();
-        android.view.View getView();
         Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer ();
         public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber);
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap();
         FirebaseFirestore getDatabase();
     }
     interface View {
-        void setOrderRecyclerView(RecyclerView orderRecyclerView);
-        RecyclerView prepareOrderRecyclerView();
+        void setOrdersListForThisTable();
         void setOrderRecyclerViewConsumer(Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer);
     }
     interface Presenter {
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap ();
+        void setModelDataState(boolean needToNotifyView);
+        OrderRecyclerViewAdapter getOrderRecyclerViewAdapter(int ableNumber);
         void orderRecyclerViewOnActivityDestroy(int tableNumber);
-        void setViewModelState();
-        Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer ();
+        Consumer<Pair<OrderItem, String>> getOrderNotifyAdapterConsumer();
         void acceptAndWriteOrderToDb(int tableNumber, int guestCount);
     }
 }

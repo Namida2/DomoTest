@@ -1,22 +1,12 @@
 package presenters;
 
-
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.testfirebase.R;
 import com.example.testfirebase.adapters.TablesRecyclerViewAdapter;
+import com.example.testfirebase.order.OrderActivity;
 
 import interfaces.TablesFragmentInterface;
 import model.TablesFragmentModel;
-
-import static registration.LogInActivity.TAG;
-
 
 public class TablesFragmentPresenter implements TablesFragmentInterface.Presenter {
 
@@ -25,37 +15,28 @@ public class TablesFragmentPresenter implements TablesFragmentInterface.Presente
 
     public TablesFragmentPresenter (TablesFragmentInterface.MyView view) {
         this.myView = view;
-        if (model == null)
+        if (model == null) {
             model = new TablesFragmentModel();
+            model.setAdapter(new TablesRecyclerViewAdapter());
+        }
     }
-
     @Override
-    public void prepare(TablesFragmentInterface.MyView view, LayoutInflater inflater, ViewGroup container) {
-        View mView;
-        RecyclerView recyclerView;
-        if(model.getView() == null) {
-            Log.d(TAG, "View is null");
-            mView = inflater.inflate(R.layout.fragment_tables, container, false);
-            model.setView(mView);
-        }
-        else mView = model.getView();
-        if(model.getAdapter() == null) {
-            Log.d(TAG, "Adapter is null");
-            model.setAdapter(new TablesRecyclerViewAdapter(view));
-        }
-        if(model.getRecyclerView() == null) {
-            Log.d(TAG, "RecyclerView is null");
-            recyclerView = mView.findViewById(R.id.tables_recycle_view);
-            recyclerView.setLayoutManager(new GridLayoutManager(container.getContext(), 2));
-            recyclerView.setAdapter(model.getAdapter());
-            model.setRecyclerView(recyclerView);
-        }
-        myView.setView(model.getView());
+    public void setModelState(View view) {
+        model.setView(view);
     }
-
+    @Override
+    public View getView() {
+        return model.getView();
+    }
+    @Override
+    public TablesRecyclerViewAdapter getAdapter() {
+        return model.getAdapter();
+    }
     @Override
     public void onResume() {
+        model.getAdapter().setAcceptTableNumber(tableNumber -> {
+            myView.startNewActivity(OrderActivity.class, tableNumber);
+        });
         model.getAdapter().resetIsPressed();
     }
-
 }

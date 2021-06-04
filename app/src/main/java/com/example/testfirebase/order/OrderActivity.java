@@ -21,6 +21,7 @@ import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -32,6 +33,7 @@ import model.MenuDialogModel;
 import presenters.MenuDialogPresenter;
 import presenters.GuestCountDialogOrderActivityPresenter;
 import presenters.OrderActivityPresenter;
+import tools.Animations;
 import tools.Pair;
 
 import static com.example.testfirebase.mainActivityFragments.TablesFragment.EXTRA_TAG;
@@ -77,33 +79,33 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         tableNumberTextView.setText(Integer.toString(tableNumber));
         guestsCountTextView = findViewById(R.id.guests_count);
 
-        // First - GuestCountDialog, Second - OrderRecyclerView, Third - menuDialog
         guestsCountDialogPresenter = new GuestCountDialogOrderActivityPresenter(this);
         setGuestCountDialogView();
         guestCountDialog = new GuestsCountBottomSheetDialog(guestCountDialogView);
-
         new Handler().postDelayed(() -> {
             guestCountDialog.show(getSupportFragmentManager(), "");
         }, 10);
 
         menuDialogPresenter = new MenuDialogPresenter(this);
-        orderPresenter = new OrderActivityPresenter(this, tableNumber);
+        orderPresenter = new OrderActivityPresenter(this);
+        this.notifyOrderAdapterConsumer = orderPresenter.getOrderNotifyAdapterConsumer();
+        setOrdersListForThisTable();
+
 
         bottomAppBar = findViewById(R.id.bottom_app_bar);
         fba = findViewById(R.id.menu_floating_action_button);
-        fba.setOnClickListener(view -> {
-            if(menuDialogView != null) // add isExist
+        fba.setOnClickListener(view -> { // add isExist
+            if(menuDialogView != null)
                 menuDialog.show(getSupportFragmentManager(), "");
         });
-        bottomAppBar.setNavigationOnClickListener(view -> {
-            // add isExist
+        bottomAppBar.setNavigationOnClickListener(view -> { // add isExist
             OrderMenuBottomSheetDialog dialog = OrderMenuBottomSheetDialog.getNewInstance(orderWasAccepted -> {
                 orderPresenter.acceptAndWriteOrderToDb(tableNumber, guestsCount);
             });
             dialog.show(getSupportFragmentManager(), "");
         });
     }
-
+    //----------GUESTS_COUNT
     @Override
     public void setGuestsCountTextView(int guestsCount) {
         this.guestsCount = guestsCount;
@@ -118,6 +120,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         recyclerView.setAdapter(guestsCountDialogPresenter.getGuestCountAdapter());
         guestCountDialogView = view;
     }
+    //----------MENU
     @Override
     public void onMenuDialogModelComplete(MenuRecyclerViewAdapter adapter) {
         View contentView = View.inflate(this, R.layout.dialog_menu, null);
@@ -143,18 +146,14 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         if(!ErrorAlertDialog.isIsExist())
             ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
     }
+    //----------ORDER
     @Override
-    public void setOrderRecyclerView(RecyclerView orderRecyclerView) {
-        CoordinatorLayout coordinatorLayout = findViewById(R.id.order_recycler_view_container);
-        coordinatorLayout.removeView(findViewById(R.id.order_recycler_view));
-        coordinatorLayout.addView(orderRecyclerView);
-    }
-    @Override
-    public RecyclerView prepareOrderRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.order_recycler_view);
-        OrderRecyclerViewAdapter adapter = new OrderRecyclerViewAdapter();
-        recyclerView.setAdapter(adapter);
-        return recyclerView;
+    public void setOrdersListForThisTable() {
+        OrderRecyclerViewAdapter orderRecyclerViewAdapter = orderPresenter.getOrderRecyclerViewAdapter(tableNumber);
+        if(orderRecyclerViewAdapter != null) {
+            RecyclerView recyclerView = findViewById(R.id.order_recycler_view);
+            recyclerView.setAdapter(orderRecyclerViewAdapter);
+        }
     }
     @Override
     public void setOrderRecyclerViewConsumer(Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer) {

@@ -9,13 +9,18 @@ import com.example.testfirebase.adapters.TablesRecyclerViewAdapter;
 import interfaces.TablesFragmentInterface;
 
 public class TablesFragmentModel implements TablesFragmentInterface.Model {
-    private RecyclerView recyclerView;
+
     private TablesRecyclerViewAdapter adapter;
     private View view;
+    public static int TABLE_COUNT = 17;
 
     @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerView;
+    public void setView(View view) {
+        this.view = view;
+    }
+    @Override
+    public View getView() {
+        return view;
     }
     @Override
     public TablesRecyclerViewAdapter getAdapter() {
@@ -24,18 +29,6 @@ public class TablesFragmentModel implements TablesFragmentInterface.Model {
     @Override
     public void setAdapter(TablesRecyclerViewAdapter adapter) {
         this.adapter = adapter;
-    }
-    @Override
-    public void setRecyclerView(RecyclerView recyclerView) {
-        this.recyclerView = recyclerView;
-    }
-    @Override
-    public View getView() {
-        return view;
-    }
-    @Override
-    public void setView(View view) {
-        this.view = view;
     }
 
 }

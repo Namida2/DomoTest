@@ -1,13 +1,11 @@
 package model;
 
-import android.view.View;
-
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.example.testfirebase.order.OrderItem;
+import com.google.common.collect.Table;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,10 +16,9 @@ import tools.Pair;
 
 public class OrderActivityModel implements OrderActivityInterface.Model {
 
-    private Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap;
+    // key, listItems, isAccepted
+    private  Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap;
 
-    private View view;
-    private RecyclerView orderRecyclerView;
     private OrderRecyclerViewAdapter adapter;
 
     private FirebaseFirestore db;
@@ -35,6 +32,7 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
         this.ordersHashMap = new HashMap<>();
         db = FirebaseFirestore.getInstance();
     }
+
     @Override
     public Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer() {
         return order -> {
@@ -52,6 +50,11 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
         }
     }
     @Override
+    public ArrayList<OrderItem> getOrderItemsArrayList(int tableNumber) {
+        if (ordersHashMap.get(DOCUMENT_TABLE + tableNumber) == null) return null;
+        return ordersHashMap.get(DOCUMENT_TABLE + tableNumber).first;
+    }
+    @Override
     public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap() {
         return ordersHashMap;
     }
@@ -60,28 +63,11 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
         return db;
     }
     @Override
-    public void setOrderRecyclerView(RecyclerView orderRecyclerView) {
-        this.orderRecyclerView = orderRecyclerView;
-    }
-    @Override
     public void setAdapter(OrderRecyclerViewAdapter adapter) {
         this.adapter = adapter;
-    }
-    @Override
-    public void setView(View view) {
-        this.view = view;
     }
     @Override
     public OrderRecyclerViewAdapter getAdapter() {
         return adapter;
     }
-    @Override
-    public RecyclerView getOrderRecyclerView() {
-        return orderRecyclerView;
-    }
-    @Override
-    public View getView() {
-        return view;
-    }
-
 }

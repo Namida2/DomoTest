@@ -10,6 +10,7 @@ import com.example.testfirebase.order.Dish;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import dialogsTools.ErrorAlertDialog;
 import interfaces.OrderActivityInterface;
 import io.reactivex.rxjava3.core.Observable;
 import model.OrderActivityModel;
+import model.TablesFragmentModel;
 import tools.Pair;
 
 import static model.MenuDialogModel.DISHES_COLLECTION_NAME;
@@ -31,28 +33,45 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
     private static final String GUEST_COUNT_KEY = "guestCount";
     private static final String IS_COMPLETE_KEY = "isComplete";
 
+    private static int TABLE_COUNT = 0;
+
     private OrderActivityInterface.View view;
     private static OrderActivityInterface.Model model;
 
-    public OrderActivityPresenter (OrderActivityInterface.View view, int tableNumber) {
-        this.view = view;
+    public OrderActivityPresenter () {
+        TABLE_COUNT = TablesFragmentModel.TABLE_COUNT;
         if (model == null) {
             model = new OrderActivityModel();
-            setModelDataState();
-            setViewModelState();
-            model.getAdapter().setOrdersArrayList(model.getOrderInfo(tableNumber).first);
+            model.setAdapter(new OrderRecyclerViewAdapter());
         }
-        else {
-            model.getAdapter().setOrdersArrayList(model.getOrderInfo(tableNumber).first);
-            view.setOrderRecyclerViewConsumer(model.getNotifyOrderAdapterConsumer());
-            view.setOrderRecyclerView(model.getOrderRecyclerView());
-        }
+        Log.d(TAG, "OrderActivityPresenter was create");
     }
-    public void setModelDataState() {
+
+    public OrderActivityPresenter (OrderActivityInterface.View view) {
+        this.view = view;
+        TABLE_COUNT = TablesFragmentModel.TABLE_COUNT;
+        if (model == null) {
+            model = new OrderActivityModel();
+            model.setAdapter(new OrderRecyclerViewAdapter());
+        }
+        Log.d(TAG, "OrderActivityPresenter was create");
+    }
+
+    @Override
+    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap() {
+        return model.getOrdersHashMap();
+    }
+
+    @Override
+    public void setModelDataState(boolean needToNotifyView) {
+        if(view == null && needToNotifyView) {
+            Log.d(TAG, "OrderActivityPresenter.setModelDataState: View is null, can not notify view!");
+            needToNotifyView = false;
+        }
+        final boolean finalNeedToNotifyView = needToNotifyView;
         ArrayList<TableInfo> tables = new ArrayList<>();
         model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-
                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                     TableInfo tableInfo = new TableInfo();
                     tableInfo.setTableName(documentSnapshot.getId());
@@ -61,13 +80,14 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
                         tableInfo.setGuestCount( (long) data.get(GUEST_COUNT_KEY) );
                         tableInfo.setIsComplete( (boolean) data.get(IS_COMPLETE_KEY) );
                     } catch (Exception e) {
-                        Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + e.getMessage());
+                        Log.d(TAG, "OrderActivityPresenter.setModelDataState tableInfo: " + e.getMessage());
                     }
                     tables.add(tableInfo);
                 }
-
+                final int collectionSize = tables.size();
                 getTablesObservable(tables)
-                    .subscribe( tableDocument -> {
+                    .subscribe( tableDocumentPosition -> {
+                        TableInfo tableDocument = tables.get(tableDocumentPosition);
                         model.getDatabase().collection( OrderActivityModel.COLLECTION_ORDERS_NAME )
                             .document( tableDocument.getTableName() )
                             .collection( OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME )
@@ -77,6 +97,18 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
                                 model.getOrdersHashMap().put( tableDocument.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true) );
                             }
                             else  Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task1.getException());
+                            Map<String, Pair<ArrayList<OrderItem>, Boolean>> a = model.getOrdersHashMap();
+                            if (finalNeedToNotifyView  && model.getOrdersHashMap().size() == collectionSize)
+                                view.setOrdersListForThisTable();
+                            if( model.getOrdersHashMap().size() == collectionSize) {
+                                for(int i = 1; i <= TABLE_COUNT; ++i){
+                                    if (!model.getOrdersHashMap().containsKey( OrderActivityModel.DOCUMENT_TABLE + i )) {
+                                        model.getOrdersHashMap().put(OrderActivityModel.DOCUMENT_TABLE + i, new Pair<>(new ArrayList<>(), false));
+                                        a = model.getOrdersHashMap();
+                                    }
+                                }
+                                Log.d(TAG, "OrderActivityPresenter.setModelDataState: COMPLETE");
+                            }
                         });
                     }, error -> {
                         Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + error.getMessage());
@@ -86,19 +118,31 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
             else {
                 Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task.getException().toString());
                 //view.onMenuDialogError(ErrorAlertDialog.INTERNET_CONNECTION);
-                // add a category "SOMETHING WRONG"
+                //add a category "SOMETHING WRONG"
             }
         });
     }
-
-    private Observable<TableInfo> getTablesObservable (ArrayList<TableInfo> tablesInfo) {
+    @Override
+    public OrderRecyclerViewAdapter getOrderRecyclerViewAdapter(int tableNumber) {
+        if(model.getOrderItemsArrayList(tableNumber) == null)
+            setModelDataState(true);
+        else {
+            model.getAdapter().setOrdersArrayList(model.getOrderItemsArrayList(tableNumber));
+            return model.getAdapter();
+        }
+        return null;
+    }
+    @Override
+    public  Consumer<Pair<OrderItem, String>> getOrderNotifyAdapterConsumer() {
+        return model.getNotifyOrderAdapterConsumer();
+    }
+    private Observable<Integer> getTablesObservable (ArrayList<TableInfo> tablesInfo) {
         return Observable.create(emitter -> {
             for (int i = 0 ; i < tablesInfo.size(); ++i) {
-                emitter.onNext(tablesInfo.get(i));
+                emitter.onNext(i);
             }
         });
     }
-
     @Override
     public void acceptAndWriteOrderToDb(int tableNumber, int guestCount) {
         model.getOrderInfo(tableNumber).second = true;
@@ -109,7 +153,6 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
             .document(OrderActivityModel.DOCUMENT_TABLE + tableNumber)
             .set(guestCountHashMap).addOnCompleteListener(guestCountTask -> {
                 if(guestCountTask.isSuccessful()) {
-
                     for(int i = 0; i < orderItems.size(); ++i) {
                         OrderItem orderItem = orderItems.get(i);
                         model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
@@ -118,7 +161,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
                             .document(orderItem.getName()
                                 + OrderActivityModel.DOCUMENT_NAME_DELIMITER
                                 + orderItem.getCommentary())
-                            .set(orderItem).addOnCompleteListener(task -> {
+                            .set(orderItem, SetOptions.merge()).addOnCompleteListener(task -> {
                             if(task.isSuccessful())
                                 Log.d(TAG, orderItem.getName()
                                     + OrderActivityModel.DOCUMENT_NAME_DELIMITER
@@ -126,27 +169,15 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
                             else Log.d(TAG, "OrderActivityPresenter.writeOrderToDb: " + task.getException());
                         });
                     }
-
+                    Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: COMPLETE");
                 }
                 else Log.d(TAG, "OrderActivityPresenter.writeOrderToDb: " + guestCountTask.getException());
         });
     }
     @Override
     public void orderRecyclerViewOnActivityDestroy(int tableNumber) {
-        RecyclerView recyclerView = model.getOrderRecyclerView();
-        ((ViewGroup) recyclerView.getParent()).removeView(recyclerView);
         if ( !model.getOrderInfo(tableNumber).second )
-            model.getOrdersHashMap().remove(OrderActivityModel.DOCUMENT_TABLE + tableNumber);
+            model.getOrdersHashMap().get(OrderActivityModel.DOCUMENT_TABLE + tableNumber).first = new ArrayList<>();
     }
-    @Override
-    public void setViewModelState() {
-        RecyclerView recyclerView = view.prepareOrderRecyclerView();
-        model.setOrderRecyclerView(recyclerView);
-        model.setAdapter( (OrderRecyclerViewAdapter) recyclerView.getAdapter() );
-        view.setOrderRecyclerViewConsumer(model.getNotifyOrderAdapterConsumer());
-    }
-    @Override
-    public Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer() {
-        return model.getNotifyOrderAdapterConsumer();
-    }
+
 }

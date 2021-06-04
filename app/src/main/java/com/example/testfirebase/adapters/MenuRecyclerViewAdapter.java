@@ -31,6 +31,7 @@ import com.example.testfirebase.order.OrderItem;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import tools.Animations;
 import tools.Pair;
 
 import static registration.LogInActivity.TAG;
@@ -118,6 +119,7 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 menuItemViewHolder.name.setText (dish.getName());
                 menuItemViewHolder.weight.setText(dish.getWeight());
                 menuItemViewHolder.cost.setText(dish.getCost());
+                Animations.Companion.startAnimationViewShowing(menuItemViewHolder.menuItemContainer);
                 RxView.clicks(menuItemViewHolder.menuItemContainer)
                     .debounce(150, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
