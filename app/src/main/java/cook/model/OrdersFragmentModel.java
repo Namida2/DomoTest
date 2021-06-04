@@ -16,4 +16,7 @@ public class OrdersFragmentModel implements OrdersFragmentInterface.Model {
     public void setOrdersHashMap(Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap) {
         this.ordersHashMap = ordersHashMap;
     }
+
+    //
+
 }
