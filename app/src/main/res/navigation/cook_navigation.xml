@@ -8,7 +8,7 @@
         android:id="@+id/cookOrdersFragment"
         android:name="cook.fragments.CookOrdersFragment"
         android:label="CookOrdersFragment"
-        tools:layout="@layout/fragmet_cook_orders">
+        tools:layout="@layout/fragment_cook_orders">
         <action
             android:id="@+id/action_cookOrdersFragment_to_cookChecksFragment"
             app:destination="@id/cookChecksFragment" />

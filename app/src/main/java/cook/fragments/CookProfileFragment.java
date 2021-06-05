@@ -26,14 +26,7 @@ public class CookProfileFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        //View contentView = presenter.getView();
-        //if(contentView != null) return contentView;
-        //contentView = inflater.inflate(R.layout.fragment_tables, container, false);
-        //RecyclerView recyclerView = contentView.findViewById(R.id.tables_recycle_view);
-        //recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        //recyclerView.setAdapter(presenter.getAdapter());
-        //presenter.setModelState(contentView);
-        //return contentView;
+
         super.onCreate(savedInstanceState);
     }
 

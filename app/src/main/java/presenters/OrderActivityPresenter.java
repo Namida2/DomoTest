@@ -1,12 +1,8 @@
 package presenters;
 
 import android.util.Log;
-import android.view.ViewGroup;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
-import com.example.testfirebase.order.Dish;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -18,14 +14,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import dialogsTools.ErrorAlertDialog;
 import interfaces.OrderActivityInterface;
 import io.reactivex.rxjava3.core.Observable;
 import model.OrderActivityModel;
 import model.TablesFragmentModel;
 import tools.Pair;
-
-import static model.MenuDialogModel.DISHES_COLLECTION_NAME;
 
 public class OrderActivityPresenter implements OrderActivityInterface.Presenter {
 
@@ -56,12 +49,10 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
         }
         Log.d(TAG, "OrderActivityPresenter was create");
     }
-
     @Override
-    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap() {
-        return model.getOrdersHashMap();
+    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap() {
+        return model.getNotEmptyTablesOrdersHashMap();
     }
-
     @Override
     public void setModelDataState(boolean needToNotifyView) {
         if(view == null && needToNotifyView) {
@@ -94,17 +85,18 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
                             .get().addOnCompleteListener(task1 -> {
                             if(task1.isSuccessful()) {
                                 List<OrderItem> orderItemsList = task1.getResult().toObjects(OrderItem.class);
-                                model.getOrdersHashMap().put( tableDocument.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true) );
+                                model.getAllTablesOrdersHashMap().put( tableDocument.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true) );
                             }
                             else  Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task1.getException());
-                            Map<String, Pair<ArrayList<OrderItem>, Boolean>> a = model.getOrdersHashMap();
-                            if (finalNeedToNotifyView  && model.getOrdersHashMap().size() == collectionSize)
+                           // Map<String, Pair<ArrayList<OrderItem>, Boolean>> a = model.getOrdersHashMap();
+                            model.getNotEmptyTablesOrdersHashMap().putAll(model.getAllTablesOrdersHashMap());
+                            if (finalNeedToNotifyView  && model.getAllTablesOrdersHashMap().size() == collectionSize)
                                 view.setOrdersListForThisTable();
-                            if( model.getOrdersHashMap().size() == collectionSize) {
+                            if( model.getAllTablesOrdersHashMap().size() == collectionSize) {
                                 for(int i = 1; i <= TABLE_COUNT; ++i){
-                                    if (!model.getOrdersHashMap().containsKey( OrderActivityModel.DOCUMENT_TABLE + i )) {
-                                        model.getOrdersHashMap().put(OrderActivityModel.DOCUMENT_TABLE + i, new Pair<>(new ArrayList<>(), false));
-                                        a = model.getOrdersHashMap();
+                                    if (!model.getAllTablesOrdersHashMap().containsKey( OrderActivityModel.DOCUMENT_TABLE + i )) {
+                                        model.getAllTablesOrdersHashMap().put(OrderActivityModel.DOCUMENT_TABLE + i, new Pair<>(new ArrayList<>(), false));
+                                        //a = model.getOrdersHashMap();
                                     }
                                 }
                                 Log.d(TAG, "OrderActivityPresenter.setModelDataState: COMPLETE");
@@ -177,7 +169,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
     @Override
     public void orderRecyclerViewOnActivityDestroy(int tableNumber) {
         if ( !model.getOrderInfo(tableNumber).second )
-            model.getOrdersHashMap().get(OrderActivityModel.DOCUMENT_TABLE + tableNumber).first = new ArrayList<>();
+            model.getAllTablesOrdersHashMap().get(OrderActivityModel.DOCUMENT_TABLE + tableNumber).first = new ArrayList<>();
     }
 
 }

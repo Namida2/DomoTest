@@ -1,5 +1,7 @@
 package cook.presenters;
 
+import android.view.View;
+
 import cook.interfaces.OrdersFragmentInterface;
 import cook.model.OrdersFragmentModel;
 import interfaces.OrderActivityInterface;
@@ -16,8 +18,12 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
         if(model == null) {
             model = new OrdersFragmentModel();
             orderActivityPresenter = new OrderActivityPresenter();
-            model.setOrdersHashMap(orderActivityPresenter.getOrdersHashMap());
+            model.setOrdersHashMap(orderActivityPresenter.getNotEmptyTablesOrdersHashMap());
         }
     }
 
+    @Override
+    public View getView() {
+        return model.getView();
+    }
 }

@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import tools.Animations;
 
 public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecyclerViewAdapter.ViewHolder> {
 
@@ -24,6 +26,7 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
         ordersArrayList = new ArrayList<>();
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public ConstraintLayout container;
         public TextView categoryName;
         public TextView name;
         public TextView weight;
@@ -31,6 +34,7 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
         public TextView count;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
+            container = itemView.findViewById(R.id.order_item_container);
             categoryName = itemView.findViewById(R.id.category_name);
             name = itemView.findViewById(R.id.dish_name);
             weight = itemView.findViewById(R.id.dish_weight);
@@ -53,6 +57,7 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
         holder.weight.setText(ordersArrayList.get(position).getWeight());
         holder.cost.setText(ordersArrayList.get(position).getCost());
         holder.count.setText(ordersArrayList.get(position).getCount() + " шт");
+        Animations.Companion.startAnimationViewShowing(holder.container);
     }
     @Override
     public int getItemCount() {

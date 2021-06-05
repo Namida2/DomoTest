@@ -2,10 +2,8 @@ package model;
 
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.example.testfirebase.order.OrderItem;
-import com.google.common.collect.Table;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +15,8 @@ import tools.Pair;
 public class OrderActivityModel implements OrderActivityInterface.Model {
 
     // key, listItems, isAccepted
-    private  Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap;
+    private  Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap;
+    private  Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap;
 
     private OrderRecyclerViewAdapter adapter;
 
@@ -29,10 +28,14 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     public static final String DOCUMENT_GUEST_COUNT_FIELD = "guestCount";
 
     public OrderActivityModel () {
-        this.ordersHashMap = new HashMap<>();
+        this.allTablesOrdersHashMap = new HashMap<>();
+        this.notEmptyTablesOrdersHashMap = new HashMap<>();
         db = FirebaseFirestore.getInstance();
     }
-
+    @Override
+    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap() {
+        return notEmptyTablesOrdersHashMap;
+    }
     @Override
     public Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer() {
         return order -> {
@@ -42,21 +45,21 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     @Override
     public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber) {
         String key = DOCUMENT_TABLE + tableNumber;
-        if (ordersHashMap.containsKey(key)) return ordersHashMap.get(key);
+        if (allTablesOrdersHashMap.containsKey(key)) return allTablesOrdersHashMap.get(key);
         else {
             Pair<ArrayList<OrderItem>, Boolean> orderInfo = new Pair<>(new ArrayList<>(), false);
-            ordersHashMap.put(key, orderInfo);
+            allTablesOrdersHashMap.put(key, orderInfo);
             return orderInfo;
         }
     }
     @Override
     public ArrayList<OrderItem> getOrderItemsArrayList(int tableNumber) {
-        if (ordersHashMap.get(DOCUMENT_TABLE + tableNumber) == null) return null;
-        return ordersHashMap.get(DOCUMENT_TABLE + tableNumber).first;
+        if (allTablesOrdersHashMap.get(DOCUMENT_TABLE + tableNumber) == null) return null;
+        return allTablesOrdersHashMap.get(DOCUMENT_TABLE + tableNumber).first;
     }
     @Override
-    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap() {
-        return ordersHashMap;
+    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getAllTablesOrdersHashMap() {
+        return allTablesOrdersHashMap;
     }
     @Override
     public FirebaseFirestore getDatabase() {

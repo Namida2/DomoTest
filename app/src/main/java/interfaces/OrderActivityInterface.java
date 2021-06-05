@@ -20,7 +20,8 @@ public interface OrderActivityInterface {
         OrderRecyclerViewAdapter getAdapter();
         Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer ();
         public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber);
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap();
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getAllTablesOrdersHashMap();
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap()
         FirebaseFirestore getDatabase();
     }
     interface View {
@@ -28,7 +29,7 @@ public interface OrderActivityInterface {
         void setOrderRecyclerViewConsumer(Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer);
     }
     interface Presenter {
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap ();
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap();
         void setModelDataState(boolean needToNotifyView);
         OrderRecyclerViewAdapter getOrderRecyclerViewAdapter(int ableNumber);
         void orderRecyclerViewOnActivityDestroy(int tableNumber);
