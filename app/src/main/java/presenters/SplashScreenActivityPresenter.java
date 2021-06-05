@@ -2,19 +2,22 @@ package presenters;
 
 import android.util.Log;
 
+import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import interfaces.OrderActivityInterface;
 import interfaces.SplashScreenInterface;
+import interfaces.ToolsInterface;
 import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
 
 import static registration.LogInActivity.TAG;
 
-public class SplashScreenActivityPresenter implements SplashScreenInterface.Presenter {
+public class SplashScreenActivityPresenter implements SplashScreenInterface.Presenter, ToolsInterface.Notifiable {
 
     private SplashScreenInterface.View view;
     private SplashScreenInterface.Model splashScreenModel;
@@ -23,8 +26,14 @@ public class SplashScreenActivityPresenter implements SplashScreenInterface.Pres
     public SplashScreenActivityPresenter (SplashScreenInterface.View view) {
         this.view = view;
         if(splashScreenModel == null) splashScreenModel = new SplashScreenActivityModel();
-        orderActivityPresenter = new OrderActivityPresenter();
-        orderActivityPresenter.setModelDataState(false);
+        orderActivityPresenter = new OrderActivityPresenter(this);
+        orderActivityPresenter.setModelDataState(true);
+
+    }
+    @Override
+    public void notifyMe() {
+        ArrayList<TableInfo> asd = orderActivityPresenter.getTableInfoArrayList();
+        getCurrentUserPost();
     }
     @Override
     public void getCurrentUserPost() {
@@ -47,5 +56,4 @@ public class SplashScreenActivityPresenter implements SplashScreenInterface.Pres
                 }
         });
     }
-
 }

@@ -1,5 +1,6 @@
 package cook.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,35 +13,42 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
-import com.google.firestore.v1.StructuredQuery;
 
 import org.jetbrains.annotations.NotNull;
 
-import cook.interfaces.OrdersFragmentInterface;
-import cook.presenters.OrdersFragmentPresenter;
+import cook.interfaces.TablesFragmentInterface;
+import cook.presenters.TablesFragmentPresenter;
 
-public class CookOrdersFragment extends Fragment implements OrdersFragmentInterface.View {
+public class CookOrdersFragment extends Fragment implements TablesFragmentInterface.View {
 
-    private OrdersFragmentInterface.Presenter presenter;
+    private TablesFragmentInterface.Presenter presenter;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        presenter = new OrdersFragmentPresenter(this);
+        presenter = new TablesFragmentPresenter(this);
         super.onCreate(savedInstanceState);
     }
-
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View contentView = presenter.getView();
         if(contentView != null) return contentView;
-        contentView = inflater.inflate(R.layout.fragment_tables, container, false);
-        RecyclerView recyclerView = contentView.findViewById(R.id.tables_recycle_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        contentView = inflater.inflate(R.layout.fragment_cook_orders, container, false);
+        RecyclerView recyclerView = contentView.findViewById(R.id.orders_recycler_view);
         recyclerView.setAdapter(presenter.getAdapter());
         presenter.setModelState(contentView);
         return contentView;
-        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.onResume();
+    }
+
+    @Override
+    public void startDetailOrderActivity(String tableNumber) {
+        getActivity().startActivity(new Intent());
     }
 }

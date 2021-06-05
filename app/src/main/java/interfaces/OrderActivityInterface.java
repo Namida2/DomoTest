@@ -1,9 +1,8 @@
 package interfaces;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.example.testfirebase.order.OrderItem;
+import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -21,11 +20,12 @@ public interface OrderActivityInterface {
         Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer ();
         public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber);
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> getAllTablesOrdersHashMap();
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap()
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap();
         FirebaseFirestore getDatabase();
+        void setTableInfoArrayList(ArrayList<TableInfo> tablesInfo);
+        ArrayList<TableInfo> getTableInfoArrayList();
     }
     interface View {
-        void setOrdersListForThisTable();
         void setOrderRecyclerViewConsumer(Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer);
     }
     interface Presenter {
@@ -35,5 +35,7 @@ public interface OrderActivityInterface {
         void orderRecyclerViewOnActivityDestroy(int tableNumber);
         Consumer<Pair<OrderItem, String>> getOrderNotifyAdapterConsumer();
         void acceptAndWriteOrderToDb(int tableNumber, int guestCount);
+
+        ArrayList<TableInfo> getTableInfoArrayList();
     }
 }

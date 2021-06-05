@@ -2,6 +2,7 @@ package model;
 
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.example.testfirebase.order.OrderItem;
+import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -15,8 +16,9 @@ import tools.Pair;
 public class OrderActivityModel implements OrderActivityInterface.Model {
 
     // key, listItems, isAccepted
-    private  Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap;
-    private  Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap;
+    private Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap;
+    private Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap;
+    private ArrayList<TableInfo> tablesInfo;
 
     private OrderRecyclerViewAdapter adapter;
 
@@ -64,6 +66,14 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     @Override
     public FirebaseFirestore getDatabase() {
         return db;
+    }
+    @Override
+    public void setTableInfoArrayList(ArrayList<TableInfo> tablesInfo) {
+        this.tablesInfo = tablesInfo;
+    }
+    @Override
+    public ArrayList<TableInfo> getTableInfoArrayList() {
+        return tablesInfo;
     }
     @Override
     public void setAdapter(OrderRecyclerViewAdapter adapter) {

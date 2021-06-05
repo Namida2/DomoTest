@@ -29,6 +29,7 @@ import dialogsTools.ErrorAlertDialog;
 import interfaces.GuestCountDialogOrderActivityInterface;
 import interfaces.MenuDialogOrderActivityInterface;
 import interfaces.OrderActivityInterface;
+import interfaces.ToolsInterface;
 import model.MenuDialogModel;
 import presenters.MenuDialogPresenter;
 import presenters.GuestCountDialogOrderActivityPresenter;
@@ -43,7 +44,7 @@ import static interfaces.GuestCountDialogOrderActivityInterface.GUEST_COUNT_DIAL
 import static registration.LogInActivity.TAG;
 
 public class OrderActivity extends AppCompatActivity implements GuestCountDialogOrderActivityInterface.Activity.MyView,
-    MenuDialogOrderActivityInterface.View, OrderActivityInterface.View {
+    MenuDialogOrderActivityInterface.View, OrderActivityInterface.View, ToolsInterface.Notifiable {
 
     private OrderActivityInterface.Presenter orderPresenter;
     private Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer;
@@ -66,7 +67,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        //LayoutInflater layoutInflater = LayoutInflater.from(this);
         setContentView(R.layout.activity_order);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -89,7 +90,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         menuDialogPresenter = new MenuDialogPresenter(this);
         orderPresenter = new OrderActivityPresenter(this);
         this.notifyOrderAdapterConsumer = orderPresenter.getOrderNotifyAdapterConsumer();
-        setOrdersListForThisTable();
+        notifyMe();
 
 
         bottomAppBar = findViewById(R.id.bottom_app_bar);
@@ -147,8 +148,9 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
     }
     //----------ORDER
+
     @Override
-    public void setOrdersListForThisTable() {
+    public void notifyMe() {
         OrderRecyclerViewAdapter orderRecyclerViewAdapter = orderPresenter.getOrderRecyclerViewAdapter(tableNumber);
         if(orderRecyclerViewAdapter != null) {
             RecyclerView recyclerView = findViewById(R.id.order_recycler_view);
@@ -159,6 +161,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     public void setOrderRecyclerViewConsumer(Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer) {
         this.notifyOrderAdapterConsumer = notifyOrderAdapterConsumer;
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

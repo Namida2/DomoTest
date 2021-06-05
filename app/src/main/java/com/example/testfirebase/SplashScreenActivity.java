@@ -23,8 +23,12 @@ public class SplashScreenActivity extends Activity implements SplashScreenInterf
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        presenter = new SplashScreenActivityPresenter(this);
-        presenter.getCurrentUserPost();
+        //presenter = new SplashScreenActivityPresenter(this);
+        new Handler().postDelayed(() -> {
+            Intent mainIntent = new Intent(SplashScreenActivity.this, LogInActivity.class);
+            SplashScreenActivity.this.startActivity(mainIntent);
+            SplashScreenActivity.this.finish();
+        }, 80);
     }
     @Override
     public void setCurrentUserPost(String post) {
