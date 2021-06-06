@@ -1,11 +1,13 @@
 package cook.adapters;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +30,7 @@ import tools.Pair;
 
 public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTablesRecyclerViewAdapter.ViewHolder> {
 
-    private Consumer<String> acceptTableNumber;
+    private Consumer<String> acceptOrderArrayList;
     private ArrayList<Pair<ArrayList<OrderItem>, Boolean>> ordersArrayList;
     private ArrayList<String> tableNames;
 
@@ -44,8 +46,8 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
         }
     }
 
-    public void setAcceptTableNumber (Consumer<String> acceptTableNumber) {
-        this.acceptTableNumber = acceptTableNumber;
+    public void setAcceptOrderArrayList(Consumer<String> acceptOrderArrayList) {
+        this.acceptOrderArrayList = acceptOrderArrayList;
     }
     @Override
     public int getItemCount() {
@@ -62,6 +64,7 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
             preview = itemView.findViewById(R.id.preview);
         }
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         String stringPreview = "";
@@ -76,7 +79,7 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
-
+                acceptOrderArrayList.accept(tableNames.get(position));
             });
     }
     @NonNull

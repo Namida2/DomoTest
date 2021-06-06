@@ -13,13 +13,18 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
+import com.example.testfirebase.order.OrderItem;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.function.Consumer;
+
+import cook.DetailOrderActivity;
 import cook.interfaces.TablesFragmentInterface;
 import cook.presenters.TablesFragmentPresenter;
 
-public class CookOrdersFragment extends Fragment implements TablesFragmentInterface.View {
+public class CookOrdersFragment extends Fragment implements TablesFragmentInterface.View  {
 
     private TablesFragmentInterface.Presenter presenter;
 
@@ -49,6 +54,6 @@ public class CookOrdersFragment extends Fragment implements TablesFragmentInterf
 
     @Override
     public void startDetailOrderActivity(String tableNumber) {
-        getActivity().startActivity(new Intent());
+
     }
 }

@@ -2,27 +2,23 @@ package com.example.testfirebase.order;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
-import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import dialogsTools.ErrorAlertDialog;
@@ -30,18 +26,14 @@ import interfaces.GuestCountDialogOrderActivityInterface;
 import interfaces.MenuDialogOrderActivityInterface;
 import interfaces.OrderActivityInterface;
 import interfaces.ToolsInterface;
-import model.MenuDialogModel;
+
 import presenters.MenuDialogPresenter;
 import presenters.GuestCountDialogOrderActivityPresenter;
 import presenters.OrderActivityPresenter;
-import tools.Animations;
 import tools.Pair;
 
 import static com.example.testfirebase.mainActivityFragments.TablesFragment.EXTRA_TAG;
-import static interfaces.GuestCountDialogOrderActivityInterface.GUEST_COUNT_DIALOG_RECYCLER_VIEW_ADAPTER_KEY;
-import static interfaces.GuestCountDialogOrderActivityInterface.GUEST_COUNT_DIALOG_RECYCLER_VIEW_KEY;
-import static interfaces.GuestCountDialogOrderActivityInterface.GUEST_COUNT_DIALOG_VIEW_KEY;
-import static registration.LogInActivity.TAG;
+
 
 public class OrderActivity extends AppCompatActivity implements GuestCountDialogOrderActivityInterface.Activity.MyView,
     MenuDialogOrderActivityInterface.View, OrderActivityInterface.View, ToolsInterface.Notifiable {
@@ -148,7 +140,6 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
     }
     //----------ORDER
-
     @Override
     public void notifyMe() {
         OrderRecyclerViewAdapter orderRecyclerViewAdapter = orderPresenter.getOrderRecyclerViewAdapter(tableNumber);

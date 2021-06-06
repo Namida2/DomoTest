@@ -16,9 +16,9 @@ import tools.Pair;
 public class OrderActivityModel implements OrderActivityInterface.Model {
 
     // key, listItems, isAccepted
-    private Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap;
-    private Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap;
-    private ArrayList<TableInfo> tablesInfo;
+    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap;
+    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap;
+    private static ArrayList<TableInfo> tablesInfo;
 
     private OrderRecyclerViewAdapter adapter;
 
@@ -30,8 +30,8 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     public static final String DOCUMENT_GUEST_COUNT_FIELD = "guestCount";
 
     public OrderActivityModel () {
-        this.allTablesOrdersHashMap = new HashMap<>();
-        this.notEmptyTablesOrdersHashMap = new HashMap<>();
+        allTablesOrdersHashMap = new HashMap<>();
+        notEmptyTablesOrdersHashMap = new HashMap<>();
         db = FirebaseFirestore.getInstance();
     }
     @Override
