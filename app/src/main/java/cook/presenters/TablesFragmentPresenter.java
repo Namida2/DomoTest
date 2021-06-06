@@ -26,7 +26,7 @@ public class TablesFragmentPresenter implements TablesFragmentInterface.Presente
     @Override
     public void onResume() {
         model.getAdapter().setAcceptOrderArrayList(tableNumber -> {
-
+            view.startDetailOrderActivity(tableNumber);
         });
     }
     @Override

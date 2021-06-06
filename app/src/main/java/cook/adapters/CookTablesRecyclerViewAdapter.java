@@ -45,7 +45,6 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
             ordersArrayList.add(ordersHashMap.get(name));
         }
     }
-
     public void setAcceptOrderArrayList(Consumer<String> acceptOrderArrayList) {
         this.acceptOrderArrayList = acceptOrderArrayList;
     }
