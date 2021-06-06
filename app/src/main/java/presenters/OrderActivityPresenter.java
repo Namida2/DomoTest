@@ -49,7 +49,6 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
         }
         Log.d(TAG, "OrderActivityPresenter was create");
     }
-
     @Override
     public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap() {
         return model.getNotEmptyTablesOrdersHashMap();
@@ -63,6 +62,8 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
         final boolean finalNeedToNotifyView = needToNotifyView;
         ArrayList<TableInfo> tablesInfo = new ArrayList<>();
         model.setTableInfoArrayList(tablesInfo);
+        model.setAllTablesOrdersHashMap(new HashMap<>());
+        model.setNotEmptyTablesOrdersHashMap(new HashMap<>());
         model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
@@ -121,7 +122,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
     public OrderRecyclerViewAdapter getOrderRecyclerViewAdapter(int tableNumber) {
         if(model.getOrderItemsArrayList(tableNumber) == null) setModelDataState(true);
         else {
-            model.getAdapter().setOrdersArrayList(model.getOrderItemsArrayList(tableNumber));
+            model.getAdapter().setOrderItemsArrayList(model.getOrderItemsArrayList(tableNumber));
             return model.getAdapter();
         }
         return null;

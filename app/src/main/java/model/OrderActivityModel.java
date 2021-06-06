@@ -17,7 +17,7 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
 
     // key, listItems, isAccepted
     private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap;
-    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap;
+    public static Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap;
     private static ArrayList<TableInfo> tablesInfo;
 
     private OrderRecyclerViewAdapter adapter;
@@ -30,10 +30,9 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     public static final String DOCUMENT_GUEST_COUNT_FIELD = "guestCount";
 
     public OrderActivityModel () {
-        allTablesOrdersHashMap = new HashMap<>();
-        notEmptyTablesOrdersHashMap = new HashMap<>();
         db = FirebaseFirestore.getInstance();
     }
+
     @Override
     public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap() {
         return notEmptyTablesOrdersHashMap;
@@ -62,6 +61,14 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     @Override
     public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getAllTablesOrdersHashMap() {
         return allTablesOrdersHashMap;
+    }
+    @Override
+    public void setAllTablesOrdersHashMap(Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap) {
+        OrderActivityModel.allTablesOrdersHashMap = allTablesOrdersHashMap;
+    }
+    @Override
+    public void setNotEmptyTablesOrdersHashMap(Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap) {
+        OrderActivityModel.notEmptyTablesOrdersHashMap = notEmptyTablesOrdersHashMap;
     }
     @Override
     public FirebaseFirestore getDatabase() {

@@ -20,10 +20,10 @@ import tools.Animations;
 
 public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<OrderItem> ordersArrayList;
+    private ArrayList<OrderItem> orderItemsArrayList;
 
     public OrderRecyclerViewAdapter() {
-        ordersArrayList = new ArrayList<>();
+        orderItemsArrayList = new ArrayList<>();
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ConstraintLayout container;
@@ -52,22 +52,22 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     }
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        holder.categoryName.setText(ordersArrayList.get(position).getCategoryName());
-        holder.name.setText(ordersArrayList.get(position).getName());
-        holder.weight.setText(ordersArrayList.get(position).getWeight());
-        holder.cost.setText(ordersArrayList.get(position).getCost());
-        holder.count.setText(ordersArrayList.get(position).getCount() + " шт");
+        holder.categoryName.setText(orderItemsArrayList.get(position).getCategoryName());
+        holder.name.setText(orderItemsArrayList.get(position).getName());
+        holder.weight.setText(orderItemsArrayList.get(position).getWeight());
+        holder.cost.setText(orderItemsArrayList.get(position).getCost());
+        holder.count.setText(orderItemsArrayList.get(position).getCount() + " шт");
         Animations.Companion.startAnimationViewShowing(holder.container);
     }
     @Override
     public int getItemCount() {
-        return ordersArrayList.size();
+        return orderItemsArrayList.size();
     }
     public void addOrder(OrderItem order) {
-        this.ordersArrayList.add(order);
+        this.orderItemsArrayList.add(order);
         this.notifyDataSetChanged();
     }
-    public void setOrdersArrayList (ArrayList<OrderItem> ordersArrayList) {
-        this.ordersArrayList = ordersArrayList;
+    public void setOrderItemsArrayList(ArrayList<OrderItem> orderItemsArrayList) {
+        this.orderItemsArrayList = orderItemsArrayList;
     }
 }

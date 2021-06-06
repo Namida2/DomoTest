@@ -28,6 +28,7 @@
         <activity android:name="registration.RegistrationActivity"/>
         <activity android:name=".order.OrderActivity"/>
         <activity android:name="cook.CookMainActivity"/>
+        <activity android:name="cook.DetailOrderActivity"/>
 
         <service
             android:name=".MyService"

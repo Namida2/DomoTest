@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 
 import cook.DetailOrderActivity;
 import cook.interfaces.TablesFragmentInterface;
+import cook.model.DetailOrderActivityModel;
 import cook.presenters.TablesFragmentPresenter;
 
 public class CookOrdersFragment extends Fragment implements TablesFragmentInterface.View  {
@@ -54,6 +55,8 @@ public class CookOrdersFragment extends Fragment implements TablesFragmentInterf
 
     @Override
     public void startDetailOrderActivity(String tableNumber) {
-
+        Intent intent = new Intent(getContext(), DetailOrderActivity.class);
+        intent.putExtra(DetailOrderActivityModel.EXTRA_TAG, tableNumber);
+        getActivity().startActivity(intent);
     }
 }

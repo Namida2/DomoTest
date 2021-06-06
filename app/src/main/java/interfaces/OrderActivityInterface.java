@@ -11,7 +11,6 @@ import java.util.function.Consumer;
 
 import tools.Pair;
 
-
 public interface OrderActivityInterface {
     interface Model {
         ArrayList<OrderItem> getOrderItemsArrayList(int tableNumber);
@@ -20,6 +19,8 @@ public interface OrderActivityInterface {
         Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer ();
         public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber);
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> getAllTablesOrdersHashMap();
+        void setAllTablesOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap);
+        void setNotEmptyTablesOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap) ;
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap();
         FirebaseFirestore getDatabase();
         void setTableInfoArrayList(ArrayList<TableInfo> tablesInfo);
@@ -35,7 +36,6 @@ public interface OrderActivityInterface {
         void orderRecyclerViewOnActivityDestroy(int tableNumber);
         Consumer<Pair<OrderItem, String>> getOrderNotifyAdapterConsumer();
         void acceptAndWriteOrderToDb(int tableNumber, int guestCount);
-
         ArrayList<TableInfo> getTableInfoArrayList();
     }
 }
