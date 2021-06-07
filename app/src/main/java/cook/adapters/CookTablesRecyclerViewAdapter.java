@@ -52,6 +52,7 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
     public int getItemCount() {
         return ordersArrayList.size();
     }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tableNumber;
         public ConstraintLayout container;

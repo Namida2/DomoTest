@@ -1,6 +1,7 @@
 package cook.presenters;
 
 import android.util.Log;
+import android.widget.ThemedSpinnerAdapter;
 
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import cook.ReadyDish;
 import cook.adapters.DetailOrderItemsRecyclerViewAdapter;
 import cook.interfaces.DetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
@@ -30,22 +32,22 @@ public class DetailOrderActivityPresenter implements DetailOrderActivityInterfac
             model = new DetailOrderActivityModel();
             DetailOrderItemsRecyclerViewAdapter adapter = new DetailOrderItemsRecyclerViewAdapter();
             model.setRecyclerViewAdapter(adapter);
-
         }
     }
-
     @Override
-    public void setDishState(Pair<OrderItem, TableInfo> dishData) {
+    public void setDishState(ReadyDish readyDish) {
+        Log.d(TAG, Thread.currentThread().getName());
         Map<String, Object> readyHaspMap = new HashMap<>();
-        dishData.first.setReady(true);
+        readyDish.getOrderItem().setReady(true);
         readyHaspMap.put(OrderActivityModel.DOCUMENT_READY_FIELD, true);
+        model.getRecyclerViewAdapter().notifyItemChanged(readyDish.getPosition());
         model.getDatabase()
             .collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
-            .document(dishData.second.getTableName())
+            .document(readyDish.getTableInfo().getTableName())
             .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME)
-            .document(dishData.first.getName()
+            .document(readyDish.getOrderItem().getName()
                 + OrderActivityModel.DOCUMENT_NAME_DELIMITER
-                + dishData.first.getCommentary())
+                + readyDish.getOrderItem().getCommentary())
             .set(readyHaspMap, SetOptions.merge()).addOnCompleteListener(task -> {
                 if(task.isSuccessful()) {
                     Log.d(TAG,"DetailOrderActivityPresenter.setDishState: SUCCESS" );
@@ -54,7 +56,6 @@ public class DetailOrderActivityPresenter implements DetailOrderActivityInterfac
                 }
         });
     }
-
     @Override
     public DetailOrderItemsRecyclerViewAdapter getAdapter(String tableNumber) {
         Log.d(TAG, OrderActivityModel.DOCUMENT_TABLE + tableNumber);

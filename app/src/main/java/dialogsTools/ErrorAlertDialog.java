@@ -41,7 +41,7 @@ public class ErrorAlertDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.alertDialogStyle);
         View view = View.inflate(getActivity(), R.layout.dialog_error, null);
         TextView title = view.findViewById(R.id.title);
-        TextView text = view.findViewById(R.id.text);
+        TextView text = view.findViewById(R.id.commentary_title);
         Button button = view.findViewById(R.id.ok);
         button.setOnClickListener( v -> {
             dismiss();

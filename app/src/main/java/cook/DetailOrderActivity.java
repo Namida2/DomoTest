@@ -23,7 +23,6 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
 
     private DetailOrderActivityInterface.Presenter presenter;
     private String tableNumber;
-    private Pair<String, TableInfo> dishData;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -42,11 +41,10 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
 
 
     @Override
-    public void showSetDishReadyDialog(Pair<OrderItem, TableInfo> dishData) {
-        //this.dishData = dishData;
+    public void showSetDishReadyDialog(ReadyDish dishData) {
         new SetDishReadyAlertDialog( dishName -> {
             presenter.setDishState(dishData);
-        }, dishData.first.getName()).show(getSupportFragmentManager(), "");
+        }, dishData.getOrderItem().getName()).show(getSupportFragmentManager(), "");
 
     }
 

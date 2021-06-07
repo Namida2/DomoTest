@@ -1,9 +1,11 @@
 package cook.adapters;
 
 import android.os.Build;
+import android.util.AndroidException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import cook.ReadyDish;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import tools.Animations;
 import tools.Pair;
 
@@ -30,7 +34,7 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
 
     private ArrayList<OrderItem> orderItemsArrayList;
     private TableInfo tableInfo;
-    private Consumer<Pair<OrderItem, TableInfo>> acceptDishConsumer;
+    private Consumer<ReadyDish> acceptDishConsumer;
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -42,6 +46,8 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
         public TextView cost;
         public TextView count;
         public TextView commentary;
+        public TextView commentaryTitle;
+        public ImageView isReady;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             container_large = itemView.findViewById(R.id.order_item_container_large);
@@ -52,10 +58,12 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
             cost = itemView.findViewById(R.id.dish_cost);
             count = itemView.findViewById(R.id.dish_count);
             commentary = itemView.findViewById(R.id.commentary);
+            commentaryTitle = itemView.findViewById(R.id.commentary_title);
+            isReady = itemView.findViewById(R.id.is_ready);
         }
     }
 
-    public void setAcceptedDishConsumer(Consumer<Pair<OrderItem, TableInfo>> acceptDishConsumer) {
+    public void setAcceptedDishConsumer(Consumer<ReadyDish> acceptDishConsumer) {
         this.acceptDishConsumer = acceptDishConsumer;
     }
 
@@ -79,19 +87,26 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
         holder.weight.setText(orderItemsArrayList.get(position).getWeight());
         holder.cost.setText(orderItemsArrayList.get(position).getCost());
         holder.count.setText(orderItemsArrayList.get(position).getCount() + " шт");
-        holder.commentary.setText(orderItemsArrayList.get(position).getCommentary() + " ");
+        if (orderItemsArrayList.get(position).getCommentary().equals("")) {
+            holder.commentaryTitle.setVisibility(View.GONE);
+            holder.commentary.setVisibility(View.GONE);
+        } else holder.commentary.setText(orderItemsArrayList.get(position).getCommentary() + " ");
+        if (orderItemsArrayList.get(position).isReady())
+            holder.isReady.setVisibility(View.VISIBLE);
         Animations.Companion.startAnimationViewShowing(holder.container_large);
         RxView.clicks(holder.container_large)
             .debounce(150, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
                 acceptDishConsumer.accept(
-                    new Pair<>(orderItemsArrayList.get(position), tableInfo));
+                    new ReadyDish(orderItemsArrayList.get(position), tableInfo, position));
             });
         RxView.clicks(holder.container)
             .debounce(150, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
                 acceptDishConsumer.accept(
-                    new Pair<>(orderItemsArrayList.get(position), tableInfo));
+                    new ReadyDish(orderItemsArrayList.get(position), tableInfo, position));
             });
     }
 

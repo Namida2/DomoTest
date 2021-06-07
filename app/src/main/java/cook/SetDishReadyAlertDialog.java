@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+
 public class SetDishReadyAlertDialog extends DialogFragment {
 
     private String dishName;
@@ -52,11 +54,14 @@ public class SetDishReadyAlertDialog extends DialogFragment {
         ( (TextView)contentView.findViewById(R.id.title) ).setText(dishName);
         RxView.clicks(cancel)
             .debounce(150, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
                 dismiss();
             });
             RxView.clicks(accept)
                 .debounce(150, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(unit -> {
                     acceptDishReady.accept(dishName);
                 });

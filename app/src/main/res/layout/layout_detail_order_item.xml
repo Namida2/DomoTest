@@ -26,16 +26,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/is_ready"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_marginStart="24dp"
             android:src="@drawable/ic_accept"
             app:layout_constraintBottom_toBottomOf="@+id/category_name"
             app:layout_constraintEnd_toStartOf="@+id/category_name"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/category_name" />
+            app:layout_constraintTop_toTopOf="@+id/category_name"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/category_name"
@@ -127,7 +128,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/commentary_title"
         android:layout_below="@+id/order_item_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -141,7 +142,7 @@
 
     <TextView
         android:id="@+id/commentary"
-        android:layout_below="@+id/text"
+        android:layout_below="@+id/commentary_title"
         android:layout_width="match_parent"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="16dp"
