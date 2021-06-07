@@ -13,7 +13,7 @@
         android:background="@drawable/bg_error_dialog">
 
         <TextView
-            android:id="@+id/responseCode"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -28,7 +28,7 @@
             android:textStyle="bold" />
         <TextView
             android:id="@+id/text"
-            android:layout_below="@id/responseCode"
+            android:layout_below="@id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Пароль должен быть больше 6 символов."

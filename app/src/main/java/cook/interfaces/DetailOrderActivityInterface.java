@@ -8,9 +8,11 @@ public interface DetailOrderActivityInterface {
         DetailOrderItemsRecyclerViewAdapter getRecyclerViewAdapter();
     }
     interface View {
+        void showSetDishReadyDialog (String dishName);
         void setViewData();
     }
     interface Presenter {
+        void onResume();
         DetailOrderItemsRecyclerViewAdapter getAdapter(String tableNumber);
     }
 }

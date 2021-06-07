@@ -1,5 +1,6 @@
 package cook.adapters;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,26 +8,34 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
 import com.example.testfirebase.order.OrderItem;
+import com.example.testfirebase.order.TableInfo;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
-import cook.SetDishReadyDialog;
 import tools.Animations;
+import tools.Pair;
 
 public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<DetailOrderItemsRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<OrderItem> orderItemsArrayList;
+    private ArrayList<TableInfo> tableInfoArrayList;
+    private Consumer<Pair<String, TableInfo>> acceptDishConsumer;
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        public RelativeLayout container;
+
+        public RelativeLayout container_large;
+        public ConstraintLayout container;
         public TextView categoryName;
         public TextView name;
         public TextView weight;
@@ -35,7 +44,8 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
         public TextView commentary;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            container = itemView.findViewById(R.id.order_item_container_large);
+            container_large = itemView.findViewById(R.id.order_item_container_large);
+            container = itemView.findViewById(R.id.order_item_container);
             categoryName = itemView.findViewById(R.id.category_name);
             name = itemView.findViewById(R.id.dish_name);
             weight = itemView.findViewById(R.id.dish_weight);
@@ -44,8 +54,14 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
             commentary = itemView.findViewById(R.id.commentary);
         }
     }
-    public void setOrderItemsArrayList (ArrayList<OrderItem> orderItemsArrayList) {
+
+    public void setAcceptedDishConsumer(Consumer<Pair<String, TableInfo>> acceptDishConsumer) {
+        this.acceptDishConsumer = acceptDishConsumer;
+    }
+
+    public void setOrderItemsData(ArrayList<OrderItem> orderItemsArrayList, ArrayList<TableInfo> tableInfoArrayList) {
         this.orderItemsArrayList = orderItemsArrayList;
+        this.tableInfoArrayList = tableInfoArrayList;
     }
     @NonNull
     @NotNull
@@ -55,6 +71,7 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
         View view = layoutInflater.inflate(R.layout.layout_detail_order_item, parent, false);
         return new ViewHolder(view);
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         holder.categoryName.setText(orderItemsArrayList.get(position).getCategoryName());
@@ -63,12 +80,20 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
         holder.cost.setText(orderItemsArrayList.get(position).getCost());
         holder.count.setText(orderItemsArrayList.get(position).getCount() + " шт");
         holder.commentary.setText(orderItemsArrayList.get(position).getCommentary() + " ");
-        Animations.Companion.startAnimationViewShowing(holder.container);
+        Animations.Companion.startAnimationViewShowing(holder.container_large);
+        RxView.clicks(holder.container_large)
+            .debounce(150, TimeUnit.MILLISECONDS)
+            .subscribe(unit -> {
+                acceptDishConsumer.accept(
+                    new Pair<>(orderItemsArrayList.get(position).getName(),
+                    tableInfoArrayList.get(position))););
+            });
         RxView.clicks(holder.container)
             .debounce(150, TimeUnit.MILLISECONDS)
             .subscribe(unit -> {
-                //addIsExist
-                //new SetDishReadyDialog().show();
+                acceptDishConsumer.accept(
+                    new Pair<>(orderItemsArrayList.get(position).getName(),
+                    tableInfoArrayList.get(position)));
             });
     }
 

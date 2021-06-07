@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    >
+    android:background="@android:color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/containerText"
@@ -16,15 +15,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <TextView
-            android:id="@+id/responseCode"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/montserrat_semi_bold"
-            android:text="Oops!"
+            android:text="Томато мисо рамен с креветкой"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -32,23 +30,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/responseCode"
+            android:layout_below="@id/title"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="36dp"
             android:fontFamily="@font/montserrat_light"
-            android:text="Ответить это блюдо как готовое?"
+            android:text="Отметить это блюдо как готовое?"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/responseCode" />
+            app:layout_constraintTop_toBottomOf="@+id/title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View

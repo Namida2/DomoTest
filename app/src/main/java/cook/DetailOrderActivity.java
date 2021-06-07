@@ -14,7 +14,7 @@ import cook.interfaces.DetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
 import cook.presenters.DetailOrderActivityPresenter;
 
-public class DetailOrderActivity extends AppCompatActivity implements DetailOrderActivityInterface.View{
+public class DetailOrderActivity extends AppCompatActivity implements DetailOrderActivityInterface.View {
 
     private DetailOrderActivityInterface.Presenter presenter;
     private String tableNumber;
@@ -25,7 +25,6 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
         setContentView(R.layout.activity_detail_order);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initialization();
-        new SetDishReadyDialog().show(getSupportFragmentManager(), "");
     }
 
     private void initialization () {
@@ -34,10 +33,22 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
         presenter = new DetailOrderActivityPresenter(this);
         setViewData();
     }
+
+    @Override
+    public void showSetDishReadyDialog(String dishName) {
+        //add IsExist
+        new SetDishReadyAlertDialog(dishName).show(getSupportFragmentManager(), "");
+    }
+
     @Override
     public void setViewData() {
         RecyclerView recyclerView = findViewById(R.id.order_items_recycler_view);
         recyclerView.setAdapter(presenter.getAdapter(tableNumber));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.onResume();
+    }
 }

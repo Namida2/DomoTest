@@ -40,7 +40,7 @@ public class ErrorAlertDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.alertDialogStyle);
         View view = View.inflate(getActivity(), R.layout.dialog_error, null);
-        TextView title = view.findViewById(R.id.responseCode);
+        TextView title = view.findViewById(R.id.title);
         TextView text = view.findViewById(R.id.text);
         Button button = view.findViewById(R.id.ok);
         button.setOnClickListener( v -> {
