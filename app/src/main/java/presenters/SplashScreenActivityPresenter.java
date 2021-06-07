@@ -35,6 +35,7 @@ public class SplashScreenActivityPresenter implements SplashScreenInterface.Pres
         ArrayList<TableInfo> asd = orderActivityPresenter.getTableInfoArrayList();
         getCurrentUserPost();
     }
+
     @Override
     public void getCurrentUserPost() {
         FirebaseUser currentUser = splashScreenModel.gerAuth().getCurrentUser();

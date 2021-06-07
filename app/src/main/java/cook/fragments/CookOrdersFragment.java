@@ -9,25 +9,20 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
-import com.example.testfirebase.order.OrderItem;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.function.Consumer;
-
 import cook.DetailOrderActivity;
-import cook.interfaces.TablesFragmentInterface;
+import cook.interfaces.OrdersFragmentInterface;
 import cook.model.DetailOrderActivityModel;
 import cook.presenters.TablesFragmentPresenter;
 
-public class CookOrdersFragment extends Fragment implements TablesFragmentInterface.View  {
+public class CookOrdersFragment extends Fragment implements OrdersFragmentInterface.View  {
 
-    private TablesFragmentInterface.Presenter presenter;
+    private OrdersFragmentInterface.Presenter presenter;
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {

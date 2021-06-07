@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import cook.model.TablesFragmentModel;
+import cook.model.OrdersFragmentModel;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import tools.Pair;
 
@@ -41,7 +41,7 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
         Iterator<String> iterator = keys.iterator();
         while (iterator.hasNext()) {
             String name = iterator.next();
-            tableNames.add( name.substring(name.indexOf(TablesFragmentModel.DELIMITER) + 1) );
+            tableNames.add( name.substring(name.indexOf(OrdersFragmentModel.DELIMITER) + 1) );
             ordersArrayList.add(ordersHashMap.get(name));
         }
     }
@@ -71,7 +71,7 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
             String name = ordersArrayList.get(position).first.get(i).getName();
             stringPreview += name.length() > 16 ? name.substring(0, 16) + "...\n" : name + "\n" ;
         }
-        if (ordersArrayList.get(position).first.size() > 5) stringPreview += "..........";
+        //if (ordersArrayList.get(position).first.size() > 5) stringPreview += "еще +";
         holder.preview.setText(stringPreview);
         holder.tableNumber.setText(tableNames.get(position));
         RxView.clicks(holder.container)

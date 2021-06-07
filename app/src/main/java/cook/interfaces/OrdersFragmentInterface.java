@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 import cook.adapters.CookTablesRecyclerViewAdapter;
 import tools.Pair;
 
-public interface TablesFragmentInterface {
+public interface OrdersFragmentInterface {
     interface Model {
         void setAdapter(CookTablesRecyclerViewAdapter adapter);
         CookTablesRecyclerViewAdapter getAdapter();

@@ -29,12 +29,10 @@ public class DetailOrderActivityPresenter implements DetailOrderActivityInterfac
             model.setRecyclerViewAdapter(adapter);
         }
     }
-
     @Override
     public DetailOrderItemsRecyclerViewAdapter getAdapter(String tableNumber) {
         Log.d(TAG, OrderActivityModel.DOCUMENT_TABLE + tableNumber);
         model.getRecyclerViewAdapter().setOrderItemsArrayList(
-
            new OrderActivityModel().getNotEmptyTablesOrdersHashMap().get(OrderActivityModel.DOCUMENT_TABLE + tableNumber).first
         );
         return model.getRecyclerViewAdapter();

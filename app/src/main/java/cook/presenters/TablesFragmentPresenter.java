@@ -3,21 +3,21 @@ package cook.presenters;
 import android.view.View;
 
 import cook.adapters.CookTablesRecyclerViewAdapter;
-import cook.interfaces.TablesFragmentInterface;
-import cook.model.TablesFragmentModel;
+import cook.interfaces.OrdersFragmentInterface;
+import cook.model.OrdersFragmentModel;
 import interfaces.OrderActivityInterface;
 import presenters.OrderActivityPresenter;
 
-public class TablesFragmentPresenter implements TablesFragmentInterface.Presenter {
+public class TablesFragmentPresenter implements OrdersFragmentInterface.Presenter {
 
-    private TablesFragmentInterface.View view;
-    private static TablesFragmentInterface.Model model;
+    private OrdersFragmentInterface.View view;
+    private static OrdersFragmentInterface.Model model;
     private OrderActivityInterface.Presenter orderActivityPresenter;
 
-    public TablesFragmentPresenter(TablesFragmentInterface.View view) {
+    public TablesFragmentPresenter(OrdersFragmentInterface.View view) {
         this.view = view;
         if(model == null) {
-            model = new TablesFragmentModel();
+            model = new OrdersFragmentModel();
             orderActivityPresenter = new OrderActivityPresenter();
             model.setOrdersHashMap(orderActivityPresenter.getNotEmptyTablesOrdersHashMap());
             model.setAdapter(new CookTablesRecyclerViewAdapter(orderActivityPresenter.getNotEmptyTablesOrdersHashMap()));

@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import cook.adapters.CookTablesRecyclerViewAdapter;
-import cook.interfaces.TablesFragmentInterface;
+import cook.interfaces.OrdersFragmentInterface;
 import tools.Pair;
 
-public class TablesFragmentModel implements TablesFragmentInterface.Model {
+public class OrdersFragmentModel implements OrdersFragmentInterface.Model {
 
     public static final char DELIMITER = '_';
 
@@ -39,7 +39,6 @@ public class TablesFragmentModel implements TablesFragmentInterface.Model {
     public void setOrdersHashMap(Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap) {
         this.ordersHashMap = ordersHashMap;
     }
-
     @Override
     public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap() {
         return ordersHashMap;

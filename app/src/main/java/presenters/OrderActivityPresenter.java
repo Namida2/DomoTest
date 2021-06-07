@@ -47,7 +47,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
             model = new OrderActivityModel();
             model.setAdapter(new OrderRecyclerViewAdapter());
         }
-        Log.d(TAG, "OrderActivityPresenter was create");
+        Log.d(TAG, "OrderActivityPresenter is created");
     }
     @Override
     public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap() {
@@ -113,6 +113,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
             }
             else {
                 Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task.getException().toString());
+                view.notifyMe();
                 //view.onMenuDialogError(ErrorAlertDialog.INTERNET_CONNECTION);
                 //add a category "SOMETHING WRONG"
             }

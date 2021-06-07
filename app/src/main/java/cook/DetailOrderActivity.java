@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
 
-import cook.adapters.DetailOrderItemsRecyclerViewAdapter;
 import cook.interfaces.DetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
 import cook.presenters.DetailOrderActivityPresenter;
@@ -26,6 +25,7 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
         setContentView(R.layout.activity_detail_order);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initialization();
+        new SetDishReadyDialog().show(getSupportFragmentManager(), "");
     }
 
     private void initialization () {

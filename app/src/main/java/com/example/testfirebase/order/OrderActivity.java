@@ -148,6 +148,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             recyclerView.setAdapter(orderRecyclerViewAdapter);
         }
     }
+
     @Override
     public void setOrderRecyclerViewConsumer(Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer) {
         this.notifyOrderAdapterConsumer = notifyOrderAdapterConsumer;

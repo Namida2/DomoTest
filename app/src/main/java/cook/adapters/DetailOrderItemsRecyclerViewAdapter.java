@@ -11,11 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
 import com.example.testfirebase.order.OrderItem;
+import com.jakewharton.rxbinding4.view.RxView;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
+import cook.SetDishReadyDialog;
 import tools.Animations;
 
 public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<DetailOrderItemsRecyclerViewAdapter.ViewHolder> {
@@ -54,7 +57,6 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
     }
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-
         holder.categoryName.setText(orderItemsArrayList.get(position).getCategoryName());
         holder.name.setText(orderItemsArrayList.get(position).getName());
         holder.weight.setText(orderItemsArrayList.get(position).getWeight());
@@ -62,7 +64,12 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
         holder.count.setText(orderItemsArrayList.get(position).getCount() + " шт");
         holder.commentary.setText(orderItemsArrayList.get(position).getCommentary() + " ");
         Animations.Companion.startAnimationViewShowing(holder.container);
-
+        RxView.clicks(holder.container)
+            .debounce(150, TimeUnit.MILLISECONDS)
+            .subscribe(unit -> {
+                //addIsExist
+                //new SetDishReadyDialog().show();
+            });
     }
 
     @Override
