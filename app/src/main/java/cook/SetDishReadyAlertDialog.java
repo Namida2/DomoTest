@@ -3,6 +3,7 @@ package cook;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.testfirebase.R;
@@ -21,19 +23,23 @@ import com.jakewharton.rxbinding4.view.RxView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class SetDishReadyAlertDialog extends DialogFragment {
 
     private String dishName;
+    private Consumer<String> acceptDishReady;
 
-    public SetDishReadyAlertDialog(String dishName) {
+    public SetDishReadyAlertDialog(Consumer<String> acceptDishReady, String dishName) {
         this.dishName = dishName;
+        this.acceptDishReady = acceptDishReady;
     }
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @NotNull
     @Override
@@ -52,7 +58,7 @@ public class SetDishReadyAlertDialog extends DialogFragment {
             RxView.clicks(accept)
                 .debounce(150, TimeUnit.MILLISECONDS)
                 .subscribe(unit -> {
-
+                    acceptDishReady.accept(dishName);
                 });
         return builder.create();
     }

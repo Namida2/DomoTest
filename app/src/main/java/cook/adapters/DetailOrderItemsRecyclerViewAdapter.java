@@ -29,8 +29,8 @@ import tools.Pair;
 public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<DetailOrderItemsRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<OrderItem> orderItemsArrayList;
-    private ArrayList<TableInfo> tableInfoArrayList;
-    private Consumer<Pair<String, TableInfo>> acceptDishConsumer;
+    private TableInfo tableInfo;
+    private Consumer<Pair<OrderItem, TableInfo>> acceptDishConsumer;
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -55,13 +55,13 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
         }
     }
 
-    public void setAcceptedDishConsumer(Consumer<Pair<String, TableInfo>> acceptDishConsumer) {
+    public void setAcceptedDishConsumer(Consumer<Pair<OrderItem, TableInfo>> acceptDishConsumer) {
         this.acceptDishConsumer = acceptDishConsumer;
     }
 
-    public void setOrderItemsData(ArrayList<OrderItem> orderItemsArrayList, ArrayList<TableInfo> tableInfoArrayList) {
+    public void setOrderItemsData(ArrayList<OrderItem> orderItemsArrayList, TableInfo tableInfo) {
         this.orderItemsArrayList = orderItemsArrayList;
-        this.tableInfoArrayList = tableInfoArrayList;
+        this.tableInfo = tableInfo;
     }
     @NonNull
     @NotNull
@@ -85,15 +85,13 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
             .debounce(150, TimeUnit.MILLISECONDS)
             .subscribe(unit -> {
                 acceptDishConsumer.accept(
-                    new Pair<>(orderItemsArrayList.get(position).getName(),
-                    tableInfoArrayList.get(position))););
+                    new Pair<>(orderItemsArrayList.get(position), tableInfo));
             });
         RxView.clicks(holder.container)
             .debounce(150, TimeUnit.MILLISECONDS)
             .subscribe(unit -> {
                 acceptDishConsumer.accept(
-                    new Pair<>(orderItemsArrayList.get(position).getName(),
-                    tableInfoArrayList.get(position)));
+                    new Pair<>(orderItemsArrayList.get(position), tableInfo));
             });
     }
 

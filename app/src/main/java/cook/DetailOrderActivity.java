@@ -9,15 +9,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
+import com.example.testfirebase.order.OrderItem;
+import com.example.testfirebase.order.TableInfo;
+
+import java.util.function.Consumer;
 
 import cook.interfaces.DetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
 import cook.presenters.DetailOrderActivityPresenter;
+import tools.Pair;
 
 public class DetailOrderActivity extends AppCompatActivity implements DetailOrderActivityInterface.View {
 
     private DetailOrderActivityInterface.Presenter presenter;
     private String tableNumber;
+    private Pair<String, TableInfo> dishData;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -34,10 +40,14 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
         setViewData();
     }
 
+
     @Override
-    public void showSetDishReadyDialog(String dishName) {
-        //add IsExist
-        new SetDishReadyAlertDialog(dishName).show(getSupportFragmentManager(), "");
+    public void showSetDishReadyDialog(Pair<OrderItem, TableInfo> dishData) {
+        //this.dishData = dishData;
+        new SetDishReadyAlertDialog( dishName -> {
+            presenter.setDishState(dishData);
+        }, dishData.first.getName()).show(getSupportFragmentManager(), "");
+
     }
 
     @Override

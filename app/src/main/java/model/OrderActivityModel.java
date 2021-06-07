@@ -17,7 +17,7 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
 
     // key, listItems, isAccepted
     private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap;
-    public static Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap;
+    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap;
     private static ArrayList<TableInfo> tablesInfo;
 
     private OrderRecyclerViewAdapter adapter;
@@ -28,6 +28,7 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     public static final String DOCUMENT_TABLE = "table_";
     public static final String DOCUMENT_NAME_DELIMITER = "_";
     public static final String DOCUMENT_GUEST_COUNT_FIELD = "guestCount";
+    public static final String DOCUMENT_READY_FIELD = "ready";
 
     public OrderActivityModel () {
         db = FirebaseFirestore.getInstance();
