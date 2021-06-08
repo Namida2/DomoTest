@@ -1,7 +1,6 @@
-package cook.adapters;
+package com.example.testfirebase.adapters;
 
 import android.os.Build;
-import android.util.AndroidException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,6 @@ import java.util.function.Consumer;
 import cook.ReadyDish;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import tools.Animations;
-import tools.Pair;
 
 public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<DetailOrderItemsRecyclerViewAdapter.ViewHolder> {
 
@@ -98,17 +96,20 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
-                acceptDishConsumer.accept(
-                    new ReadyDish(orderItemsArrayList.get(position), tableInfo, position));
+
             });
         RxView.clicks(holder.container)
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
-                acceptDishConsumer.accept(
-                    new ReadyDish(orderItemsArrayList.get(position), tableInfo, position));
+
             });
     }
+
+    public void setReadyStatus(OrderItem orderItem) {
+
+    }
+
 
     @Override
     public int getItemCount() {

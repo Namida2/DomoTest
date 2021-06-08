@@ -11,11 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.testfirebase.DetailOrderActivity;
 import com.example.testfirebase.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import cook.DetailOrderActivity;
+import cook.CookDetailOrderActivity;
 import cook.interfaces.OrdersFragmentInterface;
 import cook.model.DetailOrderActivityModel;
 import cook.presenters.TablesFragmentPresenter;

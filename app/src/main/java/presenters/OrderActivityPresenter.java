@@ -14,12 +14,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import cook.model.DetailOrderActivityModel;
 import interfaces.OrderActivityInterface;
 import interfaces.ToolsInterface;
 import io.reactivex.rxjava3.core.Observable;
 import model.OrderActivityModel;
 import model.TablesFragmentModel;
 import tools.Pair;
+
+import static registration.LogInActivity.TAG;
 
 public class OrderActivityPresenter implements OrderActivityInterface.Presenter {
 
@@ -143,11 +146,14 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
     public void acceptAndWriteOrderToDb(int tableNumber, int guestCount) {
         model.getOrderInfo(tableNumber).second = true;
         ArrayList<OrderItem> orderItems = model.getOrderInfo(tableNumber).first;
-        Map<String, Object> guestCountHashMap = new HashMap<>();
-        guestCountHashMap.put(OrderActivityModel.DOCUMENT_GUEST_COUNT_FIELD, guestCount);
+        Map<String, Object> tableInfoHashMap = new HashMap<>();
+
+        tableInfoHashMap.put(OrderActivityModel.DOCUMENT_GUEST_COUNT_FIELD, guestCount);
+        tableInfoHashMap.put(OrderActivityModel.DOCUMENT_IS_COMPLETE_FIELD, false);
+
         model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
             .document(OrderActivityModel.DOCUMENT_TABLE + tableNumber)
-            .set(guestCountHashMap).addOnCompleteListener(guestCountTask -> {
+            .set(tableInfoHashMap).addOnCompleteListener(guestCountTask -> {
                 if(guestCountTask.isSuccessful()) {
                     for(int i = 0; i < orderItems.size(); ++i) {
                         OrderItem orderItem = orderItems.get(i);

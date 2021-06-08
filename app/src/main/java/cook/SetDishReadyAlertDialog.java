@@ -64,6 +64,7 @@ public class SetDishReadyAlertDialog extends DialogFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(unit -> {
                     acceptDishReady.accept(dishName);
+                    dismiss();
                 });
         return builder.create();
     }

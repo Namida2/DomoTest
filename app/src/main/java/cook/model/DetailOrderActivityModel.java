@@ -2,15 +2,17 @@ package cook.model;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import cook.adapters.DetailOrderItemsRecyclerViewAdapter;
-import cook.interfaces.DetailOrderActivityInterface;
+import cook.adapters.CookDetailOrderItemsRecyclerViewAdapter;
+import cook.interfaces.CookDetailOrderActivityInterface;
 
-public class DetailOrderActivityModel implements DetailOrderActivityInterface.Model {
+public class DetailOrderActivityModel implements CookDetailOrderActivityInterface.Model {
 
     public static final String EXTRA_TAG = "extra_tag";
+    public static final String COLLECTION_ITEMS_LISTENER_NAME = "items_listener";
+    public static final String DOCUMENT_LISTENER_NAME = "listener";
+    public static final String FIELD_NOTIFY_NAME = "notify";
 
-
-    private DetailOrderItemsRecyclerViewAdapter adapter;
+    private CookDetailOrderItemsRecyclerViewAdapter adapter;
     private FirebaseFirestore db;
 
     public DetailOrderActivityModel () {
@@ -21,11 +23,11 @@ public class DetailOrderActivityModel implements DetailOrderActivityInterface.Mo
         return db;
     }
     @Override
-    public void setRecyclerViewAdapter(DetailOrderItemsRecyclerViewAdapter adapter) {
+    public void setRecyclerViewAdapter(CookDetailOrderItemsRecyclerViewAdapter adapter) {
         this.adapter = adapter;
     }
     @Override
-    public DetailOrderItemsRecyclerViewAdapter getRecyclerViewAdapter() {
+    public CookDetailOrderItemsRecyclerViewAdapter getRecyclerViewAdapter() {
         return adapter;
     }
 }

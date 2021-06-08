@@ -9,19 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
-import com.example.testfirebase.order.OrderItem;
-import com.example.testfirebase.order.TableInfo;
 
-import java.util.function.Consumer;
-
-import cook.interfaces.DetailOrderActivityInterface;
+import cook.interfaces.CookDetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
 import cook.presenters.DetailOrderActivityPresenter;
-import tools.Pair;
 
-public class DetailOrderActivity extends AppCompatActivity implements DetailOrderActivityInterface.View {
+public class CookDetailOrderActivity extends AppCompatActivity implements CookDetailOrderActivityInterface.View {
 
-    private DetailOrderActivityInterface.Presenter presenter;
+    private CookDetailOrderActivityInterface.Presenter presenter;
     private String tableNumber;
 
     @Override
@@ -38,7 +33,6 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
         presenter = new DetailOrderActivityPresenter(this);
         setViewData();
     }
-
 
     @Override
     public void showSetDishReadyDialog(ReadyDish dishData) {

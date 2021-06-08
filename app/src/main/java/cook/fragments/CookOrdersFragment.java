@@ -15,7 +15,7 @@ import com.example.testfirebase.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import cook.DetailOrderActivity;
+import cook.CookDetailOrderActivity;
 import cook.interfaces.OrdersFragmentInterface;
 import cook.model.DetailOrderActivityModel;
 import cook.presenters.TablesFragmentPresenter;
@@ -41,16 +41,14 @@ public class CookOrdersFragment extends Fragment implements OrdersFragmentInterf
         presenter.setModelState(contentView);
         return contentView;
     }
-
     @Override
     public void onResume() {
         super.onResume();
         presenter.onResume();
     }
-
     @Override
     public void startDetailOrderActivity(String tableNumber) {
-        Intent intent = new Intent(getContext(), DetailOrderActivity.class);
+        Intent intent = new Intent(getContext(), CookDetailOrderActivity.class);
         intent.putExtra(DetailOrderActivityModel.EXTRA_TAG, tableNumber);
         getActivity().startActivity(intent);
     }

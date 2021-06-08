@@ -56,6 +56,7 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
                     categoryNames.add(new DishCategoryInfo<>(documentSnapshot.getId(), 0));
                 getCategoryNameObservable(categoryNames)
                     .subscribe(categoryNameItem -> {
+                        Log.d(TAG, "MenuDialogPresenter.initialization: " + categoryNameItem);
                         model.getDatabase().collection(MENU_COLLECTION_NAME)
                             .document(categoryNameItem.categoryName)
                             .collection(DISHES_COLLECTION_NAME)

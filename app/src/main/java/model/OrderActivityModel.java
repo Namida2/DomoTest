@@ -28,6 +28,7 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     public static final String DOCUMENT_TABLE = "table_";
     public static final String DOCUMENT_NAME_DELIMITER = "_";
     public static final String DOCUMENT_GUEST_COUNT_FIELD = "guestCount";
+    public static final String DOCUMENT_IS_COMPLETE_FIELD = "isComplete";
     public static final String DOCUMENT_READY_FIELD = "ready";
 
     public OrderActivityModel () {

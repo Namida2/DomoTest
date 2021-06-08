@@ -1,10 +1,9 @@
 package cook.presenters;
 
 import android.util.Log;
-import android.widget.ThemedSpinnerAdapter;
 
-import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
@@ -12,25 +11,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cook.ReadyDish;
-import cook.adapters.DetailOrderItemsRecyclerViewAdapter;
-import cook.interfaces.DetailOrderActivityInterface;
+import cook.adapters.CookDetailOrderItemsRecyclerViewAdapter;
+import cook.interfaces.CookDetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
-import interfaces.OrderActivityInterface;
 import model.OrderActivityModel;
-import tools.Pair;
 
 import static registration.LogInActivity.TAG;
 
-public class DetailOrderActivityPresenter implements DetailOrderActivityInterface.Presenter {
+public class DetailOrderActivityPresenter implements CookDetailOrderActivityInterface.Presenter {
 
-    private DetailOrderActivityInterface.View view;
-    private static DetailOrderActivityInterface.Model model;
+    private CookDetailOrderActivityInterface.View view;
+    private static CookDetailOrderActivityInterface.Model model;
 
-    public DetailOrderActivityPresenter (DetailOrderActivityInterface.View view) {
+    public DetailOrderActivityPresenter (CookDetailOrderActivityInterface.View view) {
         this.view = view;
         if (model == null) {
             model = new DetailOrderActivityModel();
-            DetailOrderItemsRecyclerViewAdapter adapter = new DetailOrderItemsRecyclerViewAdapter();
+            CookDetailOrderItemsRecyclerViewAdapter adapter = new CookDetailOrderItemsRecyclerViewAdapter();
             model.setRecyclerViewAdapter(adapter);
         }
     }
@@ -50,14 +47,26 @@ public class DetailOrderActivityPresenter implements DetailOrderActivityInterfac
                 + readyDish.getOrderItem().getCommentary())
             .set(readyHaspMap, SetOptions.merge()).addOnCompleteListener(task -> {
                 if(task.isSuccessful()) {
-                    Log.d(TAG,"DetailOrderActivityPresenter.setDishState: SUCCESS" );
+                    Log.d(TAG,"DetailOrderActivityPresenter.setDishState writing: SUCCESS" );
+                    model.getDatabase().collection(DetailOrderActivityModel.COLLECTION_ITEMS_LISTENER_NAME)
+                        .document(DetailOrderActivityModel.DOCUMENT_LISTENER_NAME)
+                        .update(readyDish.getTableInfo().getTableName(), FieldValue.arrayUnion(
+                            readyDish.getOrderItem().getName()
+                                + OrderActivityModel.DOCUMENT_NAME_DELIMITER
+                                + readyDish.getOrderItem().getCommentary()
+                        )).addOnCompleteListener(taskNotify -> {
+                            if(task.isSuccessful()) {
+                                Log.d(TAG,"DetailOrderActivityPresenter.setDishState notify: SUCCESS" );
+                            }
+                            else Log.d(TAG, "DetailOrderActivityPresenter.setDishState error: " + taskNotify.getException());
+                    });
                 } else {
-                    Log.d(TAG,"DetailOrderActivityPresenter.setDishState: " + task.getException() );
+                    Log.d(TAG,"DetailOrderActivityPresenter.setDishState error: " + task.getException() );
                 }
         });
     }
     @Override
-    public DetailOrderItemsRecyclerViewAdapter getAdapter(String tableNumber) {
+    public CookDetailOrderItemsRecyclerViewAdapter getAdapter(String tableNumber) {
         Log.d(TAG, OrderActivityModel.DOCUMENT_TABLE + tableNumber);
         OrderActivityModel orderActivityModel = new OrderActivityModel();
 

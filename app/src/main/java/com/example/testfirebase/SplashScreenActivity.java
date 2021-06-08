@@ -12,10 +12,10 @@ import interfaces.SplashScreenInterface;
 import model.SplashScreenActivityModel;
 import presenters.SplashScreenActivityPresenter;
 import registration.LogInActivity;
+import tools.UserData;
 
 public class SplashScreenActivity extends Activity implements SplashScreenInterface.View {
 
-    private String post;
     private SplashScreenInterface.Presenter presenter;
 
     @Override
@@ -24,10 +24,17 @@ public class SplashScreenActivity extends Activity implements SplashScreenInterf
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         presenter = new SplashScreenActivityPresenter(this);
+
+//        new Handler().postDelayed(() -> {
+//            Intent mainIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
+//            SplashScreenActivity.this.startActivity(mainIntent);
+//            SplashScreenActivity.this.finish();
+//        }, 80);
+
     }
     @Override
     public void setCurrentUserPost(String post) {
-        this.post = post;
+        UserData.post = post;
         switch (post) {
             case SplashScreenActivityModel.COOK_POST_NAME:
                 startNewActivity(CookMainActivity.class);
