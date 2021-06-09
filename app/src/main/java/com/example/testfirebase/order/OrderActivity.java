@@ -81,9 +81,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
 
         menuDialogPresenter = new MenuDialogPresenter(this);
         orderPresenter = new OrderActivityPresenter(this);
-        this.notifyOrderAdapterConsumer = orderPresenter.getOrderNotifyAdapterConsumer();
         notifyMe();
-
 
         bottomAppBar = findViewById(R.id.bottom_app_bar);
         fba = findViewById(R.id.menu_floating_action_button);
@@ -118,26 +116,23 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     public void onMenuDialogModelComplete(MenuRecyclerViewAdapter adapter) {
         View contentView = View.inflate(this, R.layout.dialog_menu, null);
         RecyclerView recyclerView = contentView.findViewById(R.id.menu_recycler_view);
-        adapter.setFragmentManager(getSupportFragmentManager());
         recyclerView.setAdapter(adapter);
         menuDialog = new MenuBottomSheetDialog(contentView);
         this.menuDialogView = contentView;
     }
     @Override
-    public MenuRecyclerViewAdapter onMenuDialogDataFillingComplete(MenuDialogOrderActivityInterface.Model model) {
-        MenuRecyclerViewAdapter adapter = new MenuRecyclerViewAdapter(
-            getSupportFragmentManager(),
-            model.getMenu(),
-            model.getCategoryNames(),
-            notifyOrderAdapterConsumer,
-            tableNumber
-        );
-        return adapter;
-    }
-    @Override
     public void onMenuDialogError(int errorCode) {
         if(!ErrorAlertDialog.isIsExist())
             ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
+    }
+    @Override
+    public void showMenuItemDishDialog(Dish dish) {
+        AddDishAlertDialog dialog = AddDishAlertDialog.getNewInstance( orderItem -> {
+            orderPresenter.notifyAdapterDataSetChanged(orderItem);
+        }, dish, accept -> {
+            menuDialogPresenter.resetItemIsPressed();
+        });
+        dialog.show(getSupportFragmentManager(), "");
     }
     //----------ORDER
     @Override
@@ -148,15 +143,19 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             recyclerView.setAdapter(orderRecyclerViewAdapter);
         }
     }
-
-    @Override
-    public void setOrderRecyclerViewConsumer(Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer) {
-        this.notifyOrderAdapterConsumer = notifyOrderAdapterConsumer;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         orderPresenter.orderRecyclerViewOnActivityDestroy(tableNumber);
+        menuDialogPresenter.onDestroy();
+        menuDialog = null;
+        guestCountDialog = null;
+        guestCountDialogView = null;
+        menuDialogPresenter = null;
+        guestsCountDialogPresenter = null;
+        orderPresenter = null;
     }
+
+
+
 }

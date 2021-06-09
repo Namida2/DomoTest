@@ -15,6 +15,7 @@ public interface DetailOrderItemsActivityInterface {
         void setViewData();
     }
     interface Presenter {
+        void onDestroy();
         DetailOrderItemsRecyclerViewAdapter getAdapter(String tableNumber);
     }
 

@@ -52,6 +52,12 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
         }
         Log.d(TAG, "OrderActivityPresenter is created");
     }
+
+    @Override
+    public void notifyAdapterDataSetChanged(OrderItem orderItem) {
+        model.getAdapter().addOrder(orderItem);
+    }
+
     @Override
     public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap() {
         return model.getNotEmptyTablesOrdersHashMap();
@@ -131,10 +137,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
         }
         return null;
     }
-    @Override
-    public  Consumer<Pair<OrderItem, String>> getOrderNotifyAdapterConsumer() {
-        return model.getNotifyOrderAdapterConsumer();
-    }
+
     private Observable<Integer> getTablesObservable (ArrayList<TableInfo> tablesInfo) {
         return Observable.create(emitter -> {
             for (int i = 0 ; i < tablesInfo.size(); ++i) {
@@ -186,5 +189,6 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter 
     public void orderRecyclerViewOnActivityDestroy(int tableNumber) {
         if ( !model.getOrderInfo(tableNumber).second )
             model.getAllTablesOrdersHashMap().get(OrderActivityModel.DOCUMENT_TABLE + tableNumber).first = new ArrayList<>();
+        view = null;
     }
 }

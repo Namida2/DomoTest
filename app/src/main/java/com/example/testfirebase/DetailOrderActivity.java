@@ -6,6 +6,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.FontResourcesParserCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import cook.model.DetailOrderActivityModel;
@@ -39,4 +40,9 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
         recyclerView.setAdapter(presenter.getAdapter(tableNumber));
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
 }

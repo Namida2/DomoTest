@@ -1,11 +1,10 @@
 package presenters;
 
 import android.util.Log;
-import android.view.View;
 
-import com.example.testfirebase.R;
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.order.Dish;
+import com.example.testfirebase.order.OrderItem;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import dialogsTools.ErrorAlertDialog;
 import interfaces.MenuDialogOrderActivityInterface;
 import io.reactivex.rxjava3.core.Observable;
 import model.MenuDialogModel;
-import tools.Pair;
 
 import com.example.testfirebase.order.DishCategoryInfo;
 
@@ -40,9 +38,27 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
     }
     @Override
     public void setModelViewState() {
-        model.setMenuItemAdapter(view.onMenuDialogDataFillingComplete(model)) ;
+        MenuRecyclerViewAdapter adapter = new MenuRecyclerViewAdapter(
+            dish -> {
+                view.showMenuItemDishDialog(dish);
+            },
+            model.getMenu(),
+            model.getCategoryNames()
+        );
+        model.setMenuItemAdapter(adapter);
         view.onMenuDialogModelComplete(model.getMenuItemAdapter());
     }
+
+    @Override
+    public void onDestroy() {
+        view = null;
+    }
+
+    @Override
+    public void resetItemIsPressed() {
+        model.getMenuItemAdapter().resetIsPressed();
+    }
+
     @Override
     public void setModelDataState() {
         ArrayList<DishCategoryInfo<String, Integer>> categoryNames = new ArrayList<>();

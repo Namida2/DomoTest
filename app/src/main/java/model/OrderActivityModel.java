@@ -6,9 +6,7 @@ import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import interfaces.OrderActivityInterface;
 import tools.Pair;
@@ -39,12 +37,7 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap() {
         return notEmptyTablesOrdersHashMap;
     }
-    @Override
-    public Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer() {
-        return order -> {
-            adapter.addOrder(order.first);
-        };
-    }
+
     @Override
     public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber) {
         String key = DOCUMENT_TABLE + tableNumber;

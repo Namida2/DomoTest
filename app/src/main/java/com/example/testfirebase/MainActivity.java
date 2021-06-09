@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import cook.model.DetailOrderActivityModel;
+import io.grpc.android.AndroidChannelBuilder;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         disposable = getBottomAppBarObservable()
             .debounce(150, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(itemId -> {
                 NavDestination currentDestination = navHostController.getCurrentDestination();
                 switch ( itemId ) {
@@ -96,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
                                     new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
                         break;
                 }
+            }, error -> {
+
+                Log.d(TAG, Thread.currentThread().getName());
             });
     }
     private Observable<Integer> getBottomAppBarObservable () {

@@ -36,32 +36,29 @@ import tools.Pair;
 
 import static registration.LogInActivity.TAG;
 
-
 public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
+    Consumer<Dish> acceptDish;
     private ArrayList<DishCategoryInfo<String, Integer>> categoryNames;
     private Map<String, List<Dish>> menu;
     private ArrayList<Object> menuItems;
-    private AddDishAlertDialog addDishAlertDialog;
-    private FragmentManager fragmentManager;
 
     private boolean isPressed = false;
 
-    public MenuRecyclerViewAdapter (FragmentManager fragmentManager, Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames, Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer, int tableNumber) {
-        addDishAlertDialog = AddDishAlertDialog.getNewInstance(notifyOrderAdapterConsumer, tableNumber);
-        this.fragmentManager = fragmentManager;
+    public MenuRecyclerViewAdapter ( Consumer<Dish> acceptDish, Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames) {
+        //Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer
+        //AddDishAlertDialog.getNewInstance(notifyOrderAdapterConsumer, tableNumber);
         this.menu = menu;
+        this.acceptDish = acceptDish;
         this.categoryNames = categoryNames;
         menuItems = new ArrayList<>();
-        for( int i = 0; i < this.categoryNames.size(); ++i){
+        for(int i = 0; i < this.categoryNames.size(); ++i){
             DishCategoryInfo <String, Integer> categoryNameInfo = categoryNames.get(i);
             menuItems.add(categoryNameInfo);
             menuItems.addAll(menu.get(categoryNameInfo.categoryName));
         }
     }
-    public void setFragmentManager(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-    }
+
     class CategoryNameViewHolder extends RecyclerView.ViewHolder {
         private TextView categoryName;
         public CategoryNameViewHolder(@NonNull @NotNull View itemView) {
@@ -105,6 +102,7 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
         return null;
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
@@ -126,8 +124,7 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     .subscribe(item -> {
                         if(!AddDishAlertDialog.isExit() && !isPressed) {
                             isPressed = true;
-                            addDishAlertDialog.setData(dish, resetIsPressed -> { isPressed = false; });
-                            addDishAlertDialog.show(fragmentManager, "");
+                            acceptDish.accept(dish);
                         }
                     }, error -> {
                         Log.d(TAG, "MenuRecyclerViewAdapter.onBindViewHolder: " + error.getMessage());
@@ -135,6 +132,11 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 break;
         }
     }
+
+    public void resetIsPressed() {
+        isPressed = false;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public int getItemCount() {

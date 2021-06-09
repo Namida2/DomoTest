@@ -36,23 +36,19 @@ import static registration.LogInActivity.TAG;
 
 public class AddDishAlertDialog extends DialogFragment {
 
-    private static Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer;
-    private  Consumer<Boolean> resetIsPressed;
+    private static Consumer<OrderItem> notifyOrderAdapterConsumer;
+    private static Consumer<Boolean> resetIsPressed;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
-    private static int tableNumber;
-    private Dish dish;
+    private static Dish dish;
 
-    public static AddDishAlertDialog getNewInstance (Consumer<Pair<OrderItem, String>> consumer, int tableNumber) {
-        //isExist.set(true);
-        AddDishAlertDialog.tableNumber = tableNumber;
+    public static AddDishAlertDialog getNewInstance (Consumer<OrderItem> consumer, Dish dish,  Consumer<Boolean> resetIsPressed) {
+        AddDishAlertDialog.dish = dish;
+        AddDishAlertDialog.resetIsPressed = resetIsPressed;
         AddDishAlertDialog.notifyOrderAdapterConsumer = consumer;
         AddDishAlertDialog dialog = new AddDishAlertDialog();
         return dialog;
     }
-    public void setData(Dish dish, Consumer<Boolean> resetIsPressed) {
-        this.dish = dish;
-        this.resetIsPressed = resetIsPressed;
-    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @NotNull
@@ -75,7 +71,7 @@ public class AddDishAlertDialog extends DialogFragment {
                 OrderItem orderItem = new OrderItem(
                     dish, commentary.getText().toString(),
                     Integer.parseInt(dishCount.getText().toString()));
-                notifyOrderAdapterConsumer.accept(new Pair<>( orderItem, Integer.toString(tableNumber)));
+                notifyOrderAdapterConsumer.accept(orderItem);
                 this.dismiss();
             });
 

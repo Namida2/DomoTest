@@ -4,6 +4,7 @@ package interfaces;
 
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.order.Dish;
+import com.example.testfirebase.order.OrderItem;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -24,11 +25,13 @@ public interface MenuDialogOrderActivityInterface {
         void setCategoryNames(ArrayList<DishCategoryInfo<String, Integer>> categoryNames);
     }
     interface View {
+        void showMenuItemDishDialog(Dish orderItem);
         void onMenuDialogError(int errorCode);
         void onMenuDialogModelComplete(MenuRecyclerViewAdapter adapter);
-        MenuRecyclerViewAdapter onMenuDialogDataFillingComplete(MenuDialogOrderActivityInterface.Model model);
     }
     interface Presenter {
+        void onDestroy();
+        void resetItemIsPressed();
         void setModelDataState();
         void setModelViewState();
     }

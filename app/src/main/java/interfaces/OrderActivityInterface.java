@@ -13,28 +13,26 @@ import tools.Pair;
 
 public interface OrderActivityInterface {
     interface Model {
-        ArrayList<OrderItem> getOrderItemsArrayList(int tableNumber);
-        void setAdapter(OrderRecyclerViewAdapter adapter);
+        FirebaseFirestore getDatabase();
         OrderRecyclerViewAdapter getAdapter();
-        Consumer<Pair<OrderItem, String>> getNotifyOrderAdapterConsumer ();
+        ArrayList<TableInfo> getTableInfoArrayList();
+        void setAdapter(OrderRecyclerViewAdapter adapter);
+        void setTableInfoArrayList(ArrayList<TableInfo> tablesInfo);
+        ArrayList<OrderItem> getOrderItemsArrayList(int tableNumber);
         public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber);
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> getAllTablesOrdersHashMap();
         void setAllTablesOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap);
-        void setNotEmptyTablesOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap) ;
+        void setNotEmptyTablesOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap);
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap();
-        FirebaseFirestore getDatabase();
-        void setTableInfoArrayList(ArrayList<TableInfo> tablesInfo);
-        ArrayList<TableInfo> getTableInfoArrayList();
     }
     interface View {
-        void setOrderRecyclerViewConsumer(Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer);
     }
     interface Presenter {
+        void notifyAdapterDataSetChanged(OrderItem orderItem);
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap();
         void setModelDataState(boolean needToNotifyView);
         OrderRecyclerViewAdapter getOrderRecyclerViewAdapter(int ableNumber);
         void orderRecyclerViewOnActivityDestroy(int tableNumber);
-        Consumer<Pair<OrderItem, String>> getOrderNotifyAdapterConsumer();
         void acceptAndWriteOrderToDb(int tableNumber, int guestCount);
         ArrayList<TableInfo> getTableInfoArrayList();
     }
