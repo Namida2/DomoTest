@@ -34,12 +34,10 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
         }
         DocumentListenerService.getService().subscribe(this);
     }
-
     @Override
     public void onDestroy() {
         DocumentListenerService.getService().unSubscribe(this);
     }
-
     @Override
     public DetailOrderItemsRecyclerViewAdapter getAdapter(String tableNumber) {
         Log.d(TAG, OrderActivityModel.DOCUMENT_TABLE + tableNumber);
@@ -60,12 +58,10 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
         );
         return model.getRecyclerViewAdapter();
     }
-
     @Override
     public void notifyMe(Object data) {
         Map<String, Object> notifiable = (Map<String, Object>) data;
     }
-
     @Override
     public void setLatestData(Map<String, Object> latestData) {
         String key;
