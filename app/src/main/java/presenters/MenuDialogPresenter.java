@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.order.Dish;
-import com.example.testfirebase.order.OrderItem;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -39,31 +38,30 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
     @Override
     public void setModelViewState() {
         MenuRecyclerViewAdapter adapter = new MenuRecyclerViewAdapter(
-            dish -> {
-                view.showMenuItemDishDialog(dish);
-            },
             model.getMenu(),
             model.getCategoryNames()
         );
+        adapter.setAcceptDishConsumer(view::showMenuItemDishDialog);
         model.setMenuItemAdapter(adapter);
         view.onMenuDialogModelComplete(model.getMenuItemAdapter());
     }
-
+    @Override
+    public void onResume () {
+        if (model.getMenuItemAdapter() != null)
+            model.getMenuItemAdapter().setAcceptDishConsumer(view::showMenuItemDishDialog);
+    }
     @Override
     public void onDestroy() {
         view = null;
     }
-
     @Override
     public void resetItemIsPressed() {
         model.getMenuItemAdapter().resetIsPressed();
     }
-
     @Override
     public void setModelDataState() {
         ArrayList<DishCategoryInfo<String, Integer>> categoryNames = new ArrayList<>();
         Map<String, List<Dish>> menu = new HashMap<>();
-
         model.setCategoryNames(categoryNames);
         model.setMenu(menu);
         model.getDatabase().collection(MENU_COLLECTION_NAME).get().addOnCompleteListener(task -> {

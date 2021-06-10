@@ -72,21 +72,19 @@ public class AddDishAlertDialog extends DialogFragment {
                     dish, commentary.getText().toString(),
                     Integer.parseInt(dishCount.getText().toString()));
                 notifyOrderAdapterConsumer.accept(orderItem);
+                resetIsPressed.accept(false);
                 this.dismiss();
             });
 
         builder.setView(contentView);
         return builder.create();
     }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDismiss(@NonNull @NotNull DialogInterface dialog) {
         super.onDismiss(dialog);
         resetIsPressed.accept(false);
     }
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -96,7 +94,7 @@ public class AddDishAlertDialog extends DialogFragment {
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(layoutParams);
     }
-    public static boolean isExit () {
-        return isExist.get();
-    }
+//    public static boolean isExit () {
+//        return isExist.get();
+//    }
 }

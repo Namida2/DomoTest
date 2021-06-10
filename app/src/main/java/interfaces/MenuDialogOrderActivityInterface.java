@@ -1,7 +1,5 @@
 package interfaces;
 
-
-
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.order.Dish;
 import com.example.testfirebase.order.OrderItem;
@@ -30,6 +28,7 @@ public interface MenuDialogOrderActivityInterface {
         void onMenuDialogModelComplete(MenuRecyclerViewAdapter adapter);
     }
     interface Presenter {
+        void onResume ();
         void onDestroy();
         void resetItemIsPressed();
         void setModelDataState();

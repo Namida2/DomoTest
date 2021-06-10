@@ -5,17 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
-import com.example.testfirebase.order.AddDishAlertDialog;
 import com.example.testfirebase.order.Dish;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,32 +21,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import com.example.testfirebase.order.DishCategoryInfo;
-import com.example.testfirebase.order.OrderItem;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import tools.Animations;
-import tools.Pair;
 
 import static registration.LogInActivity.TAG;
 
 public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
-    Consumer<Dish> acceptDish;
+    Consumer<Dish> acceptDishConsumer;
     private ArrayList<DishCategoryInfo<String, Integer>> categoryNames;
     private Map<String, List<Dish>> menu;
     private ArrayList<Object> menuItems;
 
-    private boolean isPressed = false;
+    private AtomicBoolean isPressed = new AtomicBoolean(false);
 
-    public MenuRecyclerViewAdapter ( Consumer<Dish> acceptDish, Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames) {
-        //Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer
-        //AddDishAlertDialog.getNewInstance(notifyOrderAdapterConsumer, tableNumber);
+    public MenuRecyclerViewAdapter (Map<String, List<Dish>> menu, ArrayList<DishCategoryInfo<String, Integer>> categoryNames) {
         this.menu = menu;
-        this.acceptDish = acceptDish;
         this.categoryNames = categoryNames;
         menuItems = new ArrayList<>();
         for(int i = 0; i < this.categoryNames.size(); ++i){
@@ -57,6 +50,10 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             menuItems.add(categoryNameInfo);
             menuItems.addAll(menu.get(categoryNameInfo.categoryName));
         }
+    }
+
+    public void setAcceptDishConsumer(Consumer<Dish> acceptDishConsumer) {
+        this.acceptDishConsumer = acceptDishConsumer;
     }
 
     class CategoryNameViewHolder extends RecyclerView.ViewHolder {
@@ -122,9 +119,9 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     .debounce(150, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(item -> {
-                        if(!AddDishAlertDialog.isExit() && !isPressed) {
-                            isPressed = true;
-                            acceptDish.accept(dish);
+                        if(!isPressed.get()) {
+                            isPressed.set(true);
+                            acceptDishConsumer.accept(dish);
                         }
                     }, error -> {
                         Log.d(TAG, "MenuRecyclerViewAdapter.onBindViewHolder: " + error.getMessage());
@@ -132,11 +129,9 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 break;
         }
     }
-
     public void resetIsPressed() {
-        isPressed = false;
+        isPressed.set(false);
     }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public int getItemCount() {

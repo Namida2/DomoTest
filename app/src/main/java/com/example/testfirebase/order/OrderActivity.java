@@ -144,6 +144,11 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         }
     }
     @Override
+    protected void onResume() {
+        super.onResume();
+        menuDialogPresenter.onResume();
+    }
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         orderPresenter.orderRecyclerViewOnActivityDestroy(tableNumber);
@@ -155,7 +160,5 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         guestsCountDialogPresenter = null;
         orderPresenter = null;
     }
-
-
 
 }

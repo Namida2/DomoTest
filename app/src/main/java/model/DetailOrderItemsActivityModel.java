@@ -7,7 +7,6 @@ import interfaces.DetailOrderItemsActivityInterface;
 
 public class DetailOrderItemsActivityModel implements DetailOrderItemsActivityInterface.Model {
 
-
     private DetailOrderItemsRecyclerViewAdapter adapter;
 
     @Override

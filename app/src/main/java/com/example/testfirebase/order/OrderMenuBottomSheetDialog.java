@@ -46,6 +46,7 @@ public class OrderMenuBottomSheetDialog extends BottomSheetDialogFragment {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
                 orderWasAccepted.accept(true);
+                dismiss();
             });
 
         dialog.setContentView(contentView);
