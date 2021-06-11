@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
@@ -34,14 +35,16 @@ public class CookMainActivity extends AppCompatActivity {
 
         disposable = getBottomAppBarObservable()
             .debounce(150, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(itemId -> {
                 NavDestination currentDestination = navHostController.getCurrentDestination();
                 switch ( itemId ) {
                     case R.id.cookOrdersFragment:
                         if(currentDestination.getId() != R.id.cookOrdersFragment)
                             navHostController.navigate(R.id.cookOrdersFragment,
-                                null,
-                                new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
+                                null
+                                //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
+                            );
                         break;
                     case R.id.cookChecksFragment:
                         if(currentDestination.getId() != R.id.cookChecksFragment)

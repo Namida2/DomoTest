@@ -2,7 +2,7 @@ package presenters;
 
 import android.util.Log;
 
-import com.example.testfirebase.DocumentListenerService;
+import com.example.testfirebase.DocumentDishesListenerService;
 import com.example.testfirebase.adapters.DetailOrderItemsRecyclerViewAdapter;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
@@ -12,17 +12,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import cook.model.OrdersFragmentModel;
 import interfaces.DetailOrderItemsActivityInterface;
-import interfaces.DocumentListenerServiceInterface;
+import interfaces.DocumentDishesListenerServiceInterface;
 import model.DetailOrderItemsActivityModel;
 import model.OrderActivityModel;
-import tools.Pair;
 
-import static android.content.Context.KEYGUARD_SERVICE;
 import static registration.LogInActivity.TAG;
 
-public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivityInterface.Presenter, DocumentListenerServiceInterface.Subscriber {
+public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivityInterface.Presenter, DocumentDishesListenerServiceInterface.Subscriber {
 
     private DetailOrderItemsActivityInterface.View view;
     private DetailOrderItemsActivityInterface.Model model;
@@ -33,7 +30,7 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
             model = new DetailOrderItemsActivityModel();
             model.setRecyclerViewAdapter(new DetailOrderItemsRecyclerViewAdapter());
         }
-        DocumentListenerService.getService().subscribe(this);
+        DocumentDishesListenerService.getService().dishesSubscribe(this);
     }
     @Override
     public DetailOrderItemsRecyclerViewAdapter getAdapter(String tableNumber) {
@@ -57,7 +54,7 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
     }
     @Override
     public void onDestroy() {
-        DocumentListenerService.getService().unSubscribe(this);
+        DocumentDishesListenerService.getService().unSubscribe(this);
     }
     //DocumentListenerService
     @Override
@@ -70,29 +67,28 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
         notifyOrderItems(latestData);
     }
     private void notifyOrderItems(Map<String, Object> notifiable) {
-        model.getRecyclerViewAdapter().notifyDataSetChanged();
-//        String key;
-//        String dishName;
-//        ArrayList<Object> orderItemNames;
-//        Set<String> keys = notifiable.keySet();
-//        Iterator<String> iterator = keys.iterator();
-//        while(iterator.hasNext()) {
-//            key = iterator.next();
-//            OrderActivityModel orderActivityModel = new OrderActivityModel();
-//            Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaa = orderActivityModel.getNotEmptyTablesOrdersHashMap();
-//            ArrayList<OrderItem> orderItems = orderActivityModel
-//                .getNotEmptyTablesOrdersHashMap()
-//                .get(key).first;
-//            orderItemNames = (ArrayList<Object>) notifiable.get(key);
-//            for(int i = 0; i < orderItemNames.size(); ++i) {
-//                dishName = (String) ((ArrayList<?>) notifiable.get(key)).get(i);
-//                for(int j = 0; j < orderItems.size(); ++j) {
-//                    if( (orderItems.get(i).getName()
-//                        + OrderActivityModel.DOCUMENT_NAME_DELIMITER
-//                        + orderItems.get(i).getCommentary()).equals(dishName))
-//                        orderItems.get(i).setReady(true);
-//                }
-//            }
-//        }
+        String key;
+        String dishName;
+        ArrayList<Object> orderItemNames;
+        Set<String> keys = notifiable.keySet();
+        Iterator<String> iterator = keys.iterator();
+        while(iterator.hasNext()) {
+            key = iterator.next();
+            OrderActivityModel orderActivityModel = new OrderActivityModel();
+            ArrayList<OrderItem> orderItems = orderActivityModel
+                .getNotEmptyTablesOrdersHashMap()
+                .get(key).first;
+            orderItemNames = (ArrayList<Object>) notifiable.get(key);
+            for(int i = 0; i < orderItemNames.size(); ++i) {
+                dishName = (String) ((ArrayList<?>) notifiable.get(key)).get(i);
+                for(int j = 0; j < orderItems.size(); ++j) {
+                    String aa = orderItems.get(j).getName() + OrderActivityModel.DOCUMENT_NAME_DELIMITER + orderItems.get(j).getCommentary();
+                    if( (orderItems.get(j).getName() + OrderActivityModel.DOCUMENT_NAME_DELIMITER + orderItems.get(j).getCommentary()).equals(dishName)) {
+                        orderItems.get(j).setReady(true);
+                        model.getRecyclerViewAdapter().notifyItemChanged(j);
+                    }
+                }
+            }
+        }
     }
 }

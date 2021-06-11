@@ -12,8 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.testfirebase.R;
+import com.jakewharton.rxbinding4.view.RxView;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class ErrorAlertDialog extends DialogFragment {
 
@@ -43,10 +47,14 @@ public class ErrorAlertDialog extends DialogFragment {
         TextView title = view.findViewById(R.id.title);
         TextView text = view.findViewById(R.id.commentary_title);
         Button button = view.findViewById(R.id.ok);
-        button.setOnClickListener( v -> {
-            dismiss();
-            isExist.set(false);
-        });
+        RxView.clicks(button).
+            debounce(150, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(unit -> {
+                dismiss();
+                isExist.set(false);
+            });
+
         switch (dialogType) {
             case SHORT_PASSWORD:
                 title.setText(R.string.error_alert_dialog_wrong_password_title);

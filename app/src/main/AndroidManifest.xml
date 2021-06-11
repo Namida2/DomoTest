@@ -32,7 +32,10 @@
         <activity android:name=".DetailOrderActivity"/>
 
         <service
-            android:name=".DocumentListenerService"
+            android:name=".DocumentDishesListenerService"
+            android:exported="false" />
+        <service
+            android:name=".DocumentOrdersListenerService"
             android:exported="false" />
     </application>
 

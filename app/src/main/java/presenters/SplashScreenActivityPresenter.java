@@ -28,7 +28,6 @@ public class SplashScreenActivityPresenter implements SplashScreenInterface.Pres
         if(splashScreenModel == null) splashScreenModel = new SplashScreenActivityModel();
         orderActivityPresenter = new OrderActivityPresenter(this);
         orderActivityPresenter.setModelDataState(true);
-
     }
     @Override
     public void notifyMe() {

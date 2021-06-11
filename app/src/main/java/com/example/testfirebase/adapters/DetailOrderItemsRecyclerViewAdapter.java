@@ -85,12 +85,12 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
         holder.weight.setText(orderItemsArrayList.get(position).getWeight());
         holder.cost.setText(orderItemsArrayList.get(position).getCost());
         holder.count.setText(orderItemsArrayList.get(position).getCount() + " шт");
+        if (orderItemsArrayList.get(position).isReady())
+            holder.isReady.setVisibility(View.VISIBLE);
         if (orderItemsArrayList.get(position).getCommentary().equals("")) {
             holder.commentaryTitle.setVisibility(View.GONE);
             holder.commentary.setVisibility(View.GONE);
         } else holder.commentary.setText(orderItemsArrayList.get(position).getCommentary() + " ");
-        if (orderItemsArrayList.get(position).isReady())
-            holder.isReady.setVisibility(View.VISIBLE);
         Animations.Companion.startAnimationViewShowing(holder.container_large);
         RxView.clicks(holder.container_large)
             .debounce(150, TimeUnit.MILLISECONDS)

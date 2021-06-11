@@ -14,6 +14,7 @@ public interface CookDetailOrderActivityInterface {
     interface View {
         void showSetDishReadyDialog (ReadyDish dishData);
         void setViewData();
+        void onError(int errorCode);
     }
     interface Presenter {
         void onResume();

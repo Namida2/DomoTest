@@ -23,40 +23,42 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 
-import cook.model.DetailOrderActivityModel;
 import cook.model.OrdersFragmentModel;
-import interfaces.DocumentListenerServiceInterface;
+import interfaces.DocumentDishesListenerServiceInterface;
+import interfaces.DocumentOrdersListenerInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import presenters.OrderActivityPresenter;
+import io.reactivex.rxjava3.disposables.Disposable;
+import model.SplashScreenActivityModel;
 
 import static registration.LogInActivity.TAG;
 
-public class DocumentListenerService extends Service implements DocumentListenerServiceInterface.Observable {
+public class DocumentDishesListenerService extends Service implements DocumentDishesListenerServiceInterface.Observable {
 
     private static int id = 1;
     private static NotificationChannel channel;
-    private static String channelId = "Domo";
+    private static String channelId = "Domo_dishes";
     private static String channelName = "DomoChannel";
     private static String TABLE = "Столик ";
     private static String READY_TO_SERVE = "готово к подаче";
 
     private NotificationManager notificationManager;
-    private static ArrayList<DocumentListenerServiceInterface.Subscriber> subscribers;
+    private static ArrayList<DocumentDishesListenerServiceInterface.Subscriber> subscribers;
     private Map<String, Object> latestData;
 
-    private static DocumentListenerService service;
+    private static DocumentDishesListenerService service;
     private static Consumer<Boolean> serviceCreatedConsumer;
+    private static Disposable disposable;
+    private AtomicBoolean firstCall = new AtomicBoolean(true);
 
     public static void setServiceCreatedConsumer (Consumer<Boolean> serviceCreatedConsumer) {
-        DocumentListenerService.serviceCreatedConsumer = serviceCreatedConsumer;
+        DocumentDishesListenerService.serviceCreatedConsumer = serviceCreatedConsumer;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -67,10 +69,10 @@ public class DocumentListenerService extends Service implements DocumentListener
         if (latestData == null) latestData = new HashMap<>();
         notificationManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         createChannel(notificationManager);
-        getObservable()
+        disposable = getObservable()
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(data ->{
-                notifyAllSubscribers(data);
+            .subscribe(data -> {
+                dishesNotifyAllSubscribers(data);
                 Map<String, Object> newData = new HashMap<>();
                 Set<String> keys = data.keySet();
                 for (String key : keys) {
@@ -84,21 +86,21 @@ public class DocumentListenerService extends Service implements DocumentListener
                     try {
                         items.removeAll((Collection<?>) latestData.get(key));
                     } catch (Exception e) {
-                        Log.d(TAG, "DocumentListenerService.onCreate: latestData does not contain key \"" + key +"\"");
+                        Log.d(TAG, "DocumentListenerService.onCreate: latestData does not contain key \"" + key + "\"");
                     }
                     newData.put(key, new ArrayList<>(items));
                 }
                 keys = newData.keySet();
                 for (String tableName : keys) {
                     ArrayList<String> dishNames = (ArrayList<String>) newData.get(tableName);
-                    for(int i = 0; i < dishNames.size(); ++i) {
+                    for (int i = 0; i < dishNames.size(); ++i) {
                         try {
                             String tableNumber = tableName.substring(tableName
                                 .indexOf(OrdersFragmentModel.DELIMITER) + 1);
                             String dishName = dishNames.get(i);
                             dishName = dishName.substring(0, dishName
                                 .indexOf(OrdersFragmentModel.DELIMITER));
-                            showNotification(TABLE + tableNumber, dishName + ": "  + READY_TO_SERVE);
+                            showNotification(TABLE + tableNumber, dishName + ": " + READY_TO_SERVE);
                         } catch (Exception e) {
                             Log.d(TAG, "DocumentListenerService.onCreate: wrong delimiter location");
                         }
@@ -106,26 +108,77 @@ public class DocumentListenerService extends Service implements DocumentListener
                 }
                 latestData = data;
             });
-        serviceCreatedConsumer.accept(true);
+
+        try {
+            serviceCreatedConsumer.accept(true);
+        } catch (Exception e) { }
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "Service created");
+        Log.d(TAG, "DocumentDishesListenerService service created");
         return START_STICKY;
     }
-    @Override
-    public void notifyAllSubscribers(Map<String, Object> data) {
-        for(DocumentListenerServiceInterface.Subscriber subscriber : subscribers) {
-            subscriber.notifyMe(data);
+
+    private void createChannel (NotificationManager notificationManager) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            channel = new NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            );
+            notificationManager.createNotificationChannel(channel);
         }
     }
+    private Observable<Map<String, Object>> getObservable (){
+        return Observable.create(emitter -> {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+                .document(SplashScreenActivityModel.DOCUMENT_DISHES_LISTENER_NAME)
+                .addSnapshotListener( (snapshot, error) -> {
+                if (error != null) {
+                    Log.d(TAG, "Error!");
+                    return;
+                }
+                if (snapshot != null && snapshot.exists() && !firstCall.get()) {
+                    emitter.onNext(snapshot.getData());
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+                if (firstCall.get() && snapshot != null)
+                    latestData = snapshot.getData();
+                firstCall.set(false);
+                });
+        });
+    }
+    public static DocumentDishesListenerService getService() {
+        return service;
+    }
+    @Nullable
     @Override
-    public void subscribe(DocumentListenerServiceInterface.Subscriber subscriber) {
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+    public static void unSubscribeFromDatabase() {
+        disposable.dispose();
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "DocumentDishesListenerService service destroyed");
+    }
+    @Override
+    public void dishesNotifyAllSubscribers(Object data) {
+        for(DocumentDishesListenerServiceInterface.Subscriber subscriber : subscribers)
+            subscriber.notifyMe(data);
+    }
+    @Override
+    public void dishesSubscribe(DocumentDishesListenerServiceInterface.Subscriber subscriber) {
+        subscribers.remove(subscriber);
         subscribers.add(subscriber);
         subscriber.setLatestData(latestData);
     }
     @Override
-    public void unSubscribe(DocumentListenerServiceInterface.Subscriber subscriber) {
+    public void unSubscribe(DocumentDishesListenerServiceInterface.Subscriber subscriber) {
         subscribers.remove(subscriber);
     }
     @Override
@@ -142,47 +195,5 @@ public class DocumentListenerService extends Service implements DocumentListener
             .addAction(null)
             .build();
         notificationManager.notify(id++, notification); //important thing
-    }
-    private void createChannel (NotificationManager notificationManager) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            channel = new NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_HIGH
-            );
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-    private Observable<Map<String, Object>> getObservable (){
-        return Observable.create(emitter -> {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection(DetailOrderActivityModel.COLLECTION_ITEMS_LISTENER_NAME)
-                .document(DetailOrderActivityModel.DOCUMENT_LISTENER_NAME)
-                .addSnapshotListener( (snapshot, error) -> {
-                if (error != null) {
-                    Log.d(TAG, "Error!");
-                    return;
-                }
-                if (snapshot != null && snapshot.exists()) {
-                    emitter.onNext(snapshot.getData());
-                } else {
-                    Log.d(TAG, "Current data: null");
-                }
-            });
-        });
-    }
-
-    public static DocumentListenerService getService() {
-        return service;
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-    @Override
-    public void onDestroy() {
-        Log.d(TAG, "Service destroyed");
     }
 }

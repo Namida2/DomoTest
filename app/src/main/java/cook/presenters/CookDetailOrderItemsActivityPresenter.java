@@ -15,15 +15,16 @@ import cook.adapters.CookDetailOrderItemsRecyclerViewAdapter;
 import cook.interfaces.CookDetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
 import model.OrderActivityModel;
+import model.SplashScreenActivityModel;
 
 import static registration.LogInActivity.TAG;
 
-public class DetailOrderActivityPresenter implements CookDetailOrderActivityInterface.Presenter {
+public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderActivityInterface.Presenter {
 
     private CookDetailOrderActivityInterface.View view;
     private static CookDetailOrderActivityInterface.Model model;
 
-    public DetailOrderActivityPresenter (CookDetailOrderActivityInterface.View view) {
+    public CookDetailOrderItemsActivityPresenter(CookDetailOrderActivityInterface.View view) {
         this.view = view;
         if (model == null) {
             model = new DetailOrderActivityModel();
@@ -36,7 +37,8 @@ public class DetailOrderActivityPresenter implements CookDetailOrderActivityInte
         Log.d(TAG, Thread.currentThread().getName());
         Map<String, Object> readyHaspMap = new HashMap<>();
         readyDish.getOrderItem().setReady(true);
-        readyHaspMap.put(OrderActivityModel.DOCUMENT_READY_FIELD, true);
+        ////
+        readyHaspMap.put(OrderActivityModel.DOCUMENT_READY_FIELD, false);
         model.getRecyclerViewAdapter().notifyItemChanged(readyDish.getPosition());
         model.getDatabase()
             .collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
@@ -48,8 +50,8 @@ public class DetailOrderActivityPresenter implements CookDetailOrderActivityInte
             .set(readyHaspMap, SetOptions.merge()).addOnCompleteListener(task -> {
                 if(task.isSuccessful()) {
                     Log.d(TAG,"DetailOrderActivityPresenter.setDishState writing: SUCCESS" );
-                    model.getDatabase().collection(DetailOrderActivityModel.COLLECTION_ITEMS_LISTENER_NAME)
-                        .document(DetailOrderActivityModel.DOCUMENT_LISTENER_NAME)
+                    model.getDatabase().collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+                        .document(SplashScreenActivityModel.DOCUMENT_DISHES_LISTENER_NAME)
                         .update(readyDish.getTableInfo().getTableName(), FieldValue.arrayUnion(
                             readyDish.getOrderItem().getName()
                                 + OrderActivityModel.DOCUMENT_NAME_DELIMITER

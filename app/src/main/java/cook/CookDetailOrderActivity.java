@@ -12,7 +12,9 @@ import com.example.testfirebase.R;
 
 import cook.interfaces.CookDetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
-import cook.presenters.DetailOrderActivityPresenter;
+import cook.presenters.CookDetailOrderItemsActivityPresenter;
+import dialogsTools.ErrorAlertDialog;
+import tools.Network;
 
 public class CookDetailOrderActivity extends AppCompatActivity implements CookDetailOrderActivityInterface.View {
 
@@ -26,28 +28,33 @@ public class CookDetailOrderActivity extends AppCompatActivity implements CookDe
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initialization();
     }
-
     private void initialization () {
         Intent intent = getIntent();
         tableNumber = intent.getStringExtra(DetailOrderActivityModel.EXTRA_TAG);
-        presenter = new DetailOrderActivityPresenter(this);
+        presenter = new CookDetailOrderItemsActivityPresenter(this);
         setViewData();
     }
-
     @Override
     public void showSetDishReadyDialog(ReadyDish dishData) {
-        new SetDishReadyAlertDialog( dishName -> {
-            presenter.setDishState(dishData);
-        }, dishData.getOrderItem().getName()).show(getSupportFragmentManager(), "");
+        if (Network.isNetworkConnected(this)) {
+            new SetDishReadyAlertDialog( dishName -> {
+                presenter.setDishState(dishData);
+            }, dishData.getOrderItem().getName()).show(getSupportFragmentManager(), "");
+        } else onError(ErrorAlertDialog.INTERNET_CONNECTION);
 
     }
-
     @Override
     public void setViewData() {
         RecyclerView recyclerView = findViewById(R.id.order_items_recycler_view);
         recyclerView.setAdapter(presenter.getAdapter(tableNumber));
     }
-
+    @Override
+    public void onError(int errorCode) {
+        if (!ErrorAlertDialog.isIsExist()) {
+            ErrorAlertDialog.getNewInstance(errorCode)
+                .show(getSupportFragmentManager(), "");
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();

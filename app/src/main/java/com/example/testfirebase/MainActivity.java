@@ -77,30 +77,33 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.tablesFragment:
                         if(currentDestination.getId() != R.id.tablesFragment)
                             navHostController.navigate(R.id.tablesFragment,
-                                    null,
-                                    new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
+                                    null
+                                    //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
+                                );
                         break;
                     case R.id.ordersFragment:
                         if(currentDestination.getId() != R.id.ordersFragment)
                             navHostController.navigate(R.id.ordersFragment,
-                                    null,
-                                    new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
+                                    null
+                                    //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
+                            );
                         break;
                     case R.id.checkFragment:
                         if(currentDestination.getId() != R.id.checkFragment)
                             navHostController.navigate(R.id.checkFragment,
-                                    null,
-                                    new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
+                                    null
+                                    //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
+                            );
                         break;
                     case R.id.profileFragment:
                         if(currentDestination.getId() != R.id.profileFragment)
                             navHostController.navigate(R.id.profileFragment,
-                                    null,
-                                    new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
+                                    null
+                                    //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
+                            );
                         break;
                 }
             }, error -> {
-
                 Log.d(TAG, Thread.currentThread().getName());
             });
     }
@@ -111,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             });
         });
-
     }
     private void initialisation () {
         bottomNavigationView = findViewById(R.id.bottomNavigation);

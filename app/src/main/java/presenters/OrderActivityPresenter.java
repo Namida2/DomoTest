@@ -2,7 +2,7 @@ package presenters;
 
 import android.util.Log;
 
-import com.example.testfirebase.DocumentListenerService;
+import com.example.testfirebase.DocumentDishesListenerService;
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import interfaces.DocumentListenerServiceInterface;
+import interfaces.DocumentDishesListenerServiceInterface;
 import interfaces.OrderActivityInterface;
 import interfaces.ToolsInterface;
 import io.reactivex.rxjava3.core.Observable;
@@ -24,7 +24,7 @@ import model.OrderActivityModel;
 import model.TablesFragmentModel;
 import tools.Pair;
 
-public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentListenerServiceInterface.Subscriber{
+public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerServiceInterface.Subscriber {
 
     private static final String TAG = "myLogs";
     private static final String GUEST_COUNT_KEY = "guestCount";
@@ -42,7 +42,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
             model = new OrderActivityModel();
             model.setAdapter(new OrderRecyclerViewAdapter());
         }
-        DocumentListenerService.getService().subscribe(this);
+        DocumentDishesListenerService.getService().dishesSubscribe(this);
         Log.d(TAG, "OrderActivityPresenter is created");
     }
     @Override
@@ -102,7 +102,9 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
                             else  Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task1.getException());
                             model.getNotEmptyTablesOrdersHashMap().putAll(model.getAllTablesOrdersHashMap());
                             if (finalNeedToNotifyView  && model.getAllTablesOrdersHashMap().size() == collectionSize) {
-                                view.notifyMe();
+                                try {
+                                    view.notifyMe();
+                                } catch (Exception e) {}
                             }
                             if( model.getAllTablesOrdersHashMap().size() == collectionSize) {
                                 for(int i = 1; i <= TABLE_COUNT; ++i) {
@@ -121,7 +123,9 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
             }
             else {
                 Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task.getException().toString());
-                view.notifyMe();
+                try {
+                    view.notifyMe();
+                } catch (Exception e) {}
                 //view.onMenuDialogError(ErrorAlertDialog.INTERNET_CONNECTION);
                 //add a category "SOMETHING WRONG"
             }
@@ -221,10 +225,10 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
                 for(int i = 0; i < orderItemNames.size(); ++i) {
                     dishName = (String) ((ArrayList<?>) notifiable.get(key)).get(i);
                     for(int j = 0; j < orderItems.size(); ++j) {
-                        if( (orderItems.get(i).getName()
+                        if( (orderItems.get(j).getName()
                             + OrderActivityModel.DOCUMENT_NAME_DELIMITER
-                            + orderItems.get(i).getCommentary()).equals(dishName))
-                            orderItems.get(i).setReady(true);
+                            + orderItems.get(j).getCommentary()).equals(dishName))
+                            orderItems.get(j).setReady(true);
                     }
                 }
             } catch (Exception e) { break; }

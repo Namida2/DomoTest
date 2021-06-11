@@ -26,20 +26,17 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initialization();
     }
-
     private void initialization () {
         Intent intent = getIntent();
         tableNumber = intent.getStringExtra(DetailOrderActivityModel.EXTRA_TAG);
         presenter = new DetailOrderItemsActivityPresenter(this);
         setViewData();
     }
-
     @Override
     public void setViewData() {
         RecyclerView recyclerView = findViewById(R.id.order_items_recycler_view);
         recyclerView.setAdapter(presenter.getAdapter(tableNumber));
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
