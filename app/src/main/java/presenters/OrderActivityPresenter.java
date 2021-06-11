@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import interfaces.DocumentDishesListenerServiceInterface;
+import interfaces.DocumentOrdersListenerInterface;
 import interfaces.OrderActivityInterface;
 import interfaces.ToolsInterface;
 import io.reactivex.rxjava3.core.Observable;
@@ -24,7 +25,7 @@ import model.OrderActivityModel;
 import model.TablesFragmentModel;
 import tools.Pair;
 
-public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerServiceInterface.Subscriber {
+public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerServiceInterface.Subscriber, DocumentOrdersListenerInterface.Subscriber {
 
     private static final String TAG = "myLogs";
     private static final String GUEST_COUNT_KEY = "guestCount";
@@ -234,4 +235,16 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
             } catch (Exception e) { break; }
         }
     }
+
+    @Override
+    public void ordersServiceNotifyMe(Object data) {
+
+    }
+
+    @Override
+    public void ordersServiceSetLatestData(Object latestData) {
+
+    }
+
+
 }
