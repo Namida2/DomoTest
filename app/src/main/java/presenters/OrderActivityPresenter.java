@@ -241,10 +241,5 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
 
     }
 
-    @Override
-    public void ordersServiceSetLatestData(Object latestData) {
-
-    }
-
 
 }

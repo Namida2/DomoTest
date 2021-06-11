@@ -11,6 +11,5 @@ public interface DocumentOrdersListenerInterface {
     }
     interface Subscriber {
         void ordersServiceNotifyMe(Object data);
-        void ordersServiceSetLatestData(Object latestData);
     }
 }
