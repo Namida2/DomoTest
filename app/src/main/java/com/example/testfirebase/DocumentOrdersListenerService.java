@@ -131,39 +131,42 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     public void readTableData(Object data, boolean needToNotify) {
         String tableName = (String) data;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        //try {}
-        db.collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
-            .document(tableName)
-            .get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                TableInfo tableInfo = new TableInfo();
-                DocumentSnapshot documentSnapshot = task.getResult();
-                tableInfo.setTableName(documentSnapshot.getId());
-                Map<String, Object> tableIndoHashMap = documentSnapshot.getData();
-                tableInfo.setTableName(tableName);
-                try {
-                    tableInfo.setGuestCount( (long) tableIndoHashMap.get(OrderActivityPresenter.GUEST_COUNT_KEY) );
-                    tableInfo.setIsComplete( (boolean) tableIndoHashMap.get(OrderActivityPresenter.IS_COMPLETE_KEY) );
-                } catch (Exception e) {
-                    Log.d(TAG, "OrderActivityPresenter.setModelDataState tableInfo: " + e.getMessage());
-                    e.printStackTrace();
-                }
-                db.collection( OrderActivityModel.COLLECTION_ORDERS_NAME )
-                    .document( tableInfo.getTableName() )
-                    .collection( OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME )
-                    .get().addOnCompleteListener(task1 -> {
-                    if(task1.isSuccessful()) {
-                        latestTableInfo = tableInfo;
-                        latestDishData = new HashMap<>(); // нужно tableInfo подписчикам
-                        List<OrderItem> orderItemsList = task1.getResult().toObjects(OrderItem.class);
-                        latestDishData.put(tableInfo.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true));
-                        if(needToNotify) ordersNotifyAllSubscribers(latestDishData);
-                        else firstCall.set(false);
+        try {
+            db.collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
+                .document(tableName)
+                .get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    TableInfo tableInfo = new TableInfo();
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    tableInfo.setTableName(documentSnapshot.getId());
+                    Map<String, Object> tableIndoHashMap = documentSnapshot.getData();
+                    tableInfo.setTableName(tableName);
+                    try {
+                        tableInfo.setGuestCount((long) tableIndoHashMap.get(OrderActivityPresenter.GUEST_COUNT_KEY));
+                        tableInfo.setIsComplete((boolean) tableIndoHashMap.get(OrderActivityPresenter.IS_COMPLETE_KEY));
+                    } catch (Exception e) {
+                        Log.d(TAG, "OrderActivityPresenter.setModelDataState tableInfo: " + e.getMessage());
+                        e.printStackTrace();
                     }
-                    else Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task1.getException());
-                });
-            }
-        });
+                    db.collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
+                        .document(tableInfo.getTableName())
+                        .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME)
+                        .get().addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            latestTableInfo = tableInfo;
+                            latestDishData = new HashMap<>(); // нужно tableInfo подписчикам
+                            List<OrderItem> orderItemsList = task1.getResult().toObjects(OrderItem.class);
+                            latestDishData.put(tableInfo.getTableName(), new Pair<>(new ArrayList<>(orderItemsList), true));
+                            if (needToNotify) ordersNotifyAllSubscribers(latestDishData);
+                            else firstCall.set(false);
+                        } else
+                            Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task1.getException());
+                    });
+                }
+            });
+        } catch (Exception e) {
+            Log.d(TAG, "OrderActivityPresenter.setModelDataState: collection orders is empty." );
+        }
     }
 
     @Override

@@ -70,7 +70,6 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
                     categoryNames.add(new DishCategoryInfo<>(documentSnapshot.getId(), 0));
                 getCategoryNameObservable(categoryNames)
                     .subscribe(categoryNameItem -> {
-                        Log.d(TAG, "MenuDialogPresenter.initialization: " + categoryNameItem);
                         model.getDatabase().collection(MENU_COLLECTION_NAME)
                             .document(categoryNameItem.categoryName)
                             .collection(DISHES_COLLECTION_NAME)
@@ -94,14 +93,14 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
                                         setModelViewState();
                                 }
                             }
-                            else  Log.d(TAG, "MenuDialogPresenter.initialization: " + task1.getException());
+                            else  Log.d(TAG, "MenuDialogPresenter.setModelDataState: " + task1.getException());
                         });
                     }, error -> {
                     }, () -> {
                     });
             }
             else {
-                Log.d(TAG, "MenuDialogPresenter.initialization: " + task.getException().toString());
+                Log.d(TAG, "MenuDialogPresenter.setModelDataState: " + task.getException().toString());
                 view.onMenuDialogError(ErrorAlertDialog.INTERNET_CONNECTION);
                 // add a category "SOMETHING WRONG"
             }
