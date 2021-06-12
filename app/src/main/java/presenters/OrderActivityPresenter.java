@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.example.testfirebase.DocumentDishesListenerService;
 import com.example.testfirebase.DocumentOrdersListenerService;
-import com.example.testfirebase.SplashScreenActivity;
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
@@ -33,8 +32,8 @@ import tools.UserData;
 public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerServiceInterface.Subscriber, DocumentOrdersListenerInterface.Subscriber {
 
     private static final String TAG = "myLogs";
-    private static final String GUEST_COUNT_KEY = "guestCount";
-    private static final String IS_COMPLETE_KEY = "isComplete";
+    public static final String GUEST_COUNT_KEY = "guestCount";
+    public static final String IS_COMPLETE_KEY = "isComplete";
 
     private static int TABLE_COUNT = 0;
 
@@ -49,7 +48,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
             model.setAdapter(new OrderRecyclerViewAdapter());
         }
         DocumentDishesListenerService.getService().dishesSubscribe(this);
-        DocumentOrdersListenerService.getService().ordersServiceSubscribe(this);
+        DocumentOrdersListenerService.getService().ordersSubscribe(this);
         Log.d(TAG, "OrderActivityPresenter is created");
     }
     @Override
@@ -183,9 +182,17 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
                             else Log.d(TAG, "OrderActivityPresenter.writeOrderToDb: " + task.getException());
                         });
                     }
-                    Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: COMPLETE");
                 }
                 else Log.d(TAG, "OrderActivityPresenter.writeOrderToDb: " + guestCountTask.getException());
+        });
+        Map<String, Object> data = new HashMap<>();
+        data.put(SplashScreenActivityModel.FIELD_FIELD_TABLE_NAME, OrderActivityModel.DOCUMENT_TABLE + tableNumber);
+        model.getDatabase()
+            .collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+            .document(SplashScreenActivityModel.DOCUMENT_ORDERS_LISTENER_NAME)
+            .set(data).addOnCompleteListener(task -> {
+                if(task.isSuccessful())
+                    Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: SUCCESS");
         });
     }
     @Override
@@ -243,46 +250,29 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
     }
 
     @Override
-    public void ordersServiceNotifyMe(Object data) {
-        String tableName = (String) data;
-        if (UserData.post != SplashScreenActivityModel.COOK_POST_NAME)
-            DocumentOrdersListenerService.getService().ordersServiceShowNotification(tableName, DocumentOrdersListenerService.NEW_ORDER);
-        model.getDatabase()
-            .collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
-            .document(tableName)
-            .get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                TableInfo tableInfo = new TableInfo();
-                DocumentSnapshot documentSnapshot = task.getResult();
-                tableInfo.setTableName(documentSnapshot.getId());
-                Map<String, Object> tableIndoHashMap = documentSnapshot.getData();
-                tableInfo.setTableName(tableName);
-                try {
-                    tableInfo.setGuestCount( (long) tableIndoHashMap.get(GUEST_COUNT_KEY) );
-                    tableInfo.setIsComplete( (boolean) tableIndoHashMap.get(IS_COMPLETE_KEY) );
-                } catch (Exception e) {
-                    Log.d(TAG, "OrderActivityPresenter.setModelDataState tableInfo: " + e.getMessage());
-                    e.printStackTrace();
-                }
+    public void ordersNotifyMe(Object data) {
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> tableName = (Map<String, Pair<ArrayList<OrderItem>, Boolean>>) data;
+        if (UserData.post != SplashScreenActivityModel.WAITER_POST_NAME)
+            DocumentOrdersListenerService.getService().ordersShowNotification(tableName, DocumentOrdersListenerService.NEW_ORDER);
+        List<OrderItem> orderItemsList = task1.getResult().toObjects(OrderItem.class);\
 
-                model.getDatabase().collection( OrderActivityModel.COLLECTION_ORDERS_NAME )
-                    .document( tableInfo.getTableName() )
-                    .collection( OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME )
-                    .get().addOnCompleteListener(task1 -> {
-                    if(task1.isSuccessful()) {
-                        List<OrderItem> orderItemsList = task1.getResult().toObjects(OrderItem.class);
-                        try {
-                            model.getAllTablesOrdersHashMap().remove(tableName);
-                            model.getNotEmptyTablesOrdersHashMap().remove(tableName);
-                        } catch (Exception e) {}
-                        if (!model.getTableInfoArrayList().contains(tableInfo))
-                            model.getTableInfoArrayList().add(tableInfo);
-                        model.getAllTablesOrdersHashMap().put( tableInfo.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true) );
-                        model.getNotEmptyTablesOrdersHashMap().put( tableInfo.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true) );
-                    }
-                    else  Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task1.getException());
-                });
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaa = model.getAllTablesOrdersHashMap();
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> bbb = model.getNotEmptyTablesOrdersHashMap();
+        try {
+            model.getAllTablesOrdersHashMap().remove(tableName);
+            model.getNotEmptyTablesOrdersHashMap().remove(tableName);
+        } catch (Exception e) {}
+        ArrayList<TableInfo> ttt = model.getTableInfoArrayList();
+        for(int i = 0; i < model.getTableInfoArrayList().size(); ++i) {
+            if (model.getTableInfoArrayList().get(i).getTableName().equals(tableInfo.getTableName())) {
+                model.getTableInfoArrayList().remove(i); break;
             }
-        });
+        }
+        model.getTableInfoArrayList().add(tableInfo);
+        if (model.getTableInfoArrayList().contains(tableInfo))
+            model.getTableInfoArrayList().remove(tableInfo);
+        model.getAllTablesOrdersHashMap().put( tableInfo.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true) );
+        model.getNotEmptyTablesOrdersHashMap().put( tableInfo.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true) );
+        int a = 10;
     }
 }

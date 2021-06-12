@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 
 
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ import java.util.function.Consumer;
 
 import cook.model.OrdersFragmentModel;
 import interfaces.DocumentDishesListenerServiceInterface;
-import interfaces.DocumentOrdersListenerInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -55,6 +55,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     private static DocumentDishesListenerService service;
     private static Consumer<Boolean> serviceCreatedConsumer;
     private static Disposable disposable;
+    private static ListenerRegistration registration;
     private AtomicBoolean firstCall = new AtomicBoolean(true);
 
     public static void setServiceCreatedConsumer (Consumer<Boolean> serviceCreatedConsumer) {
@@ -100,7 +101,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
                             String dishName = dishNames.get(i);
                             dishName = dishName.substring(0, dishName
                                 .indexOf(OrdersFragmentModel.DELIMITER));
-                            showNotification(TABLE + tableNumber, dishName + ": " + READY_TO_SERVE);
+                            dishesShowNotification(TABLE + tableNumber, dishName + ": " + READY_TO_SERVE);
                         } catch (Exception e) {
                             Log.d(TAG, "DocumentListenerService.onCreate: wrong delimiter location");
                         }
@@ -132,7 +133,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     private Observable<Map<String, Object>> getObservable (){
         return Observable.create(emitter -> {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+            registration = db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
                 .document(SplashScreenActivityModel.DOCUMENT_DISHES_LISTENER_NAME)
                 .addSnapshotListener( (snapshot, error) -> {
                 if (error != null) {
@@ -160,6 +161,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     }
     public static void unSubscribeFromDatabase() {
         disposable.dispose();
+        registration.remove();
     }
     @Override
     public void onDestroy() {
@@ -178,11 +180,11 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
         subscriber.setLatestData(latestData);
     }
     @Override
-    public void unSubscribe(DocumentDishesListenerServiceInterface.Subscriber subscriber) {
+    public void dishesUnSubscribe(DocumentDishesListenerServiceInterface.Subscriber subscriber) {
         subscribers.remove(subscriber);
     }
     @Override
-    public void showNotification(String title, String name) {
+    public void dishesShowNotification(String title, String name) {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_notification);
         Notification notification = new NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_accept)

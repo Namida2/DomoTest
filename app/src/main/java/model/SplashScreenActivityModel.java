@@ -14,6 +14,7 @@ public class SplashScreenActivityModel implements SplashScreenInterface.Model {
     public static final String DOCUMENT_DISHES_LISTENER_NAME = "dishes_listener";
     public static final String DOCUMENT_ORDERS_LISTENER_NAME = "orders_listener";
     public static final String FIELD_TABLE_NAME = "tableName";
+    public static final String FIELD_FIELD_TABLE_NAME = "tableName";
 
     public static final String COOK_POST_NAME = "Повар";
     public static final String WAITER_POST_NAME = "Официант";

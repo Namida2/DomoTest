@@ -54,7 +54,7 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
     }
     @Override
     public void onDestroy() {
-        DocumentDishesListenerService.getService().unSubscribe(this);
+        DocumentDishesListenerService.getService().dishesUnSubscribe(this);
     }
     //DocumentListenerService
     @Override

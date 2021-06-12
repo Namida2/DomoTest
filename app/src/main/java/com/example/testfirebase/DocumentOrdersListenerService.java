@@ -15,22 +15,31 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.testfirebase.order.OrderItem;
+import com.example.testfirebase.order.TableInfo;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 
 
+import java.net.PasswordAuthentication;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
-import interfaces.DocumentDishesListenerServiceInterface;
 import interfaces.DocumentOrdersListenerInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
+import presenters.OrderActivityPresenter;
+import tools.Pair;
+import tools.UserData;
 
 import static registration.LogInActivity.TAG;
 
@@ -46,11 +55,12 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
 
     private NotificationManager notificationManager;
     private static ArrayList<DocumentOrdersListenerInterface.Subscriber> subscribers;
-    private Map<String, Object> latestData;
 
     private static DocumentOrdersListenerService service;
     private static Disposable disposable;
+    private static ListenerRegistration registration;
     private AtomicBoolean firstCall = new AtomicBoolean(true);
+    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> latestData;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -60,12 +70,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
         if (latestData == null) latestData = new HashMap<>();
         notificationManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         createChannel(notificationManager);
-        disposable = getObservable()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(data -> {
-                String tableName = (String) data.get(SplashScreenActivityModel.FIELD_TABLE_NAME);
-                ordersServiceNotifyAllSubscribers(data.get(SplashScreenActivityModel.FIELD_TABLE_NAME));
-            });
+        startDocumentListening();
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -73,20 +78,20 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
         return START_STICKY;
     }
     @Override
-    public void ordersServiceNotifyAllSubscribers(Object data) {
+    public void ordersNotifyAllSubscribers(Object data) {
         for(DocumentOrdersListenerInterface.Subscriber subscriber : subscribers)
-            subscriber.ordersServiceNotifyMe(data);
+            subscriber.ordersNotifyMe(data);
     }
     @Override
-    public void ordersServiceSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber) {
+    public void ordersSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber) {
         subscribers.add(subscriber);
     }
     @Override
-    public void ordersServiceUnSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber) {
+    public void ordersUnSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber) {
         subscribers.remove(subscriber);
     }
     @Override
-    public void ordersServiceShowNotification(String title, String name) {
+    public void ordersShowNotification(String title, String name) {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_notification);
         Notification notification = new NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_accept)
@@ -100,7 +105,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
             .build();
         notificationManager.notify(id++, notification); //important thing
     }
-    private void createChannel (NotificationManager notificationManager) {
+    private void createChannel(NotificationManager notificationManager) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             channel = new NotificationChannel(
                 channelId,
@@ -110,25 +115,55 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
             notificationManager.createNotificationChannel(channel);
         }
     }
-    private Observable<Map<String, Object>> getObservable (){
-        return Observable.create(emitter -> {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
-                .document(SplashScreenActivityModel.DOCUMENT_ORDERS_LISTENER_NAME)
-                .addSnapshotListener( (snapshot, error) -> {
-                    if (error != null) {
-                        Log.d(TAG, "Error!");
-                        return;
+    private void startDocumentListening() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        registration = db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+            .document(SplashScreenActivityModel.DOCUMENT_ORDERS_LISTENER_NAME)
+            .addSnapshotListener( (snapshot, error) -> {
+                if (error != null) {
+                    Log.d(TAG, "Error!");
+                    return;
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    readTableData(snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME), !firstCall.get());
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            });
+    }
+    public void readTableData(Object data, boolean needToNotify) {
+        String tableName = (String) data;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
+            .document(tableName)
+            .get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                TableInfo tableInfo = new TableInfo();
+                DocumentSnapshot documentSnapshot = task.getResult();
+                tableInfo.setTableName(documentSnapshot.getId());
+                Map<String, Object> tableIndoHashMap = documentSnapshot.getData();
+                tableInfo.setTableName(tableName);
+                try {
+                    tableInfo.setGuestCount( (long) tableIndoHashMap.get(OrderActivityPresenter.GUEST_COUNT_KEY) );
+                    tableInfo.setIsComplete( (boolean) tableIndoHashMap.get(OrderActivityPresenter.IS_COMPLETE_KEY) );
+                } catch (Exception e) {
+                    Log.d(TAG, "OrderActivityPresenter.setModelDataState tableInfo: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                db.collection( OrderActivityModel.COLLECTION_ORDERS_NAME )
+                    .document( tableInfo.getTableName() )
+                    .collection( OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME )
+                    .get().addOnCompleteListener(task1 -> {
+                    if(task1.isSuccessful()) {
+                        latestData = new HashMap<>(); // нужно tableInfo подписчикам
+                        List<OrderItem> orderItemsList = task1.getResult().toObjects(OrderItem.class);
+                        latestData.put(tableInfo.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true));
+                        if(needToNotify) ordersNotifyAllSubscribers(latestData);
+                        else firstCall.set(false);
                     }
-                    if (snapshot != null && snapshot.exists() && !firstCall.get()) {
-                        emitter.onNext(snapshot.getData());
-                    } else {
-                        Log.d(TAG, "Current data: null");
-                    }
-                    if (firstCall.get() && snapshot != null)
-                        latestData = snapshot.getData();
-                    firstCall.set(false);
+                    else Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task1.getException());
                 });
+            }
         });
     }
     public static DocumentOrdersListenerService getService() {
