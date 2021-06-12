@@ -42,9 +42,10 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     private static String channelName = "DomoChannel";
     private static String TABLE = "Столик ";
     private static String READY_TO_SERVE = "готово к подаче";
+    public static String NEW_ORDER = "Новый заказ";
 
     private NotificationManager notificationManager;
-    private static ArrayList<DocumentDishesListenerServiceInterface.Subscriber> subscribers;
+    private static ArrayList<DocumentOrdersListenerInterface.Subscriber> subscribers;
     private Map<String, Object> latestData;
 
     private static DocumentOrdersListenerService service;
@@ -62,6 +63,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
         disposable = getObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(data -> {
+                String tableName = (String) data.get(SplashScreenActivityModel.FIELD_TABLE_NAME);
                 ordersServiceNotifyAllSubscribers(data.get(SplashScreenActivityModel.FIELD_TABLE_NAME));
             });
     }
@@ -72,16 +74,15 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     }
     @Override
     public void ordersServiceNotifyAllSubscribers(Object data) {
-        for(DocumentDishesListenerServiceInterface.Subscriber subscriber : subscribers)
-            subscriber.notifyMe(data);
+        for(DocumentOrdersListenerInterface.Subscriber subscriber : subscribers)
+            subscriber.ordersServiceNotifyMe(data);
     }
     @Override
-    public void ordersServiceSubscribe(DocumentDishesListenerServiceInterface.Subscriber subscriber) {
+    public void ordersServiceSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber) {
         subscribers.add(subscriber);
-        subscriber.setLatestData(latestData);
     }
     @Override
-    public void ordersServiceUnSubscribe(DocumentDishesListenerServiceInterface.Subscriber subscriber) {
+    public void ordersServiceUnSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber) {
         subscribers.remove(subscriber);
     }
     @Override
