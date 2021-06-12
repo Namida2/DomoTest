@@ -22,7 +22,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
 
-import java.net.PasswordAuthentication;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,14 +31,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 import interfaces.DocumentOrdersListenerInterface;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
 import presenters.OrderActivityPresenter;
 import tools.Pair;
-import tools.UserData;
 
 import static registration.LogInActivity.TAG;
 
@@ -60,14 +56,15 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     private static Disposable disposable;
     private static ListenerRegistration registration;
     private AtomicBoolean firstCall = new AtomicBoolean(true);
-    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> latestData;
+    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> latestDishData;
+    private static TableInfo latestTableInfo;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate() {
         service = this;
         if (subscribers == null) subscribers = new ArrayList<>();
-        if (latestData == null) latestData = new HashMap<>();
+        if (latestDishData == null) latestDishData = new HashMap<>();
         notificationManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         createChannel(notificationManager);
         startDocumentListening();
@@ -134,6 +131,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     public void readTableData(Object data, boolean needToNotify) {
         String tableName = (String) data;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //try {}
         db.collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
             .document(tableName)
             .get().addOnCompleteListener(task -> {
@@ -155,16 +153,22 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
                     .collection( OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME )
                     .get().addOnCompleteListener(task1 -> {
                     if(task1.isSuccessful()) {
-                        latestData = new HashMap<>(); // нужно tableInfo подписчикам
+                        latestTableInfo = tableInfo;
+                        latestDishData = new HashMap<>(); // нужно tableInfo подписчикам
                         List<OrderItem> orderItemsList = task1.getResult().toObjects(OrderItem.class);
-                        latestData.put(tableInfo.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true));
-                        if(needToNotify) ordersNotifyAllSubscribers(latestData);
+                        latestDishData.put(tableInfo.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true));
+                        if(needToNotify) ordersNotifyAllSubscribers(latestDishData);
                         else firstCall.set(false);
                     }
                     else Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task1.getException());
                 });
             }
         });
+    }
+
+    @Override
+    public TableInfo getTableInfo () {
+        return latestTableInfo;
     }
     public static DocumentOrdersListenerService getService() {
         return service;

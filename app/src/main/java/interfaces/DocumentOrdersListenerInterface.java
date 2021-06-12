@@ -1,5 +1,7 @@
 package interfaces;
 
+import com.example.testfirebase.order.TableInfo;
+
 import java.util.Map;
 
 public interface DocumentOrdersListenerInterface {
@@ -8,6 +10,7 @@ public interface DocumentOrdersListenerInterface {
         void ordersSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber);
         void ordersUnSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber);
         void ordersShowNotification(String title, String name);
+        TableInfo getTableInfo ();
     }
     interface Subscriber {
         void ordersNotifyMe(Object data);

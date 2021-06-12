@@ -251,16 +251,16 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
 
     @Override
     public void ordersNotifyMe(Object data) {
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> tableName = (Map<String, Pair<ArrayList<OrderItem>, Boolean>>) data;
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> order = (Map<String, Pair<ArrayList<OrderItem>, Boolean>>) data;
+        TableInfo tableInfo = DocumentOrdersListenerService.getService().getTableInfo();
         if (UserData.post != SplashScreenActivityModel.WAITER_POST_NAME)
-            DocumentOrdersListenerService.getService().ordersShowNotification(tableName, DocumentOrdersListenerService.NEW_ORDER);
-        List<OrderItem> orderItemsList = task1.getResult().toObjects(OrderItem.class);\
+            DocumentOrdersListenerService.getService().ordersShowNotification(tableInfo.getTableName(), DocumentOrdersListenerService.NEW_ORDER);
 
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaa = model.getAllTablesOrdersHashMap();
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> bbb = model.getNotEmptyTablesOrdersHashMap();
         try {
-            model.getAllTablesOrdersHashMap().remove(tableName);
-            model.getNotEmptyTablesOrdersHashMap().remove(tableName);
+            model.getAllTablesOrdersHashMap().remove(tableInfo.getTableName());
+            model.getNotEmptyTablesOrdersHashMap().remove(tableInfo.getTableName());
         } catch (Exception e) {}
         ArrayList<TableInfo> ttt = model.getTableInfoArrayList();
         for(int i = 0; i < model.getTableInfoArrayList().size(); ++i) {
@@ -269,10 +269,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
             }
         }
         model.getTableInfoArrayList().add(tableInfo);
-        if (model.getTableInfoArrayList().contains(tableInfo))
-            model.getTableInfoArrayList().remove(tableInfo);
-        model.getAllTablesOrdersHashMap().put( tableInfo.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true) );
-        model.getNotEmptyTablesOrdersHashMap().put( tableInfo.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true) );
-        int a = 10;
+        model.getAllTablesOrdersHashMap().putAll(order);
+        model.getNotEmptyTablesOrdersHashMap().putAll(order);
     }
 }
