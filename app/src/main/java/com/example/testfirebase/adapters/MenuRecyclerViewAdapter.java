@@ -34,7 +34,7 @@ import static registration.LogInActivity.TAG;
 
 public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
-    Consumer<Dish> acceptDishConsumer;
+    private Consumer<Dish> acceptDishConsumer;
     private ArrayList<DishCategoryInfo<String, Integer>> categoryNames;
     private Map<String, List<Dish>> menu;
     private ArrayList<Object> menuItems;

@@ -139,8 +139,9 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
                     if(data != null) {
                         String tableName = (String) snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME);
                         readTableData(snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME), !firstCall.get());
-                        if (subscribers != null && !firstCall.get())
+                        if(subscribers != null && subscribers.size() == 0) {
                             ordersShowNotification(tableName, DocumentOrdersListenerService.NEW_ORDER);
+                        }
                     }
                 } else {
                     Log.d(TAG, "Current data: null");
@@ -178,7 +179,6 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
                             latestDishData.put(tableInfo.getTableName(), new Pair<>(new ArrayList<>(orderItemsList), true));
                             if (needToNotify) ordersNotifyAllSubscribers(latestDishData);
                             else firstCall.set(false);
-
                         } else
                             Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task1.getException());
                     });

@@ -22,6 +22,9 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
 
     private ArrayList<OrderItem> orderItemsArrayList;
 
+    public void setOrderItemsArrayList(ArrayList<OrderItem> orderItemsArrayList) {
+        this.orderItemsArrayList = orderItemsArrayList;
+    }
     public OrderRecyclerViewAdapter() {
         orderItemsArrayList = new ArrayList<>();
     }
@@ -66,8 +69,5 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     public void addOrder(OrderItem order) {
         this.orderItemsArrayList.add(order);
         this.notifyDataSetChanged();
-    }
-    public void setOrderItemsArrayList(ArrayList<OrderItem> orderItemsArrayList) {
-        this.orderItemsArrayList = orderItemsArrayList;
     }
 }

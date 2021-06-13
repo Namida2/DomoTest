@@ -162,7 +162,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
 
         tableInfoHashMap.put(OrderActivityModel.DOCUMENT_GUEST_COUNT_FIELD, guestCount);
         tableInfoHashMap.put(OrderActivityModel.DOCUMENT_IS_COMPLETE_FIELD, false);
-
+        // данные из адаптера не совпадают с данными из основного списка
         model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
             .document(OrderActivityModel.DOCUMENT_TABLE + tableNumber)
             .set(tableInfoHashMap).addOnCompleteListener(guestCountTask -> {
