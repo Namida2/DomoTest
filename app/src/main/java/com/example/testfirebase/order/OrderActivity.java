@@ -92,6 +92,7 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         bottomAppBar.setNavigationOnClickListener(view -> { // add isExist
             OrderMenuBottomSheetDialog dialog = OrderMenuBottomSheetDialog.getNewInstance(orderWasAccepted -> {
                 orderPresenter.acceptAndWriteOrderToDb(tableNumber, guestsCount);
+                finish();
             });
             dialog.show(getSupportFragmentManager(), "");
         });

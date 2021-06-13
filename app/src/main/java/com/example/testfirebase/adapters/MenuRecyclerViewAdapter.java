@@ -111,7 +111,7 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             case 1:
                 MenuItemViewHolder menuItemViewHolder = (MenuItemViewHolder) holder;
                 Dish dish = (Dish) menuItems.get(position);
-                menuItemViewHolder.name.setText (dish.getName());
+                menuItemViewHolder.name.setText(dish.getName());
                 menuItemViewHolder.weight.setText(dish.getWeight());
                 menuItemViewHolder.cost.setText(dish.getCost());
                 Animations.Companion.startAnimationViewShowing(menuItemViewHolder.menuItemContainer);

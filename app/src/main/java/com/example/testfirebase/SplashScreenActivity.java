@@ -25,10 +25,14 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         startService(new Intent(this, DocumentOrdersListenerService.class));
-        startService(new Intent(this, DocumentDishesListenerService.class));
+        try {
+            stopService(new Intent(this, DocumentDishesListenerService.class));
+            DocumentDishesListenerService.unSubscribeFromDatabase();
+        } catch (Exception e) {}
         DocumentDishesListenerService.setServiceCreatedConsumer(isCreated -> {
             presenter = new SplashScreenActivityPresenter(this);
         });
+        startService(new Intent(this, DocumentDishesListenerService.class));
     }
     @Override
     public void setCurrentUserPost(String post) {

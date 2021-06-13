@@ -19,7 +19,7 @@ public interface OrderActivityInterface {
         void setAdapter(OrderRecyclerViewAdapter adapter);
         void setTableInfoArrayList(ArrayList<TableInfo> tablesInfo);
         ArrayList<OrderItem> getOrderItemsArrayList(int tableNumber);
-        public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber);
+        Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber);
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> getAllTablesOrdersHashMap();
         void setAllTablesOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap);
         void setNotEmptyTablesOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap);

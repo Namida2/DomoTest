@@ -15,8 +15,11 @@ import com.example.testfirebase.order.OrderItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Map;
 
+import model.OrderActivityModel;
 import tools.Animations;
+import tools.Pair;
 
 public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecyclerViewAdapter.ViewHolder> {
 
@@ -69,6 +72,9 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
         return orderItemsArrayList.size();
     }
     public void addOrder(OrderItem order) {
+        OrderActivityModel model = new OrderActivityModel();
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> orderItems = model.getAllTablesOrdersHashMap();
+        ArrayList<OrderItem> adapterItems = getOrderItemsArrayList();
         this.orderItemsArrayList.add(order);
         this.notifyDataSetChanged();
     }
