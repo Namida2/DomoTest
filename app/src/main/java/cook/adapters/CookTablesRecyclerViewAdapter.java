@@ -4,6 +4,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import java.util.function.Consumer;
 
 import cook.model.OrdersFragmentModel;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import tools.Animations;
 import tools.Pair;
 
 public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTablesRecyclerViewAdapter.ViewHolder> {
@@ -37,6 +39,9 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
     public CookTablesRecyclerViewAdapter () {}
 
     public CookTablesRecyclerViewAdapter (Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap) {
+       setOrdersArrayList(ordersHashMap);
+    }
+    public void setOrdersArrayList (Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap) {
         Set<String> keys = ordersHashMap.keySet();
         ordersArrayList = new ArrayList<>();
         tableNames = new ArrayList<>();
@@ -83,6 +88,7 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
             .subscribe(unit -> {
                 acceptOrderArrayList.accept(tableNames.get(position));
             });
+        Animations.Companion.startAnimationViewShowing(holder.container);
     }
     @NonNull
     @NotNull

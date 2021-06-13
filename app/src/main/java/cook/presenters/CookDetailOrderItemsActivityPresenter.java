@@ -14,6 +14,7 @@ import cook.ReadyDish;
 import cook.adapters.CookDetailOrderItemsRecyclerViewAdapter;
 import cook.interfaces.CookDetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
+import interfaces.DocumentOrdersListenerInterface;
 import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
 
@@ -93,5 +94,4 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
             view.showSetDishReadyDialog(dishData);
         });
     }
-
 }

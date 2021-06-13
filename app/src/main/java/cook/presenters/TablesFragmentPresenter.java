@@ -60,23 +60,23 @@ public class TablesFragmentPresenter implements OrdersFragmentInterface.Presente
     public void ordersNotifyMe(Object data) {
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> order = (Map<String, Pair<ArrayList<OrderItem>, Boolean>>) data;
         TableInfo tableInfo = DocumentOrdersListenerService.getService().getTableInfo();
-        if (!UserData.post.equals(SplashScreenActivityModel.WAITER_POST_NAME))
-            DocumentOrdersListenerService.getService().ordersShowNotification(tableInfo.getTableName(), DocumentOrdersListenerService.NEW_ORDER);
-
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaa = model.getAllTablesOrdersHashMap();
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> bbb = model.getNotEmptyTablesOrdersHashMap();
+        OrderActivityModel orderActivityModel = new OrderActivityModel();
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaa = orderActivityModel.getAllTablesOrdersHashMap();
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> bbb = orderActivityModel.getNotEmptyTablesOrdersHashMap();
         try {
-            model.getAllTablesOrdersHashMap().remove(tableInfo.getTableName());
-            model.getNotEmptyTablesOrdersHashMap().remove(tableInfo.getTableName());
+            orderActivityModel.getAllTablesOrdersHashMap().remove(tableInfo.getTableName());
+            orderActivityModel.getNotEmptyTablesOrdersHashMap().remove(tableInfo.getTableName());
         } catch (Exception e) {}
-        ArrayList<TableInfo> ttt = model.getTableInfoArrayList();
-        for(int i = 0; i < model.getTableInfoArrayList().size(); ++i) {
-            if (model.getTableInfoArrayList().get(i).getTableName().equals(tableInfo.getTableName())) {
-                model.getTableInfoArrayList().remove(i); break;
+        ArrayList<TableInfo> ttt = orderActivityModel.getTableInfoArrayList();
+        for(int i = 0; i < orderActivityModel.getTableInfoArrayList().size(); ++i) {
+            if (orderActivityModel.getTableInfoArrayList().get(i).getTableName().equals(tableInfo.getTableName())) {
+                orderActivityModel.getTableInfoArrayList().remove(i); break;
             }
         }
-        model.getTableInfoArrayList().add(tableInfo);
-        model.getAllTablesOrdersHashMap().putAll(order);
-        model.getNotEmptyTablesOrdersHashMap().putAll(order);
+        orderActivityModel.getTableInfoArrayList().add(tableInfo);
+        orderActivityModel.getAllTablesOrdersHashMap().putAll(order);
+        orderActivityModel.getNotEmptyTablesOrdersHashMap().putAll(order);
+        model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
+        model.getAdapter().notifyDataSetChanged();
     }
 }
