@@ -35,5 +35,6 @@ public interface OrderActivityInterface {
         void orderRecyclerViewOnActivityDestroy(int tableNumber);
         void acceptAndWriteOrderToDb(int tableNumber, int guestCount);
         ArrayList<TableInfo> getTableInfoArrayList();
+        void onDestroy();
     }
 }

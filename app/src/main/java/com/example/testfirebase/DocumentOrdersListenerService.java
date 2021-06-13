@@ -81,7 +81,15 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     }
     @Override
     public void ordersSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber) {
-        subscribers.add(subscriber);
+        boolean subscriberAlreadyAdded = false;
+        for(DocumentOrdersListenerInterface.Subscriber mySubscriber : subscribers)
+            if(mySubscriber.getClass() == subscriber.getClass()) {
+                subscriberAlreadyAdded = true;
+                break;
+            }
+        if(!subscriberAlreadyAdded) {
+            subscribers.add(subscriber);
+        }
     }
     @Override
     public void ordersUnSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber) {

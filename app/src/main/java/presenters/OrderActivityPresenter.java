@@ -49,6 +49,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
         }
         DocumentDishesListenerService.getService().dishesSubscribe(this);
         DocumentOrdersListenerService.getService().ordersSubscribe(this);
+        Log.d(TAG, "Subscribe to services");
         Log.d(TAG, "OrderActivityPresenter is created");
     }
     @Override
@@ -199,6 +200,14 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
     public ArrayList<TableInfo> getTableInfoArrayList() {
         return model.getTableInfoArrayList();
     }
+
+    @Override
+    public void onDestroy() {
+        DocumentDishesListenerService.getService().dishesUnSubscribe(this);
+        DocumentOrdersListenerService.getService().ordersSubscribe(this);
+        Log.d(TAG, "Unsubscribe to services");
+    }
+
     @Override
     public void orderRecyclerViewOnActivityDestroy(int tableNumber) {
         if ( !model.getOrderInfo(tableNumber).second )
@@ -253,7 +262,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
     public void ordersNotifyMe(Object data) {
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> order = (Map<String, Pair<ArrayList<OrderItem>, Boolean>>) data;
         TableInfo tableInfo = DocumentOrdersListenerService.getService().getTableInfo();
-        if (UserData.post != SplashScreenActivityModel.WAITER_POST_NAME)
+        if (!UserData.post.equals(SplashScreenActivityModel.WAITER_POST_NAME))
             DocumentOrdersListenerService.getService().ordersShowNotification(tableInfo.getTableName(), DocumentOrdersListenerService.NEW_ORDER);
 
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaa = model.getAllTablesOrdersHashMap();

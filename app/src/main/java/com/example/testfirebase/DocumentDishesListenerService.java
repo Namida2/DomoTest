@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 
 import cook.model.OrdersFragmentModel;
 import interfaces.DocumentDishesListenerServiceInterface;
+import interfaces.DocumentOrdersListenerInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -175,9 +176,16 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     }
     @Override
     public void dishesSubscribe(DocumentDishesListenerServiceInterface.Subscriber subscriber) {
-        subscribers.remove(subscriber);
-        subscribers.add(subscriber);
-        subscriber.setLatestData(latestData);
+        boolean subscriberAlreadyAdded = false;
+        for(DocumentDishesListenerServiceInterface.Subscriber mySubscriber : subscribers)
+            if(mySubscriber.getClass() == subscriber.getClass()) {
+                subscriberAlreadyAdded = true;
+                break;
+            }
+        if(!subscriberAlreadyAdded) {
+            subscribers.add(subscriber);
+            subscriber.setLatestData(latestData);
+        }
     }
     @Override
     public void dishesUnSubscribe(DocumentDishesListenerServiceInterface.Subscriber subscriber) {
