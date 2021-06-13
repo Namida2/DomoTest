@@ -158,6 +158,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
     public void acceptAndWriteOrderToDb(int tableNumber, int guestCount) {
         model.getOrderInfo(tableNumber).second = true;
         ArrayList<OrderItem> orderItems = model.getOrderInfo(tableNumber).first;
+        ArrayList<OrderItem> adapterItems = model.getAdapter().getOrderItemsArrayList();
         Map<String, Object> tableInfoHashMap = new HashMap<>();
 
         tableInfoHashMap.put(OrderActivityModel.DOCUMENT_GUEST_COUNT_FIELD, guestCount);

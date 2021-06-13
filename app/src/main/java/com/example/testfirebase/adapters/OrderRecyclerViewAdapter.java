@@ -25,9 +25,11 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     public void setOrderItemsArrayList(ArrayList<OrderItem> orderItemsArrayList) {
         this.orderItemsArrayList = orderItemsArrayList;
     }
-    public OrderRecyclerViewAdapter() {
-        orderItemsArrayList = new ArrayList<>();
+
+    public ArrayList<OrderItem> getOrderItemsArrayList() {
+        return orderItemsArrayList;
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ConstraintLayout container;
         public TextView categoryName;

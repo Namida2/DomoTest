@@ -139,7 +139,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
                     if(data != null) {
                         String tableName = (String) snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME);
                         readTableData(snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME), !firstCall.get());
-                        if(subscribers != null && subscribers.size() == 0) {
+                        if(subscribers != null && subscribers.size() == 0) { // firstCall
                             ordersShowNotification(tableName, DocumentOrdersListenerService.NEW_ORDER);
                         }
                     }
