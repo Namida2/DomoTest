@@ -187,13 +187,22 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
                 else Log.d(TAG, "OrderActivityPresenter.writeOrderToDb: " + guestCountTask.getException());
         });
         Map<String, Object> data = new HashMap<>();
-        data.put(SplashScreenActivityModel.FIELD_FIELD_TABLE_NAME, OrderActivityModel.DOCUMENT_TABLE + tableNumber);
+        data.put(SplashScreenActivityModel.FIELD_FIELD_TABLE_NAME, null);
         model.getDatabase()
             .collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
             .document(SplashScreenActivityModel.DOCUMENT_ORDERS_LISTENER_NAME)
             .set(data).addOnCompleteListener(task -> {
-                if(task.isSuccessful())
-                    Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: SUCCESS");
+                if(task.isSuccessful()) {
+                    data.put(SplashScreenActivityModel.FIELD_FIELD_TABLE_NAME, OrderActivityModel.DOCUMENT_TABLE + tableNumber);
+                    model.getDatabase()
+                        .collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+                        .document(SplashScreenActivityModel.DOCUMENT_ORDERS_LISTENER_NAME)
+                        .set(data).addOnCompleteListener(task1 -> {
+                        if(task.isSuccessful()) {
+                            Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: SUCCESS");
+                        }
+                    });
+                }
         });
     }
     @Override
