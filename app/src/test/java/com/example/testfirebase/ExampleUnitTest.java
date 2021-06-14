@@ -1,4 +1,4 @@
-package com.example.domo;
+package com.example.testfirebase;
 
 import org.junit.Test;
 

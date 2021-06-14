@@ -1,4 +1,4 @@
-package com.example.domo.order;
+package com.example.testfirebase.order;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,9 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.domo.R;
-import com.example.domo.adapters.MenuRecyclerViewAdapter;
-import com.example.domo.adapters.OrderRecyclerViewAdapter;
+import com.example.testfirebase.R;
+import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
+import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -32,7 +32,7 @@ import presenters.GuestCountDialogOrderActivityPresenter;
 import presenters.OrderActivityPresenter;
 import tools.Pair;
 
-import static com.example.domo.mainActivityFragments.TablesFragment.EXTRA_TAG;
+import static com.example.testfirebase.mainActivityFragments.TablesFragment.EXTRA_TAG;
 
 
 public class OrderActivity extends AppCompatActivity implements GuestCountDialogOrderActivityInterface.Activity.MyView,

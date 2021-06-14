@@ -1,4 +1,4 @@
-package com.example.domo.adapters;
+package com.example.testfirebase.adapters;
 
 import android.os.Build;
 import android.util.Log;
@@ -12,7 +12,7 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.domo.R;
+import com.example.testfirebase.R;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import org.jetbrains.annotations.NotNull;

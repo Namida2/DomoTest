@@ -1,4 +1,4 @@
-package com.example.domo.mainActivityFragments;
+package com.example.testfirebase.mainActivityFragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.domo.R;
+import com.example.testfirebase.R;
 
 
 import interfaces.TablesFragmentInterface;

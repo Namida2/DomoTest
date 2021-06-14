@@ -1,8 +1,8 @@
 package model;
 
-import com.example.domo.adapters.OrderRecyclerViewAdapter;
-import com.example.domo.order.OrderItem;
-import com.example.domo.order.TableInfo;
+import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
+import com.example.testfirebase.order.OrderItem;
+import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package interfaces;
 
-import com.example.domo.order.TableInfo;
+import com.example.testfirebase.order.TableInfo;
 
 public interface DocumentOrdersListenerInterface {
     interface Observable {

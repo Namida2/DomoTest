@@ -1,7 +1,7 @@
 package cook;
 
-import com.example.domo.order.OrderItem;
-import com.example.domo.order.TableInfo;
+import com.example.testfirebase.order.OrderItem;
+import com.example.testfirebase.order.TableInfo;
 
 public class ReadyDish {
 

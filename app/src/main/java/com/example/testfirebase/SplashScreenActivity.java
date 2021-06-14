@@ -1,14 +1,18 @@
-package com.example.domo;
+package com.example.testfirebase;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import cook.CookMainActivity;
+import interfaces.DocumentOrdersListenerInterface;
 import interfaces.SplashScreenInterface;
 import model.SplashScreenActivityModel;
 import presenters.SplashScreenActivityPresenter;
@@ -18,22 +22,37 @@ import tools.UserData;
 public class SplashScreenActivity extends AppCompatActivity implements SplashScreenInterface.View {
 
     private SplashScreenInterface.Presenter presenter;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            DocumentDishesListenerService.LocalBinder binder = (DocumentDishesListenerService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
         startService(new Intent(this, DocumentOrdersListenerService.class));
-        try {
-            stopService(new Intent(this, DocumentDishesListenerService.class));
-            DocumentDishesListenerService.unSubscribeFromDatabase();
-        } catch (Exception e) {}
-        DocumentDishesListenerService.setServiceCreatedConsumer(isCreated -> {
-            presenter = new SplashScreenActivityPresenter(this);
-        });
-        startService(new Intent(this, DocumentDishesListenerService.class));
+        if(!DocumentDishesListenerService.isExist()) {
+            DocumentDishesListenerService.setServiceCreatedConsumer(isCreated -> {
+                presenter = new SplashScreenActivityPresenter(this);
+            });
+            bindService(new Intent(this, DocumentDishesListenerService.class), );
+        } else presenter = new SplashScreenActivityPresenter(this);
     }
+
     @Override
     public void setCurrentUserPost(String post) {
         UserData.post = post;

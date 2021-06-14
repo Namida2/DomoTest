@@ -1,11 +1,9 @@
-package com.example.domo;
+package com.example.testfirebase;
 
-import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,8 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.example.domo.order.OrderItem;
-import com.example.domo.order.TableInfo;
+import com.example.testfirebase.order.OrderItem;
+import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -46,7 +44,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     private static int id = 1;
     private static NotificationChannel channel;
     private static final String channelId = "Domo_orders";
-    private static final String channelName = "DomoChannel";
+    private static final String channelName = "DomoOrderChannel";
     private static final String TABLE = "Столик ";
     private static final String READY_TO_SERVE = "готово к подаче";
     public static final String NEW_ORDER = "Новый заказ";
@@ -74,7 +72,6 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "DocumentOrdersListenerService service created");
         return START_STICKY;
     }
     @Override
@@ -138,10 +135,15 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
                     if(data != null) {
                         String tableName = (String) snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME);
                         readTableData(snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME), !firstCall.get());
-                        if(subscribers != null && subscribers.size() == 0 && !firstCall.get()) { // firstCall
+                        if(subscribers != null && subscribers.size() == 0 && !firstCall.get()) {
                             ordersShowNotification(tableName, DocumentOrdersListenerService.NEW_ORDER);
                         }
                     }
+                    Log.d(TAG, "Current data: " + snapshot.getData());
+                    try {
+                        Log.d(TAG, "Current data: " + disposable.toString());
+                        Log.d(TAG, "Current data: " + registration.toString());
+                    } catch (Exception e) {}
                 } else {
                     Log.d(TAG, "Current data: null");
                 }
@@ -188,20 +190,6 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
         }
     }
 
-    public static boolean isAppRunning(final Context context, final String packageName) {
-        final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        final List<ActivityManager.RunningAppProcessInfo> procInfo = activityManager.getRunningAppProcesses();
-        if (procInfo != null)
-        {
-            for (final ActivityManager.RunningAppProcessInfo processInfo : procInfo) {
-                if (processInfo.processName.equals(packageName)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     @Override
     public TableInfo getTableInfo () {
         return latestTableInfo;
@@ -216,7 +204,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     }
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        //super.onDestroy();
         Log.d(TAG, "DocumentOrdersListenerService service destroyed");
     }
 }

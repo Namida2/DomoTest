@@ -1,6 +1,6 @@
 package interfaces;
 
-import com.example.domo.adapters.GuestsCountRecyclerViewAdapter;
+import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
 
 public interface GuestCountDialogOrderActivityInterface {
 

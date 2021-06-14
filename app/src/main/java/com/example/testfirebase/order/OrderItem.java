@@ -1,4 +1,4 @@
-package com.example.domo.order;
+package com.example.testfirebase.order;
 
 public class OrderItem {
     private String name;

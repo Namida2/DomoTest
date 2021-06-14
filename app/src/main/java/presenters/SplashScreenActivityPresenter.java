@@ -2,7 +2,7 @@ package presenters;
 
 import android.util.Log;
 
-import com.example.domo.order.TableInfo;
+import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 

@@ -2,8 +2,8 @@ package presenters;
 
 import android.util.Log;
 
-import com.example.domo.adapters.MenuRecyclerViewAdapter;
-import com.example.domo.order.Dish;
+import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
+import com.example.testfirebase.order.Dish;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import interfaces.MenuDialogOrderActivityInterface;
 import io.reactivex.rxjava3.core.Observable;
 import model.MenuDialogModel;
 
-import com.example.domo.order.DishCategoryInfo;
+import com.example.testfirebase.order.DishCategoryInfo;
 
 import static model.MenuDialogModel.DISHES_COLLECTION_NAME;
 import static model.MenuDialogModel.MENU_COLLECTION_NAME;

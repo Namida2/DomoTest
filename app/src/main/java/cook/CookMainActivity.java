@@ -10,7 +10,7 @@ import androidx.navigation.NavHostController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.domo.R;
+import com.example.testfirebase.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.concurrent.TimeUnit;

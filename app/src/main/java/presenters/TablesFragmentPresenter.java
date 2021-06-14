@@ -2,8 +2,8 @@ package presenters;
 
 import android.view.View;
 
-import com.example.domo.adapters.TablesRecyclerViewAdapter;
-import com.example.domo.order.OrderActivity;
+import com.example.testfirebase.adapters.TablesRecyclerViewAdapter;
+import com.example.testfirebase.order.OrderActivity;
 
 import interfaces.TablesFragmentInterface;
 import model.TablesFragmentModel;

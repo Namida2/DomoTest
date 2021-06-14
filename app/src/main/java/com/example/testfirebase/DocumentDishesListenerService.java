@@ -1,12 +1,15 @@
-package com.example.domo;
+package com.example.testfirebase;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -35,6 +38,7 @@ import interfaces.DocumentDishesListenerServiceInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import model.SplashScreenActivityModel;
 
 import static registration.LogInActivity.TAG;
@@ -42,9 +46,10 @@ import static registration.LogInActivity.TAG;
 public class DocumentDishesListenerService extends Service implements DocumentDishesListenerServiceInterface.Observable {
 
     private static int id = 1;
+    private static AtomicBoolean isExist = new AtomicBoolean(false);
     private static NotificationChannel channel;
     private static String channelId = "Domo_dishes";
-    private static String channelName = "DomoChannel";
+    private static String channelName = "DomoDishChannel";
     private static String TABLE = "Столик ";
     private static String READY_TO_SERVE = "готово к подаче";
 
@@ -56,7 +61,14 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     private static Consumer<Boolean> serviceCreatedConsumer;
     private static Disposable disposable;
     private static ListenerRegistration registration;
-    private AtomicBoolean firstCall = new AtomicBoolean(true);
+    private final AtomicBoolean firstCall = new AtomicBoolean(true);
+    private final LocalBinder localBinder = new LocalBinder();
+
+    public class LocalBinder extends Binder {
+        public DocumentDishesListenerService getService () {
+            return DocumentDishesListenerService.this;
+        }
+    }
 
     public static void setServiceCreatedConsumer (Consumer<Boolean> serviceCreatedConsumer) {
         DocumentDishesListenerService.serviceCreatedConsumer = serviceCreatedConsumer;
@@ -65,13 +77,15 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate() {
+        isExist.set(true);
         service = this;
-        if (subscribers == null) subscribers = new ArrayList<>();
-        if (latestData == null) latestData = new HashMap<>();
+        subscribers = new ArrayList<>();
+        latestData = new HashMap<>();
         notificationManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         createChannel(notificationManager);
         disposable = getObservable()
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.computation())
+            .subscribeOn(Schedulers.computation())
             .subscribe(data -> {
                 dishesNotifyAllSubscribers(data);
                 Map<String, Object> newData = new HashMap<>();
@@ -117,10 +131,8 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "DocumentDishesListenerService service created");
-        return START_STICKY;
+        return Service.START_STICKY;
     }
-
     private void createChannel (NotificationManager notificationManager) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             channel = new NotificationChannel(
@@ -138,7 +150,10 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
                 .document(SplashScreenActivityModel.DOCUMENT_DISHES_LISTENER_NAME)
                 .addSnapshotListener( (snapshot, error) -> {
                 if (error != null) {
-                    Log.d(TAG, "Error!");
+                    isExist.set(false);
+                    unSubscribeFromDatabase();
+                    stopSelf();
+                    Log.d(TAG, "DocumentDishesListenerService.getObservable: Error!");
                     return;
                 }
                 if (snapshot != null && snapshot.exists() && !firstCall.get()) {
@@ -158,16 +173,11 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return localBinder;
     }
     public static void unSubscribeFromDatabase() {
         disposable.dispose();
         registration.remove();
-    }
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "DocumentDishesListenerService service destroyed");
     }
     @Override
     public void dishesNotifyAllSubscribers(Object data) {
@@ -204,6 +214,17 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
             .setAutoCancel(true)
             .addAction(null)
             .build();
+        //startForeground(id++, new NotificationCompat.Builder(this, channelId).build()); //important thing
         notificationManager.notify(id++, notification); //important thing
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        isExist.set(false);
+        Log.d(TAG, "DocumentDishesListenerService: destroyed");
+    }
+
+    public static Boolean isExist() {
+        return isExist.get();
     }
 }

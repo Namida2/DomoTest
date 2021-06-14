@@ -11,8 +11,8 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.domo.R;
-import com.example.domo.order.OrderItem;
+import com.example.testfirebase.R;
+import com.example.testfirebase.order.OrderItem;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import org.jetbrains.annotations.NotNull;

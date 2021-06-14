@@ -7,8 +7,9 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.domo.MainActivity;
-import com.example.domo.R;
+import com.example.testfirebase.MainActivity;
+import com.example.testfirebase.R;
+import com.example.testfirebase.SplashScreenActivity;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import dialogsTools.ErrorAlertDialog;
@@ -48,7 +49,7 @@ public class PostActivity extends AppCompatActivity implements PostActivityInter
 
     @Override
     public void onSuccess() {
-        startActivity(new Intent(this, MainActivity.class) );
+        startActivity(new Intent(this, SplashScreenActivity.class) );
     }
 
     @Override

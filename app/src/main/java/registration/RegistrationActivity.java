@@ -10,7 +10,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.domo.R;
+import com.example.testfirebase.R;
 import dialogsTools.ErrorAlertDialog;
 
 import com.jakewharton.rxbinding4.view.RxView;

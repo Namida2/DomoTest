@@ -8,14 +8,15 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.EditText;
 
-import com.example.domo.MainActivity;
-import com.example.domo.R;
+import com.example.testfirebase.MainActivity;
+import com.example.testfirebase.R;
 
 import dialogsTools.ErrorAlertDialog;
 import interfaces.LogInActivityInterface;
 import io.reactivex.rxjava3.disposables.Disposable;
 import presenters.LogInActivityPresenter;
 
+import com.example.testfirebase.SplashScreenActivity;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import static tools.Network.isNetworkConnected;
@@ -62,7 +63,7 @@ public class LogInActivity extends AppCompatActivity implements LogInActivityInt
 
     @Override
     public void onSuccess() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, SplashScreenActivity.class));
     }
 
     @Override
