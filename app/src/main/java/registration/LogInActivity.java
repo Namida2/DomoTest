@@ -8,8 +8,8 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.EditText;
 
-import com.example.testfirebase.MainActivity;
-import com.example.testfirebase.R;
+import com.example.domo.MainActivity;
+import com.example.domo.R;
 
 import dialogsTools.ErrorAlertDialog;
 import interfaces.LogInActivityInterface;

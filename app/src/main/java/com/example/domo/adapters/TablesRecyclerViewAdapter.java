@@ -1,4 +1,4 @@
-package com.example.testfirebase.adapters;
+package com.example.domo.adapters;
 
 import android.os.Build;
 import android.util.Log;
@@ -12,8 +12,7 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.testfirebase.R;
-import com.example.testfirebase.order.OrderActivity;
+import com.example.domo.R;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import interfaces.TablesFragmentInterface;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 import static registration.LogInActivity.TAG;

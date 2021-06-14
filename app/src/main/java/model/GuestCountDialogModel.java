@@ -1,10 +1,6 @@
 package model;
 
-import android.view.View;
-
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
+import com.example.domo.adapters.GuestsCountRecyclerViewAdapter;
 
 import interfaces.GuestCountDialogOrderActivityInterface;
 

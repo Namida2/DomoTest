@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/tablesFragment"
-        android:name="com.example.testfirebase.mainActivityFragments.TablesFragment"
+        android:name="com.example.domo.mainActivityFragments.TablesFragment"
         android:label="fragment_tables"
         tools:layout="@layout/fragment_tables" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/ordersFragment"
-        android:name="com.example.testfirebase.mainActivityFragments.OrdersFragment"
+        android:name="com.example.domo.mainActivityFragments.OrdersFragment"
         android:label="OrdersFragment" >
         <action
             android:id="@+id/action_ordersFragment_to_checkFragment"
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/checkFragment"
-        android:name="com.example.testfirebase.mainActivityFragments.CheckFragment"
+        android:name="com.example.domo.mainActivityFragments.CheckFragment"
         android:label="CheckFragment" >
         <action
             android:id="@+id/action_checkFragment_to_ordersFragment"
@@ -50,6 +50,6 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.testfirebase.mainActivityFragments.ProfileFragment"
+        android:name="com.example.domo.mainActivityFragments.ProfileFragment"
         android:label="ProfileFragment" />
 </navigation>

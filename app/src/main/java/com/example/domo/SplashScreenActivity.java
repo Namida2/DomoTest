@@ -1,4 +1,4 @@
-package com.example.testfirebase;
+package com.example.domo;
 
 import android.content.Intent;
 import android.os.Bundle;

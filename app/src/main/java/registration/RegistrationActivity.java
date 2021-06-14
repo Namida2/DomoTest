@@ -9,9 +9,8 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
-import com.example.testfirebase.R;
+import com.example.domo.R;
 import dialogsTools.ErrorAlertDialog;
 
 import com.jakewharton.rxbinding4.view.RxView;

@@ -1,4 +1,4 @@
-package com.example.testfirebase.adapters;
+package com.example.domo.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.testfirebase.R;
-import com.example.testfirebase.order.OrderItem;
+import com.example.domo.R;
+import com.example.domo.order.OrderItem;
 
 import org.jetbrains.annotations.NotNull;
 

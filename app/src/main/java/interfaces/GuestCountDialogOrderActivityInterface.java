@@ -1,12 +1,6 @@
 package interfaces;
 
-import android.view.View;
-
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.testfirebase.adapters.GuestsCountRecyclerViewAdapter;
-
-import java.util.Map;
+import com.example.domo.adapters.GuestsCountRecyclerViewAdapter;
 
 public interface GuestCountDialogOrderActivityInterface {
 

@@ -1,4 +1,4 @@
-package com.example.testfirebase.order;
+package com.example.domo.order;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.testfirebase.R;
+import com.example.domo.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 

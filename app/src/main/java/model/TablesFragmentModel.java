@@ -2,9 +2,7 @@ package model;
 
 import android.view.View;
 
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.testfirebase.adapters.TablesRecyclerViewAdapter;
+import com.example.domo.adapters.TablesRecyclerViewAdapter;
 
 import interfaces.TablesFragmentInterface;
 

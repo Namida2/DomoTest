@@ -1,8 +1,8 @@
 package model;
 
 
-import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
-import com.example.testfirebase.order.Dish;
+import com.example.domo.adapters.MenuRecyclerViewAdapter;
+import com.example.domo.order.Dish;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 import interfaces.MenuDialogOrderActivityInterface;
 
-import com.example.testfirebase.order.DishCategoryInfo;
+import com.example.domo.order.DishCategoryInfo;
 
 public class MenuDialogModel implements MenuDialogOrderActivityInterface.Model {
 

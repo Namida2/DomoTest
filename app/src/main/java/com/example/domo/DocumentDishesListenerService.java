@@ -1,4 +1,4 @@
-package com.example.testfirebase;
+package com.example.domo;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -32,7 +32,6 @@ import java.util.function.Consumer;
 
 import cook.model.OrdersFragmentModel;
 import interfaces.DocumentDishesListenerServiceInterface;
-import interfaces.DocumentOrdersListenerInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -114,6 +113,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
         try {
             serviceCreatedConsumer.accept(true);
         } catch (Exception e) { }
+        Log.w(TAG, "DocumentDishesListenerService: Created");
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

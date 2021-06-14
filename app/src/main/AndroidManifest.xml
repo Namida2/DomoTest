@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.testfirebase">
+    package="com.example.domo">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
@@ -15,27 +15,32 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".SplashScreenActivity">
+        <activity android:name="com.example.domo.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"/>
+        <activity android:name="com.example.domo.MainActivity"/>
         <activity android:name="registration.LogInActivity"/>
         <activity android:name="registration.PostActivity"/>
         <activity android:name="registration.RegistrationActivity"/>
-        <activity android:name=".order.OrderActivity"/>
+        <activity android:name="com.example.domo.order.OrderActivity"/>
         <activity android:name="cook.CookMainActivity"/>
         <activity android:name="cook.CookDetailOrderActivity"/>
-        <activity android:name=".DetailOrderActivity"/>
+        <activity android:name="com.example.domo.DetailOrderActivity"/>
 
         <service
-            android:name=".DocumentDishesListenerService"
-            android:exported="false" />
+            android:name="com.example.domo.DocumentDishesListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.domo.service" />
+            </intent-filter>
+        </service>
+
         <service
-            android:name=".DocumentOrdersListenerService"
+            android:name="com.example.domo.DocumentOrdersListenerService"
             android:exported="false" />
     </application>
 

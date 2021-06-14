@@ -7,8 +7,8 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.testfirebase.MainActivity;
-import com.example.testfirebase.R;
+import com.example.domo.MainActivity;
+import com.example.domo.R;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import dialogsTools.ErrorAlertDialog;
