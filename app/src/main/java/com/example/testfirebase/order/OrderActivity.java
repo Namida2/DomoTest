@@ -161,5 +161,4 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         guestsCountDialogPresenter = null;
         orderPresenter = null;
     }
-
 }
