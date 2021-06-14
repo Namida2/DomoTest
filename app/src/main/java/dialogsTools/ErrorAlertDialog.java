@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.testfirebase.R;
+import com.example.domo.R;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import java.util.concurrent.TimeUnit;

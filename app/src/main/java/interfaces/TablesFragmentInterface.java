@@ -1,9 +1,8 @@
 package interfaces;
 
-import android.content.Context;
 import android.view.View;
 
-import com.example.testfirebase.adapters.TablesRecyclerViewAdapter;
+import com.example.domo.adapters.TablesRecyclerViewAdapter;
 
 public interface TablesFragmentInterface {
 

@@ -1,15 +1,14 @@
 package interfaces;
 
-import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
-import com.example.testfirebase.order.Dish;
-import com.example.testfirebase.order.OrderItem;
+import com.example.domo.adapters.MenuRecyclerViewAdapter;
+import com.example.domo.order.Dish;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.example.testfirebase.order.DishCategoryInfo;
+import com.example.domo.order.DishCategoryInfo;
 
 public interface MenuDialogOrderActivityInterface {
 

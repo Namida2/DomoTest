@@ -1,4 +1,4 @@
-package com.example.testfirebase.adapters;
+package com.example.domo.adapters;
 
 import android.os.Build;
 import android.util.Log;
@@ -12,8 +12,8 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.testfirebase.R;
-import com.example.testfirebase.order.Dish;
+import com.example.domo.R;
+import com.example.domo.order.Dish;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-import com.example.testfirebase.order.DishCategoryInfo;
+import com.example.domo.order.DishCategoryInfo;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;

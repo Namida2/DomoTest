@@ -1,4 +1,4 @@
-package com.example.testfirebase.mainActivityFragments;
+package com.example.domo.mainActivityFragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +11,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.testfirebase.DetailOrderActivity;
-import com.example.testfirebase.R;
+import com.example.domo.DetailOrderActivity;
+import com.example.domo.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import cook.CookDetailOrderActivity;
 import cook.interfaces.OrdersFragmentInterface;
 import cook.model.DetailOrderActivityModel;
 import cook.presenters.TablesFragmentPresenter;

@@ -1,17 +1,15 @@
-package com.example.testfirebase.order;
+package com.example.domo.order;
 
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.example.testfirebase.R;
+import com.example.domo.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.jakewharton.rxbinding4.view.RxView;
@@ -21,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import interfaces.OrderActivityInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class OrderMenuBottomSheetDialog extends BottomSheetDialogFragment {

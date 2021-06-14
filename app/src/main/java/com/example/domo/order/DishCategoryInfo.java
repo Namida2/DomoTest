@@ -1,4 +1,4 @@
-package com.example.testfirebase.order;
+package com.example.domo.order;
 
 public class DishCategoryInfo<F, S> {
 

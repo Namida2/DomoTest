@@ -1,6 +1,6 @@
 package interfaces;
 
-import com.example.testfirebase.adapters.DetailOrderItemsRecyclerViewAdapter;
+import com.example.domo.adapters.DetailOrderItemsRecyclerViewAdapter;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 

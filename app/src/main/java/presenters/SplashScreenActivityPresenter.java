@@ -2,7 +2,7 @@ package presenters;
 
 import android.util.Log;
 
-import com.example.testfirebase.order.TableInfo;
+import com.example.domo.order.TableInfo;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -12,7 +12,6 @@ import java.util.Map;
 import interfaces.OrderActivityInterface;
 import interfaces.SplashScreenInterface;
 import interfaces.ToolsInterface;
-import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
 
 import static registration.LogInActivity.TAG;

@@ -1,4 +1,4 @@
-package com.example.testfirebase;
+package com.example.domo;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.FontResourcesParserCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import cook.model.DetailOrderActivityModel;

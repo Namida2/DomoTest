@@ -2,9 +2,9 @@ package cook.presenters;
 
 import android.view.View;
 
-import com.example.testfirebase.DocumentOrdersListenerService;
-import com.example.testfirebase.order.OrderItem;
-import com.example.testfirebase.order.TableInfo;
+import com.example.domo.DocumentOrdersListenerService;
+import com.example.domo.order.OrderItem;
+import com.example.domo.order.TableInfo;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -14,9 +14,7 @@ import cook.interfaces.OrdersFragmentInterface;
 import cook.model.OrdersFragmentModel;
 import interfaces.DocumentOrdersListenerInterface;
 import model.OrderActivityModel;
-import model.SplashScreenActivityModel;
 import tools.Pair;
-import tools.UserData;
 
 public class TablesFragmentPresenter implements OrdersFragmentInterface.Presenter, DocumentOrdersListenerInterface.Subscriber {
 

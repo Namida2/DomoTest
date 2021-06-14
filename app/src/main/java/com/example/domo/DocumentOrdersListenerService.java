@@ -1,4 +1,4 @@
-package com.example.testfirebase;
+package com.example.domo;
 
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -17,12 +17,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.example.testfirebase.order.OrderItem;
-import com.example.testfirebase.order.TableInfo;
+import com.example.domo.order.OrderItem;
+import com.example.domo.order.TableInfo;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.MetadataChanges;
 
 
 import java.util.ArrayList;
@@ -139,7 +138,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
                     if(data != null) {
                         String tableName = (String) snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME);
                         readTableData(snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME), !firstCall.get());
-                        if(subscribers != null && subscribers.size() == 0) { // firstCall
+                        if(subscribers != null && subscribers.size() == 0 && !firstCall.get()) { // firstCall
                             ordersShowNotification(tableName, DocumentOrdersListenerService.NEW_ORDER);
                         }
                     }

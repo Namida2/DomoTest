@@ -2,7 +2,7 @@ package cook.presenters;
 
 import android.util.Log;
 
-import com.example.testfirebase.order.TableInfo;
+import com.example.domo.order.TableInfo;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.SetOptions;
 
@@ -14,7 +14,6 @@ import cook.ReadyDish;
 import cook.adapters.CookDetailOrderItemsRecyclerViewAdapter;
 import cook.interfaces.CookDetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
-import interfaces.DocumentOrdersListenerInterface;
 import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
 
