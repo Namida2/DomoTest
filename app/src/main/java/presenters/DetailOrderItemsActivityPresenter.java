@@ -16,6 +16,7 @@ import interfaces.DetailOrderItemsActivityInterface;
 import interfaces.DocumentDishesListenerServiceInterface;
 import model.DetailOrderItemsActivityModel;
 import model.OrderActivityModel;
+import tools.Pair;
 
 import static registration.LogInActivity.TAG;
 
@@ -75,19 +76,25 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
         while(iterator.hasNext()) {
             key = iterator.next();
             OrderActivityModel orderActivityModel = new OrderActivityModel();
-            ArrayList<OrderItem> orderItems = orderActivityModel
-                .getNotEmptyTablesOrdersHashMap()
-                .get(key).first;
-            orderItemNames = (ArrayList<Object>) notifiable.get(key);
-            for(int i = 0; i < orderItemNames.size(); ++i) {
-                dishName = (String) ((ArrayList<?>) notifiable.get(key)).get(i);
-                for(int j = 0; j < orderItems.size(); ++j) {
-                    String aa = orderItems.get(j).getName() + OrderActivityModel.DOCUMENT_NAME_DELIMITER + orderItems.get(j).getCommentary();
-                    if( (orderItems.get(j).getName() + OrderActivityModel.DOCUMENT_NAME_DELIMITER + orderItems.get(j).getCommentary()).equals(dishName)) {
-                        orderItems.get(j).setReady(true);
-                        model.getRecyclerViewAdapter().notifyItemChanged(j);
+            Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaaaa = orderActivityModel
+                .getNotEmptyTablesOrdersHashMap();
+            try {
+                ArrayList<OrderItem> orderItems = orderActivityModel
+                    .getNotEmptyTablesOrdersHashMap()
+                    .get(key).first;
+                orderItemNames = (ArrayList<Object>) notifiable.get(key);
+                for (int i = 0; i < orderItemNames.size(); ++i) {
+                    dishName = (String) ((ArrayList<?>) notifiable.get(key)).get(i);
+                    for (int j = 0; j < orderItems.size(); ++j) {
+                        String aa = orderItems.get(j).getName() + OrderActivityModel.DOCUMENT_NAME_DELIMITER + orderItems.get(j).getCommentary();
+                        if ((orderItems.get(j).getName() + OrderActivityModel.DOCUMENT_NAME_DELIMITER + orderItems.get(j).getCommentary()).equals(dishName)) {
+                            orderItems.get(j).setReady(true);
+                            model.getRecyclerViewAdapter().notifyItemChanged(j);
+                        }
                     }
                 }
+            } catch (Exception e) {
+                Log.d(TAG, "DetailOrderItemsActivityPresenter.notifyOrderItems: " + e.getMessage());
             }
         }
     }

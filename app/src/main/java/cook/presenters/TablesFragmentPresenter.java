@@ -23,12 +23,13 @@ public class TablesFragmentPresenter implements OrdersFragmentInterface.Presente
 
     public TablesFragmentPresenter(OrdersFragmentInterface.View view) {
         this.view = view;
+        OrderActivityModel orderActivityModel = new OrderActivityModel();
         if(model == null) {
             model = new OrdersFragmentModel();
-            OrderActivityModel orderActivityModel = new OrderActivityModel();
             model.setOrdersHashMap(orderActivityModel.getNotEmptyTablesOrdersHashMap());
-            model.setAdapter(new CookTablesRecyclerViewAdapter(orderActivityModel.getNotEmptyTablesOrdersHashMap()));
-        }
+            model.setAdapter(new CookTablesRecyclerViewAdapter());
+            model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
+        } else model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
         DocumentOrdersListenerService.getService().ordersSubscribe(this);
     }
     @Override

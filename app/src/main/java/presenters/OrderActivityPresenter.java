@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cook.model.OrdersFragmentModel;
 import interfaces.DocumentDishesListenerServiceInterface;
 import interfaces.DocumentOrdersListenerInterface;
 import interfaces.OrderActivityInterface;
@@ -48,8 +49,8 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
         }
         DocumentDishesListenerService.getService().dishesSubscribe(this);
         DocumentOrdersListenerService.getService().ordersSubscribe(this);
-        Log.d(TAG, "Subscribe to services");
-        Log.d(TAG, "OrderActivityPresenter is created");
+        Log.d(TAG, "Subscribe to services: SUCCESS");
+        Log.d(TAG, "OrderActivityPresenter: CREATED");
     }
     @Override
     public void notifyAdapterDataSetChanged(OrderItem orderItem) {
@@ -270,8 +271,14 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
     public void ordersNotifyMe(Object data) {
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> order = (Map<String, Pair<ArrayList<OrderItem>, Boolean>>) data;
         TableInfo tableInfo = DocumentOrdersListenerService.getService().getTableInfo();
-        if (!UserData.post.equals(SplashScreenActivityModel.WAITER_POST_NAME))
-            DocumentOrdersListenerService.getService().ordersShowNotification(tableInfo.getTableName(), DocumentOrdersListenerService.NEW_ORDER);
+        if (!UserData.post.equals(SplashScreenActivityModel.WAITER_POST_NAME)) {
+            String tableNumber = tableInfo.getTableName()
+                .substring(tableInfo.getTableName()
+                .indexOf(OrdersFragmentModel.DELIMITER) + 1);
+            DocumentOrdersListenerService.getService().ordersShowNotification(
+                DocumentDishesListenerService.TABLE + tableNumber,
+                DocumentOrdersListenerService.NEW_ORDER);
+        }
 
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaa = model.getAllTablesOrdersHashMap();
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> bbb = model.getNotEmptyTablesOrdersHashMap();

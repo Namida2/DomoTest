@@ -52,7 +52,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     private static NotificationChannel channel;
     private static String channelId = "Domo_dishes";
     private static String channelName = "DomoDishChannel";
-    private static String TABLE = "Столик ";
+    public static String TABLE = "Столик ";
     private static String READY_TO_SERVE = "готово к подаче";
 
     private NotificationManager notificationManager;
@@ -65,14 +65,9 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     private static ListenerRegistration registration;
     private final AtomicBoolean firstCall = new AtomicBoolean(true);
 
-    public static void setServiceCreatedConsumer (Consumer<Boolean> serviceCreatedConsumer) {
-        DocumentDishesListenerService.serviceCreatedConsumer = serviceCreatedConsumer;
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate() {
-
         isExist.set(true);
         service = this;
         subscribers = new ArrayList<>();
@@ -80,7 +75,6 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
         notificationManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         createChannel(notificationManager);
 
-        Log.i("Test", "Service: onCreate");
         Notification notification = new NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_accept)
             .setColor(getResources().getColor(R.color.fui_transparent))
@@ -89,15 +83,10 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
             .setAutoCancel(true)
             .addAction(null)
             .build();
-
         startForeground(777, notification);
-        Intent hideIntent = new Intent(this, HideNotificationService.class);
-        startService(hideIntent);
-
-
 
         disposable = getObservable()
-            .observeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.computation())
             .subscribe(data -> {
                 dishesNotifyAllSubscribers(data);
@@ -142,9 +131,34 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
         } catch (Exception e) { }
         Log.w(TAG, "DocumentDishesListenerService: Created");
     }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return Service.START_STICKY;
+    }
+    private Observable<Map<String, Object>> getObservable (){
+        return Observable.create(emitter -> {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            registration = db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+                .document(SplashScreenActivityModel.DOCUMENT_DISHES_LISTENER_NAME)
+                .addSnapshotListener( (snapshot, error) -> {
+                    if (error != null) {
+                        isExist.set(false);
+                        unSubscribeFromDatabase();
+                        stopSelf();
+                        Log.d(TAG, "DocumentDishesListenerService.getObservable: Error!");
+                        return;
+                    }
+                    if (snapshot != null && snapshot.exists() && !firstCall.get()) {
+                        emitter.onNext(snapshot.getData());
+                    } else {
+                        Log.d(TAG, "Current data: null");
+                    }
+                    if (firstCall.get() && snapshot != null)
+                        latestData = snapshot.getData();
+                    firstCall.set(false);
+                });
+        });
     }
     private void createChannel (NotificationManager notificationManager) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -156,38 +170,20 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
             notificationManager.createNotificationChannel(channel);
         }
     }
-    private Observable<Map<String, Object>> getObservable (){
-        return Observable.create(emitter -> {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            registration = db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
-                .document(SplashScreenActivityModel.DOCUMENT_DISHES_LISTENER_NAME)
-                .addSnapshotListener( (snapshot, error) -> {
-                if (error != null) {
-                    isExist.set(false);
-                    unSubscribeFromDatabase();
-                    stopSelf();
-                    Log.d(TAG, "DocumentDishesListenerService.getObservable: Error!");
-                    return;
-                }
-                if (snapshot != null && snapshot.exists() && !firstCall.get()) {
-                    emitter.onNext(snapshot.getData());
-                } else {
-                    Log.d(TAG, "Current data: null");
-                }
-                if (firstCall.get() && snapshot != null)
-                    latestData = snapshot.getData();
-                firstCall.set(false);
-                });
-        });
-    }
-    public static DocumentDishesListenerService getService() {
-        return service;
-    }
-    @Nullable
-
-    public static void unSubscribeFromDatabase() {
-        disposable.dispose();
-        registration.remove();
+    @Override
+    public void dishesShowNotification(String title, String name) {
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_notification);
+        Notification notification = new NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_accept)
+            .setLargeIcon(icon)
+            .setColor(getResources().getColor(R.color.fui_transparent))
+            .setContentTitle(title)
+            .setContentText(name)
+            .setDefaults(NotificationCompat.DEFAULT_SOUND)
+            .setAutoCancel(true)
+            .addAction(null)
+            .build();
+        notificationManager.notify(id++, notification); //important thing
     }
     @Override
     public void dishesNotifyAllSubscribers(Object data) {
@@ -212,35 +208,33 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
         subscribers.remove(subscriber);
     }
     @Override
-    public void dishesShowNotification(String title, String name) {
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_notification);
-        Notification notification = new NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_accept)
-            .setLargeIcon(icon)
-            .setColor(getResources().getColor(R.color.fui_transparent))
-            .setContentTitle(title)
-            .setContentText(name)
-            .setDefaults(NotificationCompat.DEFAULT_SOUND)
-            .setAutoCancel(true)
-            .addAction(null)
-            .build();
-        //startForeground(id++, new NotificationCompat.Builder(this, channelId).build()); //important thing
-        notificationManager.notify(id++, notification); //important thing
-    }
-    @Override
     public void onDestroy() {
         super.onDestroy();
         isExist.set(false);
         Log.d(TAG, "DocumentDishesListenerService: destroyed");
     }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-
     public static Boolean isExist() {
         return isExist.get();
+    }
+    public static DocumentDishesListenerService getService() {
+        return service;
+    }
+    @Nullable
+
+    public static void unSubscribeFromDatabase() {
+        try {
+            disposable.dispose();
+            registration.remove();
+        } catch (Exception e) {
+            Log.d(TAG, "unSubscribeFromDatabase: " + e.getMessage() );
+        }
+    }
+    public static void setServiceCreatedConsumer (Consumer<Boolean> serviceCreatedConsumer) {
+        DocumentDishesListenerService.serviceCreatedConsumer = serviceCreatedConsumer;
     }
 }

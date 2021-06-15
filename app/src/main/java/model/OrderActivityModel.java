@@ -1,11 +1,16 @@
 package model;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import interfaces.OrderActivityInterface;
@@ -32,12 +37,23 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     public OrderActivityModel () {
         db = FirebaseFirestore.getInstance();
     }
-
     @Override
     public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap() {
         return notEmptyTablesOrdersHashMap;
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getTablesWithAllReadyDishes() {
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> tablesWithAllReadyDishes = new HashMap<>();
+        notEmptyTablesOrdersHashMap.forEach( (key, pair) -> {
+            boolean allReady = true;
+            for(int i = 0; i < pair.first.size(); ++i)
+                if(!pair.first.get(i).isReady()) allReady = false;
+            if(allReady) tablesWithAllReadyDishes.put(key, pair);
+        });
 
+        return null;
+    }
     @Override
     public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber) {
         String key = DOCUMENT_TABLE + tableNumber;

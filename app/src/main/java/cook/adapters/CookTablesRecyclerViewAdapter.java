@@ -37,9 +37,6 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
 
     public CookTablesRecyclerViewAdapter () {}
 
-    public CookTablesRecyclerViewAdapter (Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap) {
-       setOrdersArrayList(ordersHashMap);
-    }
     public void setOrdersArrayList (Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap) {
         Set<String> keys = ordersHashMap.keySet();
         ordersArrayList = new ArrayList<>();

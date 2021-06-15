@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
+import cook.model.OrdersFragmentModel;
 import interfaces.DocumentOrdersListenerInterface;
 import io.reactivex.rxjava3.disposables.Disposable;
 import model.OrderActivityModel;
@@ -42,13 +43,13 @@ import static registration.LogInActivity.TAG;
 public class DocumentOrdersListenerService extends Service implements DocumentOrdersListenerInterface.Observable {
 
     private static int id = 1;
+    private static final AtomicBoolean isExist = new AtomicBoolean(false);
     private static NotificationChannel channel;
     private static final String channelId = "Domo_orders";
     private static final String channelName = "DomoOrderChannel";
     private static final String TABLE = "Столик ";
     private static final String READY_TO_SERVE = "готово к подаче";
     public static final String NEW_ORDER = "Новый заказ";
-    public static final String PACKAGE_NAME = "com.example.testfirebase";
 
     private NotificationManager notificationManager;
     private static ArrayList<DocumentOrdersListenerInterface.Subscriber> subscribers;
@@ -63,12 +64,23 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate() {
+        isExist.set(true);
         service = this;
         if (subscribers == null) subscribers = new ArrayList<>();
         if (latestDishData == null) latestDishData = new HashMap<>();
         notificationManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         createChannel(notificationManager);
+        Notification notification = new NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_email)
+            .setColor(getResources().getColor(R.color.fui_transparent))
+            .setContentTitle("Служба уведоблений DOMO")
+            .setDefaults(NotificationCompat.DEFAULT_SOUND)
+            .setAutoCancel(true)
+            .addAction(null)
+            .build();
+        startForeground(777, notification);
         startDocumentListening();
+        Log.d(TAG, "DocumentOrdersListenerService: CREATED");
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -91,9 +103,38 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
             subscribers.add(subscriber);
         }
     }
-    @Override
-    public void ordersUnSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber) {
-        subscribers.remove(subscriber);
+    private void startDocumentListening() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        registration = db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+            .document(SplashScreenActivityModel.DOCUMENT_ORDERS_LISTENER_NAME)
+            .addSnapshotListener( (snapshot, error) -> {
+                if (error != null) {
+                    isExist.set(false);
+                    unSubscribeFromDatabase();
+                    stopSelf();
+                    Log.d(TAG, "startDocumentListening: " + error.getMessage());
+                    return;
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    Object data = snapshot.get(SplashScreenActivityModel.FIELD_TABLE_NAME);
+                    if(data != null) {
+                        String tableName = (String) snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME);
+                        readTableData(snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME), !firstCall.get());
+                        if(subscribers != null && subscribers.size() == 0 && !firstCall.get()) {
+                            String tableNumber = tableName.substring(tableName
+                                .indexOf(OrdersFragmentModel.DELIMITER) + 1);
+                            ordersShowNotification(TABLE + tableNumber, DocumentOrdersListenerService.NEW_ORDER);
+                        }
+                    }
+                    Log.d(TAG, "Current data: " + snapshot.getData());
+                    try {
+                        Log.d(TAG, "Current data: " + disposable.toString());
+                        Log.d(TAG, "Current data: " + registration.toString());
+                    } catch (Exception e) {}
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            });
     }
     @Override
     public void ordersShowNotification(String title, String name) {
@@ -119,35 +160,6 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
             );
             notificationManager.createNotificationChannel(channel);
         }
-    }
-    // если приложение ждивет, то уведомление вызывается два раза
-    private void startDocumentListening() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        registration = db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
-            .document(SplashScreenActivityModel.DOCUMENT_ORDERS_LISTENER_NAME)
-            .addSnapshotListener( (snapshot, error) -> {
-                if (error != null) {
-                    Log.d(TAG, "Error!");
-                    return;
-                }
-                if (snapshot != null && snapshot.exists()) {
-                    Object data = snapshot.get(SplashScreenActivityModel.FIELD_TABLE_NAME);
-                    if(data != null) {
-                        String tableName = (String) snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME);
-                        readTableData(snapshot.getData().get(SplashScreenActivityModel.FIELD_TABLE_NAME), !firstCall.get());
-                        if(subscribers != null && subscribers.size() == 0 && !firstCall.get()) {
-                            ordersShowNotification(tableName, DocumentOrdersListenerService.NEW_ORDER);
-                        }
-                    }
-                    Log.d(TAG, "Current data: " + snapshot.getData());
-                    try {
-                        Log.d(TAG, "Current data: " + disposable.toString());
-                        Log.d(TAG, "Current data: " + registration.toString());
-                    } catch (Exception e) {}
-                } else {
-                    Log.d(TAG, "Current data: null");
-                }
-            });
     }
     public void readTableData(Object data, boolean needToNotify) {
         String tableName = (String) data;
@@ -189,7 +201,21 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
             Log.d(TAG, "OrderActivityPresenter.setModelDataState: collection orders is empty." );
         }
     }
-
+    public static void unSubscribeFromDatabase() {
+        try {
+            disposable.dispose();
+            registration.remove();
+        } catch (Exception e) {
+            Log.d(TAG, "unSubscribeFromDatabase: " + e.getMessage() );
+        }
+    }
+    public static Boolean isExist() {
+        return isExist.get();
+    }
+    @Override
+    public void ordersUnSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber) {
+        subscribers.remove(subscriber);
+    }
     @Override
     public TableInfo getTableInfo () {
         return latestTableInfo;
@@ -204,7 +230,8 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     }
     @Override
     public void onDestroy() {
-        //super.onDestroy();
-        Log.d(TAG, "DocumentOrdersListenerService service destroyed");
+        super.onDestroy();
+        isExist.set(false);
+        Log.d(TAG, "DocumentOrdersListenerService service: DESTROYED");
     }
 }

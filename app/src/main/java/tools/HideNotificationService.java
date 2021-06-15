@@ -33,7 +33,6 @@ public class HideNotificationService extends Service {
         createChannel(notificationManager);
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_notification);
         Notification notification = new NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_accept)
             .setLargeIcon(icon)
             .setColor(getResources().getColor(R.color.fui_transparent))
             .setContentTitle("title")

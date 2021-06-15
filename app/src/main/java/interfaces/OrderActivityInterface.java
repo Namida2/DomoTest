@@ -23,6 +23,7 @@ public interface OrderActivityInterface {
         void setAllTablesOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap);
         void setNotEmptyTablesOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap);
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap();
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getTablesWithAllReadyDishes();
     }
     interface View {
     }
