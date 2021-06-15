@@ -40,6 +40,7 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import model.SplashScreenActivityModel;
+import tools.HideNotificationService;
 
 import static registration.LogInActivity.TAG;
 
@@ -47,6 +48,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
 
     private static int id = 1;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
+
     private static NotificationChannel channel;
     private static String channelId = "Domo_dishes";
     private static String channelName = "DomoDishChannel";
@@ -62,13 +64,6 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     private static Disposable disposable;
     private static ListenerRegistration registration;
     private final AtomicBoolean firstCall = new AtomicBoolean(true);
-    private final LocalBinder localBinder = new LocalBinder();
-
-    public class LocalBinder extends Binder {
-        public DocumentDishesListenerService getService () {
-            return DocumentDishesListenerService.this;
-        }
-    }
 
     public static void setServiceCreatedConsumer (Consumer<Boolean> serviceCreatedConsumer) {
         DocumentDishesListenerService.serviceCreatedConsumer = serviceCreatedConsumer;
@@ -77,12 +72,30 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate() {
+
         isExist.set(true);
         service = this;
         subscribers = new ArrayList<>();
         latestData = new HashMap<>();
         notificationManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         createChannel(notificationManager);
+
+        Log.i("Test", "Service: onCreate");
+        Notification notification = new NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_accept)
+            .setColor(getResources().getColor(R.color.fui_transparent))
+            .setContentTitle("Служба уведоблений DOMO")
+            .setDefaults(NotificationCompat.DEFAULT_SOUND)
+            .setAutoCancel(true)
+            .addAction(null)
+            .build();
+
+        startForeground(777, notification);
+        Intent hideIntent = new Intent(this, HideNotificationService.class);
+        startService(hideIntent);
+
+
+
         disposable = getObservable()
             .observeOn(Schedulers.computation())
             .subscribeOn(Schedulers.computation())
@@ -171,10 +184,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
         return service;
     }
     @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return localBinder;
-    }
+
     public static void unSubscribeFromDatabase() {
         disposable.dispose();
         registration.remove();
@@ -222,6 +232,12 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
         super.onDestroy();
         isExist.set(false);
         Log.d(TAG, "DocumentDishesListenerService: destroyed");
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     public static Boolean isExist() {
