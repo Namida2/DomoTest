@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,22 +28,29 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         style="@style/Widget.App.BottomNavigationView"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
+        android:layout_marginBottom="16dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/black"
+        android:background="@drawable/bg_bottom_navigation"
         app:menu="@menu/menu_cook"
+        app:itemRippleColor="@color/black"
+        app:itemTextColor="@color/black"
+        app:itemIconTint="@color/color_bottom_navigation_items"
+        android:layout_gravity="bottom|center"
         app:labelVisibilityMode="labeled"/>
 
     <androidx.fragment.app.FragmentContainerView
-        android:layout_below="@id/tool_bar"
-        android:layout_above="@id/bottomNavigation"
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigation"
+        android:layout_below="@id/tool_bar"
+        android:layout_marginTop="55dp"
         app:defaultNavHost="true"
         app:navGraph="@navigation/cook_navigation" />
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

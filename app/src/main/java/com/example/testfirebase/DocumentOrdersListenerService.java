@@ -176,7 +176,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
                     tableInfo.setTableName(tableName);
                     try {
                         tableInfo.setGuestCount((long) tableIndoHashMap.get(OrderActivityPresenter.GUEST_COUNT_KEY));
-                        tableInfo.setIsComplete((boolean) tableIndoHashMap.get(OrderActivityPresenter.IS_COMPLETE_KEY));
+                        //tableInfo.setIsComplete((boolean) tableIndoHashMap.get(OrderActivityPresenter.IS_COMPLETE_KEY));
                     } catch (Exception e) {
                         Log.d(TAG, "OrderActivityPresenter.setModelDataState tableInfo: " + e.getMessage());
                         e.printStackTrace();

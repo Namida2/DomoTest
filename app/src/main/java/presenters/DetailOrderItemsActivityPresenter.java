@@ -13,14 +13,14 @@ import java.util.Map;
 import java.util.Set;
 
 import interfaces.DetailOrderItemsActivityInterface;
-import interfaces.DocumentDishesListenerServiceInterface;
+import interfaces.DocumentDishesListenerInterface;
 import model.DetailOrderItemsActivityModel;
 import model.OrderActivityModel;
 import tools.Pair;
 
 import static registration.LogInActivity.TAG;
 
-public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivityInterface.Presenter, DocumentDishesListenerServiceInterface.Subscriber {
+public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivityInterface.Presenter, DocumentDishesListenerInterface.Subscriber {
 
     private DetailOrderItemsActivityInterface.View view;
     private DetailOrderItemsActivityInterface.Model model;
@@ -59,12 +59,12 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
     }
     //DocumentListenerService
     @Override
-    public void notifyMe(Object data) {
+    public void dishesNotifyMe(Object data) {
         Map<String, Object> notifiable = (Map<String, Object>) data;
         notifyOrderItems(notifiable);
     }
     @Override
-    public void setLatestData(Map<String, Object> latestData) {
+    public void dishesSetLatestData(Map<String, Object> latestData) {
         notifyOrderItems(latestData);
     }
     private void notifyOrderItems(Map<String, Object> notifiable) {

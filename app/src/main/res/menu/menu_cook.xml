@@ -8,11 +8,6 @@
         android:title="Заказы"
         app:showAsAction="always"/>
 
-    <item
-        android:id="@+id/cookChecksFragment"
-        android:icon="@drawable/ic_check"
-        android:title="На чек"
-        app:showAsAction="always"/>
 
     <item
         android:id="@+id/cookProfileFragment"

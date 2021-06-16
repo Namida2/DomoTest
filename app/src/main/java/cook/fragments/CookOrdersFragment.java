@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
+import com.example.testfirebase.order.TableInfo;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,9 +48,9 @@ public class CookOrdersFragment extends Fragment implements OrdersFragmentInterf
         presenter.onResume();
     }
     @Override
-    public void startDetailOrderActivity(String tableNumber) {
+    public void startDetailOrderActivity(TableInfo tableInfo) {
         Intent intent = new Intent(getContext(), CookDetailOrderActivity.class);
-        intent.putExtra(DetailOrderActivityModel.EXTRA_TAG, tableNumber);
+        intent.putExtra(DetailOrderActivityModel.EXTRA_TAG, tableInfo.getTableName());
         getActivity().startActivity(intent);
     }
 }

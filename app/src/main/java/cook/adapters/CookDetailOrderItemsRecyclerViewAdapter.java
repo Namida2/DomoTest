@@ -91,6 +91,8 @@ public class CookDetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapte
         } else holder.commentary.setText(orderItemsArrayList.get(position).getCommentary() + " ");
         if (orderItemsArrayList.get(position).isReady())
             holder.isReady.setVisibility(View.VISIBLE);
+        else holder.isReady.setVisibility(View.GONE);
+
         Animations.Companion.startAnimationViewShowing(holder.container_large);
         RxView.clicks(holder.container_large)
             .debounce(150, TimeUnit.MILLISECONDS)

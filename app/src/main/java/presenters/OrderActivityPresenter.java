@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import cook.model.OrdersFragmentModel;
-import interfaces.DocumentDishesListenerServiceInterface;
+import interfaces.DocumentDishesListenerInterface;
 import interfaces.DocumentOrdersListenerInterface;
 import interfaces.OrderActivityInterface;
 import interfaces.ToolsInterface;
@@ -29,7 +29,7 @@ import model.TablesFragmentModel;
 import tools.Pair;
 import tools.UserData;
 
-public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerServiceInterface.Subscriber, DocumentOrdersListenerInterface.Subscriber {
+public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerInterface.Subscriber, DocumentOrdersListenerInterface.Subscriber {
 
     private static final String TAG = "myLogs";
     public static final String GUEST_COUNT_KEY = "guestCount";
@@ -79,7 +79,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
                     Map<String, Object> data = documentSnapshot.getData();
                     try {
                         tableInfo.setGuestCount( (long) data.get(GUEST_COUNT_KEY) );
-                        tableInfo.setIsComplete( (boolean) data.get(IS_COMPLETE_KEY) );
+                        //tableInfo.setIsComplete( (boolean) data.get(IS_COMPLETE_KEY) );
                     } catch (Exception e) {
                         Log.d(TAG, "OrderActivityPresenter.setModelDataState tableInfo: " + e.getMessage());
                         e.printStackTrace();
@@ -161,7 +161,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
         ArrayList<OrderItem> orderItems = model.getOrderInfo(tableNumber).first;
         Map<String, Object> tableInfoHashMap = new HashMap<>();
         tableInfoHashMap.put(OrderActivityModel.DOCUMENT_GUEST_COUNT_FIELD, guestCount);
-        tableInfoHashMap.put(OrderActivityModel.DOCUMENT_IS_COMPLETE_FIELD, false);
+        //tableInfoHashMap.put(OrderActivityModel.DOCUMENT_IS_COMPLETE_FIELD, false);
         // данные из адаптера не совпадают с данными из основного списка
         model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
             .document(OrderActivityModel.DOCUMENT_TABLE + tableNumber)
@@ -226,7 +226,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
 
     //DocumentListenerServices
     @Override
-    public void notifyMe(Object data) {
+    public void dishesNotifyMe(Object data) {
         if(model.getNotEmptyTablesOrdersHashMap() == null)
             Log.d(TAG, "OrderActivityPresenter.notifyMe: model is null");
         else {
@@ -235,7 +235,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
         }
     }
     @Override
-    public void setLatestData(Map<String, Object> latestData) {
+    public void dishesSetLatestData(Map<String, Object> latestData) {
         if(model.getNotEmptyTablesOrdersHashMap() == null)
             Log.d(TAG, "OrderActivityPresenter.notifyMe: model is null");
         else notifyOrderItems(latestData);

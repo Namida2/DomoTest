@@ -44,11 +44,12 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
     @Override
     public void setCurrentUserPost(String post) {
         UserData.post = post;
+        DocumentDishesListenerService.setPost(post);
         switch (post) {
             case SplashScreenActivityModel.COOK_POST_NAME:
                 startNewActivity(CookMainActivity.class);
-                DocumentDishesListenerService.unSubscribeFromDatabase();
-                stopService(new Intent(this, DocumentDishesListenerService.class));
+                //DocumentDishesListenerService.unSubscribeFromDatabase();
+                //stopService(new Intent(this, DocumentDishesListenerService.class));
                 break;
             case SplashScreenActivityModel.WAITER_POST_NAME:
                 startNewActivity(MainActivity.class);

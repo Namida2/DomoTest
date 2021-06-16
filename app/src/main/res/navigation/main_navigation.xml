@@ -11,9 +11,6 @@
         android:label="fragment_tables"
         tools:layout="@layout/fragment_tables" >
         <action
-            android:id="@+id/action_tablesFragment_to_checkFragment"
-            app:destination="@id/checkFragment" />
-        <action
             android:id="@+id/action_tablesFragment_to_ordersFragment"
             app:destination="@id/ordersFragment" />
         <action
@@ -25,28 +22,11 @@
         android:name="com.example.testfirebase.mainActivityFragments.OrdersFragment"
         android:label="OrdersFragment" >
         <action
-            android:id="@+id/action_ordersFragment_to_checkFragment"
-            app:destination="@id/checkFragment" />
-        <action
             android:id="@+id/action_ordersFragment_to_tablesFragment"
             app:destination="@id/tablesFragment" />
         <action
             android:id="@+id/action_ordersFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/checkFragment"
-        android:name="com.example.testfirebase.mainActivityFragments.CheckFragment"
-        android:label="CheckFragment" >
-        <action
-            android:id="@+id/action_checkFragment_to_ordersFragment"
-            app:destination="@id/ordersFragment" />
-        <action
-            android:id="@+id/action_checkFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_checkFragment_to_tablesFragment"
-            app:destination="@id/tablesFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"

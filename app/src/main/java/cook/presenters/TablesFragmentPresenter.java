@@ -2,21 +2,26 @@ package cook.presenters;
 
 import android.view.View;
 
+import com.example.testfirebase.DocumentDishesListenerService;
 import com.example.testfirebase.DocumentOrdersListenerService;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 import cook.adapters.CookTablesRecyclerViewAdapter;
 import cook.interfaces.OrdersFragmentInterface;
 import cook.model.OrdersFragmentModel;
+import interfaces.DocumentDishesListenerInterface;
 import interfaces.DocumentOrdersListenerInterface;
 import model.OrderActivityModel;
+import model.SplashScreenActivityModel;
 import tools.Pair;
+import tools.UserData;
 
-public class TablesFragmentPresenter implements OrdersFragmentInterface.Presenter, DocumentOrdersListenerInterface.Subscriber {
+public class TablesFragmentPresenter implements OrdersFragmentInterface.Presenter, DocumentOrdersListenerInterface.Subscriber, DocumentDishesListenerInterface.Subscriber {
 
     private OrdersFragmentInterface.View view;
     private static OrdersFragmentInterface.Model model;
@@ -28,14 +33,16 @@ public class TablesFragmentPresenter implements OrdersFragmentInterface.Presente
             model = new OrdersFragmentModel();
             model.setOrdersHashMap(orderActivityModel.getNotEmptyTablesOrdersHashMap());
             model.setAdapter(new CookTablesRecyclerViewAdapter());
-            model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
-        } else model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
+        }
+        model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
+        model.getAdapter().notifyDataSetChanged();
         DocumentOrdersListenerService.getService().ordersSubscribe(this);
+        DocumentDishesListenerService.getService().dishesSubscribe(this);
     }
     @Override
     public void onResume() {
-        model.getAdapter().setAcceptOrderArrayList(tableNumber -> {
-            view.startDetailOrderActivity(tableNumber);
+        model.getAdapter().setAcceptOrderArrayList( tableInfo -> {
+            view.startDetailOrderActivity(tableInfo);
         });
     }
     @Override
@@ -77,5 +84,18 @@ public class TablesFragmentPresenter implements OrdersFragmentInterface.Presente
         orderActivityModel.getNotEmptyTablesOrdersHashMap().putAll(order);
         model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
         model.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void dishesNotifyMe(Object data) {
+        Map<String, Object> notifiable = (Map<String, Object>) data;
+        for(String key : notifiable.keySet()) {
+            model.getAdapter().notifyTable(key);
+        }
+    }
+
+    @Override
+    public void dishesSetLatestData(Map<String, Object> latestData) {
+
     }
 }

@@ -1,6 +1,7 @@
 package cook.interfaces;
 
 import com.example.testfirebase.order.OrderItem;
+import com.example.testfirebase.order.TableInfo;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,7 +19,7 @@ public interface OrdersFragmentInterface {
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap ();
     }
     interface View {
-        void startDetailOrderActivity(String tableNumber);
+        void startDetailOrderActivity(TableInfo tableInfo);
     }
     interface Presenter {
         void onResume();

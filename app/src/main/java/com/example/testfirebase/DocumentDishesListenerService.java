@@ -4,12 +4,9 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -34,20 +31,20 @@ import java.util.function.Consumer;
 
 
 import cook.model.OrdersFragmentModel;
-import interfaces.DocumentDishesListenerServiceInterface;
+import interfaces.DocumentDishesListenerInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import model.SplashScreenActivityModel;
-import tools.HideNotificationService;
 
 import static registration.LogInActivity.TAG;
 
-public class DocumentDishesListenerService extends Service implements DocumentDishesListenerServiceInterface.Observable {
+public class DocumentDishesListenerService extends Service implements DocumentDishesListenerInterface.Observable {
 
     private static int id = 1;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
+    private static String post;
 
     private static NotificationChannel channel;
     private static String channelId = "Domo_dishes";
@@ -56,7 +53,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     private static String READY_TO_SERVE = "готово к подаче";
 
     private NotificationManager notificationManager;
-    private static ArrayList<DocumentDishesListenerServiceInterface.Subscriber> subscribers;
+    private static ArrayList<DocumentDishesListenerInterface.Subscriber> subscribers;
     private Map<String, Object> latestData;
 
     private static DocumentDishesListenerService service;
@@ -76,7 +73,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
         createChannel(notificationManager);
 
         Notification notification = new NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_accept)
+            .setSmallIcon(R.drawable.ic_email)
             .setColor(getResources().getColor(R.color.fui_transparent))
             .setContentTitle("Служба уведоблений DOMO")
             .setDefaults(NotificationCompat.DEFAULT_SOUND)
@@ -158,6 +155,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
                         latestData = snapshot.getData();
                     firstCall.set(false);
                 });
+            if (post != null) Log.d(TAG, post.toString());
         });
     }
     private void createChannel (NotificationManager notificationManager) {
@@ -187,24 +185,27 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     }
     @Override
     public void dishesNotifyAllSubscribers(Object data) {
-        for(DocumentDishesListenerServiceInterface.Subscriber subscriber : subscribers)
-            subscriber.notifyMe(data);
+        for(DocumentDishesListenerInterface.Subscriber subscriber : subscribers)
+            subscriber.dishesNotifyMe(data);
     }
     @Override
-    public void dishesSubscribe(DocumentDishesListenerServiceInterface.Subscriber subscriber) {
+    public void dishesSubscribe(DocumentDishesListenerInterface.Subscriber subscriber) {
         boolean subscriberAlreadyAdded = false;
-        for(DocumentDishesListenerServiceInterface.Subscriber mySubscriber : subscribers)
+        for(DocumentDishesListenerInterface.Subscriber mySubscriber : subscribers)
             if(mySubscriber.getClass() == subscriber.getClass()) {
                 subscriberAlreadyAdded = true;
                 break;
             }
         if(!subscriberAlreadyAdded) {
             subscribers.add(subscriber);
-            subscriber.setLatestData(latestData);
+            subscriber.dishesSetLatestData(latestData);
         }
     }
+    public static void setPost (String post) {
+        DocumentDishesListenerService.post = post;
+    }
     @Override
-    public void dishesUnSubscribe(DocumentDishesListenerServiceInterface.Subscriber subscriber) {
+    public void dishesUnSubscribe(DocumentDishesListenerInterface.Subscriber subscriber) {
         subscribers.remove(subscriber);
     }
     @Override

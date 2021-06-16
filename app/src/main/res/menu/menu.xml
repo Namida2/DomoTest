@@ -15,12 +15,6 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/checkFragment"
-        android:icon="@drawable/ic_check"
-        android:title="На чек"
-        app:showAsAction="always"/>
-
-    <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_profile"
         android:title="Профиль"

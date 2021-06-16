@@ -2,14 +2,17 @@ package com.example.testfirebase;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavHostController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.concurrent.TimeUnit;
@@ -17,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import tools.Animations;
 
 import static registration.LogInActivity.TAG;
 
@@ -34,23 +38,6 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initialisation();
 
-//        Source source = Source.DEFAULT;
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("items_listener")
-//            .document("listener")
-//            .get(source).addOnCompleteListener(task -> {
-//                if(task.isSuccessful()) {
-//                    Map<String, Object> data;
-//                    data = task.getResult().getData();
-//                    ArrayList<Object> a = (ArrayList<Object>) data.get(DetailOrderActivityModel.FIELD_NOTIFY_NAME);
-//                    Map<String, Object> text;
-//                    for(int i = 0; i < data.size(); ++i) {
-//                        text = (Map<String, Object>) a.get(i);
-//                    }
-//                    Log.d(TAG, task.getResult().getData().toString());
-//                }
-//                else Log.d(TAG, task.getException().toString());
-//        });
 
         disposable = getBottomAppBarObservable()
             .debounce(150, TimeUnit.MILLISECONDS)
@@ -72,13 +59,6 @@ public class MainActivity extends AppCompatActivity {
                                     //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
                             );
                         break;
-                    case R.id.checkFragment:
-                        if(currentDestination.getId() != R.id.checkFragment)
-                            navHostController.navigate(R.id.checkFragment,
-                                    null
-                                    //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
-                            );
-                        break;
                     case R.id.profileFragment:
                         if(currentDestination.getId() != R.id.profileFragment)
                             navHostController.navigate(R.id.profileFragment,
@@ -91,6 +71,14 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, Thread.currentThread().getName());
             });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        showBottomNavigationView();
+        //bottomNavigationView.setSelectedItemId();
+    }
+
     private Observable<Integer> getBottomAppBarObservable () {
         return Observable.create(emitter -> {
             bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -108,5 +96,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if(disposable != null) disposable.dispose();
+    }
+    private void showBottomNavigationView () {
+        ViewGroup.LayoutParams layoutParams = bottomNavigationView.getLayoutParams();
+        if (layoutParams instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.Behavior behavior =
+                ((CoordinatorLayout.LayoutParams) layoutParams).getBehavior();
+            if (behavior instanceof HideBottomViewOnScrollBehavior) {
+                HideBottomViewOnScrollBehavior<BottomNavigationView> hideShowBehavior =
+                    (HideBottomViewOnScrollBehavior<BottomNavigationView>) behavior;
+                hideShowBehavior.slideUp(bottomNavigationView);
+            }
+        }
     }
 }
