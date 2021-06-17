@@ -13,14 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.DetailOrderActivity;
 import com.example.testfirebase.R;
+import com.example.testfirebase.TableMenuBottomSheetDialog;
 import com.example.testfirebase.order.TableInfo;
+import com.example.testfirebase.services.DocumentDishesListenerService;
 
 import org.jetbrains.annotations.NotNull;
 
 import cook.interfaces.OrdersFragmentInterface;
 import cook.model.DetailOrderActivityModel;
-import cook.presenters.TablesFragmentPresenter;
-import tools.Pair;
+import cook.presenters.OrdersFragmentPresenter;
+import dialogsTools.AcceptOrCancelDialog;
 
 public class OrdersFragment extends Fragment implements OrdersFragmentInterface.View {
 
@@ -28,7 +30,7 @@ public class OrdersFragment extends Fragment implements OrdersFragmentInterface.
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        presenter = new TablesFragmentPresenter(this);
+        presenter = new OrdersFragmentPresenter(this);
         super.onCreate(savedInstanceState);
     }
     @Nullable
@@ -52,8 +54,33 @@ public class OrdersFragment extends Fragment implements OrdersFragmentInterface.
 
     @Override
     public void startDetailOrderActivity(TableInfo tableInfo) {
-        Intent intent = new Intent(getContext(), DetailOrderActivity.class);
-        intent.putExtra(DetailOrderActivityModel.EXTRA_TAG, tableInfo.getTableName());
-        getActivity().startActivity(intent);
+        String tableName = DocumentDishesListenerService.TABLE + tableInfo.getTableName();
+        if (tableInfo.isOrderComplete()) {
+            TableMenuBottomSheetDialog tableMenuBottomSheetDialog = TableMenuBottomSheetDialog.getNewInstance(action -> {
+                switch (action) {
+                    case TableMenuBottomSheetDialog.ACTION_SHOW_DELETE_ORDER_DIALOG: {
+                        AcceptOrCancelDialog acceptOrCancelDialog = new AcceptOrCancelDialog(
+                            response -> {
+                                if((boolean) response)
+                                    presenter.deleteOrderFromDatabase(tableInfo.getTableName());
+                            }, tableName,
+                            getResources().getString(R.string.table_menu_dialog_delete_order_text)
+                        );
+                        acceptOrCancelDialog.show(getActivity().getSupportFragmentManager(), "");
+                    } break;
+                    case TableMenuBottomSheetDialog.ACTION_SHOW_DETAIL_ORDER: {
+                        Intent intent = new Intent(getContext(), DetailOrderActivity.class);
+                        intent.putExtra(DetailOrderActivityModel.EXTRA_TAG, tableInfo.getTableName());
+                        getActivity().startActivity(intent);
+                    } break;
+                }
+            },tableName);
+            tableMenuBottomSheetDialog.show(getActivity().getSupportFragmentManager(), "");
+        }
+        else {
+            Intent intent = new Intent(getContext(), DetailOrderActivity.class);
+            intent.putExtra(DetailOrderActivityModel.EXTRA_TAG, tableInfo.getTableName());
+            getActivity().startActivity(intent);
+        }
     }
 }

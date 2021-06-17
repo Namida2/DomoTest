@@ -2,24 +2,29 @@ package cook.presenters;
 
 import android.util.Log;
 
+import com.example.testfirebase.services.DocumentDishesListenerService;
+import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import cook.ReadyDish;
 import cook.adapters.CookDetailOrderItemsRecyclerViewAdapter;
 import cook.interfaces.CookDetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
+import com.example.testfirebase.services.interfaces.DocumentDishesListenerInterface;
 import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
 
 import static registration.LogInActivity.TAG;
 
-public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderActivityInterface.Presenter {
+public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderActivityInterface.Presenter, DocumentDishesListenerInterface.Subscriber {
 
     private CookDetailOrderActivityInterface.View view;
     private static CookDetailOrderActivityInterface.Model model;
@@ -31,12 +36,13 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
             CookDetailOrderItemsRecyclerViewAdapter adapter = new CookDetailOrderItemsRecyclerViewAdapter();
             model.setRecyclerViewAdapter(adapter);
         }
+        DocumentDishesListenerService.getService().dishesSubscribe(this);
     }
     @Override
     public void setDishState(ReadyDish readyDish) {
         Log.d(TAG, Thread.currentThread().getName());
         Map<String, Object> readyHaspMap = new HashMap<>();
-        readyDish.getOrderItem().setReady(true);
+        //readyDish.getOrderItem().setReady(true);
         readyHaspMap.put(OrderActivityModel.DOCUMENT_READY_FIELD, false);
         model.getRecyclerViewAdapter().notifyItemChanged(readyDish.getPosition());
         model.getDatabase()
@@ -91,5 +97,46 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
         model.getRecyclerViewAdapter().setAcceptedDishConsumer( dishData -> {
             view.showSetDishReadyDialog(dishData);
         });
+    }
+
+    @Override
+    public void dishesNotifyMe(Object data) {
+        Map<String, Object> notifiable = (Map<String, Object>) data;
+        notifyOrderItems(notifiable);
+    }
+    @Override
+    public void dishesSetLatestData(Map<String, Object> latestData) {
+        notifyOrderItems(latestData);
+    }
+    private void notifyOrderItems(Map<String, Object> notifiable) {
+        String key;
+        String dishName;
+        ArrayList<Object> orderItemNames;
+        Set<String> keys = notifiable.keySet();
+        Iterator<String> iterator = keys.iterator();
+        OrderActivityModel orderActivityModel = new OrderActivityModel();
+        while(iterator.hasNext()) {
+            key = iterator.next();
+            try {
+                ArrayList<OrderItem> orderItems = orderActivityModel
+                    .getNotEmptyTablesOrdersHashMap()
+                    .get(key).first;
+                orderItemNames = (ArrayList<Object>) notifiable.get(key);
+                for (int i = 0; i < orderItemNames.size(); ++i) {
+                    dishName = (String) ((ArrayList<?>) notifiable.get(key)).get(i);
+                    for (int j = 0; j < orderItems.size(); ++j) {
+                        if ((orderItems.get(j).getName()
+                            + OrderActivityModel.DOCUMENT_NAME_DELIMITER
+                            + orderItems.get(j).getCommentary()).equals(dishName)) {
+                            orderItems.get(j).setReady(true);
+                            model.getRecyclerViewAdapter().notifyItemChanged(j);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.d(TAG, "DetailOrderItemsActivityPresenter.notifyOrderItems: " + e.getMessage());
+                break;
+            }
+        }
     }
 }

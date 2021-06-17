@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import cook.CookDetailOrderActivity;
 import cook.interfaces.OrdersFragmentInterface;
 import cook.model.DetailOrderActivityModel;
-import cook.presenters.TablesFragmentPresenter;
+import cook.presenters.OrdersFragmentPresenter;
 
 public class CookOrdersFragment extends Fragment implements OrdersFragmentInterface.View  {
 
@@ -27,7 +27,7 @@ public class CookOrdersFragment extends Fragment implements OrdersFragmentInterf
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        presenter = new TablesFragmentPresenter(this);
+        presenter = new OrdersFragmentPresenter(this);
         super.onCreate(savedInstanceState);
     }
     @Nullable

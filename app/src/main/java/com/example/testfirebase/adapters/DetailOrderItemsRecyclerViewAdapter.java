@@ -56,7 +56,7 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
             cost = itemView.findViewById(R.id.dish_cost);
             count = itemView.findViewById(R.id.dish_count);
             commentary = itemView.findViewById(R.id.commentary);
-            commentaryTitle = itemView.findViewById(R.id.commentary_title);
+            commentaryTitle = itemView.findViewById(R.id.text);
             isReady = itemView.findViewById(R.id.is_ready);
         }
     }
@@ -85,6 +85,7 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
         holder.weight.setText(orderItemsArrayList.get(position).getWeight());
         holder.cost.setText(orderItemsArrayList.get(position).getCost());
         holder.count.setText(orderItemsArrayList.get(position).getCount() + " шт");
+        holder.isReady.setVisibility(View.GONE);
         if (orderItemsArrayList.get(position).isReady())
             holder.isReady.setVisibility(View.VISIBLE);
         if (orderItemsArrayList.get(position).getCommentary().equals("")) {

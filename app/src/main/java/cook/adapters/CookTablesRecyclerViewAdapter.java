@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 
 import cook.model.OrdersFragmentModel;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import model.OrderActivityModel;
 import tools.Animations;
 import tools.Pair;
 
@@ -79,9 +80,9 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
             stringPreview += name.length() > 16 ? name.substring(0, 16) + "...\n" : name + "\n" ;
         }
         holder.completeStatusTextView.setVisibility(View.GONE);
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> ooooo = new OrderActivityModel().getNotEmptyTablesOrdersHashMap();
         if(allDishesReady(ordersArrayList.get(position).first))
             holder.completeStatusTextView.setVisibility(View.VISIBLE);
-
         holder.preview.setText(stringPreview);
         holder.tableNumber.setText(tableNumbers.get(position));
         RxView.clicks(holder.container)

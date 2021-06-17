@@ -20,4 +20,7 @@
 
     <string name="error_alert_dialog_empty_field_title">Пустое поле</string>
     <string name="error_alert_dialog_empty_field_text">Пожалуйста, заполните все поля.</string>
+
+
+    <string name="table_menu_dialog_delete_order_text">Вы действительно хотите удалить этот столик?</string>
 </resources>

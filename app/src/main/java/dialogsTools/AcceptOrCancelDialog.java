@@ -1,4 +1,4 @@
-package cook;
+package dialogsTools;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,16 +23,17 @@ import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
-public class SetDishReadyAlertDialog extends DialogFragment {
+public class AcceptOrCancelDialog extends DialogFragment {
 
-    private String dishName;
-    private Consumer<String> acceptDishReady;
+    private Consumer<Object> accept;
+    private String title;
+    private String text;
 
-    public SetDishReadyAlertDialog(Consumer<String> acceptDishReady, String dishName) {
-        this.dishName = dishName;
-        this.acceptDishReady = acceptDishReady;
+    public AcceptOrCancelDialog(Consumer<Object> accept, String title, String text) {
+        this.accept = accept;
+        this.title = title;
+        this.text = text;
     }
-
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,23 +44,29 @@ public class SetDishReadyAlertDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.alertDialogStyle);
-        View contentView = View.inflate(getContext(), R.layout.dialog_set_dish_ready, null);
+        View contentView = View.inflate(getContext(), R.layout.dialog_accept_or_cancel, null);
         builder.setView(contentView);
         Button cancel = contentView.findViewById(R.id.cancel);
         Button accept = contentView.findViewById(R.id.accept);
-        ( (TextView)contentView.findViewById(R.id.title) ).setText(dishName);
+        if(title != null)
+            ((TextView)contentView.findViewById(R.id.title)).setText(title);
+        if(text != null)
+            ((TextView)contentView.findViewById(R.id.text)).setText(text);
+
         RxView.clicks(cancel)
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
+                if(text != null ) this.accept.accept(false);
                 dismiss();
             });
             RxView.clicks(accept)
                 .debounce(150, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(unit -> {
-                    acceptDishReady.accept(dishName);
+                    if(text != null ) this.accept.accept(true);
+                    else this.accept.accept(title);
                     dismiss();
                 });
         return builder.create();

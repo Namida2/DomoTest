@@ -2,8 +2,9 @@ package presenters;
 
 import android.util.Log;
 
-import com.example.testfirebase.DocumentDishesListenerService;
-import com.example.testfirebase.DocumentOrdersListenerService;
+import com.example.testfirebase.DeleteOrderObservable;
+import com.example.testfirebase.services.DocumentDishesListenerService;
+import com.example.testfirebase.services.DocumentOrdersListenerService;
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
@@ -18,8 +19,10 @@ import java.util.Map;
 import java.util.Set;
 
 import cook.model.OrdersFragmentModel;
-import interfaces.DocumentDishesListenerInterface;
-import interfaces.DocumentOrdersListenerInterface;
+import com.example.testfirebase.services.interfaces.DocumentDishesListenerInterface;
+import com.example.testfirebase.services.interfaces.DocumentOrdersListenerInterface;
+
+import interfaces.DeleteOrderInterface;
 import interfaces.OrderActivityInterface;
 import interfaces.ToolsInterface;
 import io.reactivex.rxjava3.core.Observable;
@@ -29,7 +32,8 @@ import model.TablesFragmentModel;
 import tools.Pair;
 import tools.UserData;
 
-public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerInterface.Subscriber, DocumentOrdersListenerInterface.Subscriber {
+public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerInterface.Subscriber,
+    DocumentOrdersListenerInterface.Subscriber, DeleteOrderInterface.Subscriber {
 
     private static final String TAG = "myLogs";
     public static final String GUEST_COUNT_KEY = "guestCount";
@@ -49,6 +53,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
         }
         DocumentDishesListenerService.getService().dishesSubscribe(this);
         DocumentOrdersListenerService.getService().ordersSubscribe(this);
+        DeleteOrderObservable.getObservable().subscribe(this);
         Log.d(TAG, "Subscribe to services: SUCCESS");
         Log.d(TAG, "OrderActivityPresenter: CREATED");
     }
@@ -62,10 +67,6 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
     }
     @Override
     public void setModelDataState(boolean needToNotifyView) {
-//        if(view == null && needToNotifyView) {
-//            Log.d(TAG, "OrderActivityPresenter.setModelDataState: View is null, can not notify view!");
-//            needToNotifyView = false;
-//        }
         final boolean finalNeedToNotifyView = needToNotifyView;
         ArrayList<TableInfo> tablesInfo = new ArrayList<>();
         model.setTableInfoArrayList(tablesInfo);
@@ -209,21 +210,18 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
     public ArrayList<TableInfo> getTableInfoArrayList() {
         return model.getTableInfoArrayList();
     }
-
     @Override
     public void onDestroy() {
         DocumentDishesListenerService.getService().dishesUnSubscribe(this);
         DocumentOrdersListenerService.getService().ordersSubscribe(this);
         Log.d(TAG, "Unsubscribe to services");
     }
-
     @Override
     public void orderRecyclerViewOnActivityDestroy(int tableNumber) {
         if ( !model.getOrderInfo(tableNumber).second )
             model.getAllTablesOrdersHashMap().get(OrderActivityModel.DOCUMENT_TABLE + tableNumber).first = new ArrayList<>();
         view = null;
     }
-
     //DocumentListenerServices
     @Override
     public void dishesNotifyMe(Object data) {
@@ -266,7 +264,6 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
             } catch (Exception e) { break; }
         }
     }
-
     @Override
     public void ordersNotifyMe(Object data) {
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> order = (Map<String, Pair<ArrayList<OrderItem>, Boolean>>) data;
@@ -279,14 +276,10 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
                 DocumentDishesListenerService.TABLE + tableNumber,
                 DocumentOrdersListenerService.NEW_ORDER);
         }
-
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaa = model.getAllTablesOrdersHashMap();
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> bbb = model.getNotEmptyTablesOrdersHashMap();
         try {
             model.getAllTablesOrdersHashMap().remove(tableInfo.getTableName());
             model.getNotEmptyTablesOrdersHashMap().remove(tableInfo.getTableName());
         } catch (Exception e) {}
-        ArrayList<TableInfo> ttt = model.getTableInfoArrayList();
         for(int i = 0; i < model.getTableInfoArrayList().size(); ++i) {
             if (model.getTableInfoArrayList().get(i).getTableName().equals(tableInfo.getTableName())) {
                 model.getTableInfoArrayList().remove(i); break;
@@ -295,5 +288,15 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
         model.getTableInfoArrayList().add(tableInfo);
         model.getAllTablesOrdersHashMap().putAll(order);
         model.getNotEmptyTablesOrdersHashMap().putAll(order);
+    }
+
+    @Override
+    public void deleteOrder(String tableName) {
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaaa = model.getNotEmptyTablesOrdersHashMap();
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> bbbbb = model.getAllTablesOrdersHashMap();
+        model.getAllTablesOrdersHashMap().get(tableName).first.clear();
+        model.getAllTablesOrdersHashMap().get(tableName).second = false;
+        model.getNotEmptyTablesOrdersHashMap().remove(tableName);
+        Map<String, Pair<ArrayList<OrderItem>, Boolean>> A = model.getNotEmptyTablesOrdersHashMap();
     }
 }

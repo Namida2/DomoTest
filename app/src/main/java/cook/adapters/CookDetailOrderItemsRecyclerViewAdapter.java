@@ -56,7 +56,7 @@ public class CookDetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapte
             cost = itemView.findViewById(R.id.dish_cost);
             count = itemView.findViewById(R.id.dish_count);
             commentary = itemView.findViewById(R.id.commentary);
-            commentaryTitle = itemView.findViewById(R.id.commentary_title);
+            commentaryTitle = itemView.findViewById(R.id.text);
             isReady = itemView.findViewById(R.id.is_ready);
         }
     }

@@ -45,7 +45,7 @@ public class ErrorAlertDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.alertDialogStyle);
         View view = View.inflate(getActivity(), R.layout.dialog_error, null);
         TextView title = view.findViewById(R.id.title);
-        TextView text = view.findViewById(R.id.commentary_title);
+        TextView text = view.findViewById(R.id.text);
         Button button = view.findViewById(R.id.ok);
         RxView.clicks(button).
             debounce(150, TimeUnit.MILLISECONDS)

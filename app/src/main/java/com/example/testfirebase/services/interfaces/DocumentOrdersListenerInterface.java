@@ -1,4 +1,4 @@
-package interfaces;
+package com.example.testfirebase.services.interfaces;
 
 import com.example.testfirebase.order.TableInfo;
 

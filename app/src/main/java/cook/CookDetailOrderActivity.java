@@ -14,6 +14,7 @@ import cook.interfaces.CookDetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
 import cook.presenters.CookDetailOrderItemsActivityPresenter;
 import dialogsTools.ErrorAlertDialog;
+import dialogsTools.AcceptOrCancelDialog;
 import tools.Network;
 
 public class CookDetailOrderActivity extends AppCompatActivity implements CookDetailOrderActivityInterface.View {
@@ -37,9 +38,9 @@ public class CookDetailOrderActivity extends AppCompatActivity implements CookDe
     @Override
     public void showSetDishReadyDialog(ReadyDish dishData) {
         if (Network.isNetworkConnected(this)) {
-            new SetDishReadyAlertDialog( dishName -> {
+            new AcceptOrCancelDialog(dishName -> {
                 presenter.setDishState(dishData);
-            }, dishData.getOrderItem().getName()).show(getSupportFragmentManager(), "");
+            }, dishData.getOrderItem().getName(), null).show(getSupportFragmentManager(), "");
         } else onError(ErrorAlertDialog.INTERNET_CONNECTION);
 
     }

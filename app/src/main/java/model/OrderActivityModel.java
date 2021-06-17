@@ -20,7 +20,7 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
 
     // key, listItems, isAccepted
     private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap;
-    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap;
+    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyOrdersHashMap;
     private static ArrayList<TableInfo> tablesInfo;
 
     private OrderRecyclerViewAdapter adapter;
@@ -39,13 +39,13 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     }
     @Override
     public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap() {
-        return notEmptyTablesOrdersHashMap;
+        return notEmptyOrdersHashMap;
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getTablesWithAllReadyDishes() {
         Map<String, Pair<ArrayList<OrderItem>, Boolean>> tablesWithAllReadyDishes = new HashMap<>();
-        notEmptyTablesOrdersHashMap.forEach( (key, pair) -> {
+        notEmptyOrdersHashMap.forEach( (key, pair) -> {
             boolean allReady = true;
             for(int i = 0; i < pair.first.size(); ++i)
                 if(!pair.first.get(i).isReady()) allReady = false;
@@ -79,8 +79,10 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     }
     @Override
     public void setNotEmptyTablesOrdersHashMap(Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap) {
-        OrderActivityModel.notEmptyTablesOrdersHashMap = notEmptyTablesOrdersHashMap;
+        OrderActivityModel.notEmptyOrdersHashMap = notEmptyTablesOrdersHashMap;
     }
+
+
     @Override
     public FirebaseFirestore getDatabase() {
         return db;

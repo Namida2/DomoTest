@@ -30,7 +30,6 @@ public class SplashScreenActivityPresenter implements SplashScreenInterface.Pres
     }
     @Override
     public void notifyMe() {
-        ArrayList<TableInfo> asd = orderActivityPresenter.getTableInfoArrayList();
         getCurrentUserPost();
     }
 

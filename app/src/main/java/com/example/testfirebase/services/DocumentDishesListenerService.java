@@ -1,4 +1,4 @@
-package com.example.testfirebase;
+package com.example.testfirebase.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.testfirebase.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -31,7 +32,7 @@ import java.util.function.Consumer;
 
 
 import cook.model.OrdersFragmentModel;
-import interfaces.DocumentDishesListenerInterface;
+import com.example.testfirebase.services.interfaces.DocumentDishesListenerInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -190,16 +191,15 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     }
     @Override
     public void dishesSubscribe(DocumentDishesListenerInterface.Subscriber subscriber) {
-        boolean subscriberAlreadyAdded = false;
-        for(DocumentDishesListenerInterface.Subscriber mySubscriber : subscribers)
-            if(mySubscriber.getClass() == subscriber.getClass()) {
-                subscriberAlreadyAdded = true;
+        for(int i = 0; i < subscribers.size(); ++i) {
+            DocumentDishesListenerInterface.Subscriber mySubscriber = subscribers.get(i);
+            if (mySubscriber.getClass() == subscriber.getClass()) {
+                subscribers.remove(i);
                 break;
             }
-        if(!subscriberAlreadyAdded) {
-            subscribers.add(subscriber);
-            subscriber.dishesSetLatestData(latestData);
         }
+        subscribers.add(subscriber);
+        subscriber.dishesSetLatestData(latestData);
     }
     public static void setPost (String post) {
         DocumentDishesListenerService.post = post;

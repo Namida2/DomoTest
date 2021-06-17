@@ -34,7 +34,7 @@
         <activity android:name="com.example.testfirebase.DetailOrderActivity"/>
 
         <service
-            android:name="com.example.testfirebase.DocumentDishesListenerService"
+            android:name="com.example.testfirebase.services.DocumentDishesListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="your.app.domain.NotificationService" />
@@ -43,7 +43,7 @@
         </service>
 
         <service
-            android:name="com.example.testfirebase.DocumentOrdersListenerService"
+            android:name="com.example.testfirebase.services.DocumentOrdersListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="your.app.domain.NotificationService" />

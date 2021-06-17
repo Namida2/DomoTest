@@ -1,4 +1,4 @@
-package com.example.testfirebase;
+package com.example.testfirebase.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -15,8 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.testfirebase.R;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
+import com.example.testfirebase.services.interfaces.DocumentOrdersListenerInterface;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -31,7 +33,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 import cook.model.OrdersFragmentModel;
-import interfaces.DocumentOrdersListenerInterface;
 import io.reactivex.rxjava3.disposables.Disposable;
 import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
@@ -93,15 +94,14 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     }
     @Override
     public void ordersSubscribe(DocumentOrdersListenerInterface.Subscriber subscriber) {
-        boolean subscriberAlreadyAdded = false;
-        for(DocumentOrdersListenerInterface.Subscriber mySubscriber : subscribers)
-            if(mySubscriber.getClass() == subscriber.getClass()) {
-                subscriberAlreadyAdded = true;
+        for(int i = 0; i < subscribers.size(); ++i) {
+            DocumentOrdersListenerInterface.Subscriber mySubscriber = subscribers.get(i);
+            if (mySubscriber.getClass() == subscriber.getClass()) {
+                subscribers.remove(i);
                 break;
             }
-        if(!subscriberAlreadyAdded) {
-            subscribers.add(subscriber);
         }
+        subscribers.add(subscriber);
     }
     private void startDocumentListening() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

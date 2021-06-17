@@ -1,24 +1,21 @@
 package com.example.testfirebase;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.testfirebase.services.DocumentDishesListenerService;
+import com.example.testfirebase.services.DocumentOrdersListenerService;
+
 import cook.CookMainActivity;
-import interfaces.DocumentOrdersListenerInterface;
 import interfaces.SplashScreenInterface;
 import model.SplashScreenActivityModel;
 import presenters.SplashScreenActivityPresenter;
 import registration.LogInActivity;
-import tools.HideNotificationService;
 import tools.UserData;
 
 public class SplashScreenActivity extends AppCompatActivity implements SplashScreenInterface.View {
@@ -67,6 +64,4 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
             SplashScreenActivity.this.finish();
         }, 80);
     }
-
-
 }

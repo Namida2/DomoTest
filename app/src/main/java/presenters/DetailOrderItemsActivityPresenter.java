@@ -2,7 +2,7 @@ package presenters;
 
 import android.util.Log;
 
-import com.example.testfirebase.DocumentDishesListenerService;
+import com.example.testfirebase.services.DocumentDishesListenerService;
 import com.example.testfirebase.adapters.DetailOrderItemsRecyclerViewAdapter;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
@@ -13,10 +13,9 @@ import java.util.Map;
 import java.util.Set;
 
 import interfaces.DetailOrderItemsActivityInterface;
-import interfaces.DocumentDishesListenerInterface;
+import com.example.testfirebase.services.interfaces.DocumentDishesListenerInterface;
 import model.DetailOrderItemsActivityModel;
 import model.OrderActivityModel;
-import tools.Pair;
 
 import static registration.LogInActivity.TAG;
 
@@ -73,11 +72,9 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
         ArrayList<Object> orderItemNames;
         Set<String> keys = notifiable.keySet();
         Iterator<String> iterator = keys.iterator();
+        OrderActivityModel orderActivityModel = new OrderActivityModel();
         while(iterator.hasNext()) {
             key = iterator.next();
-            OrderActivityModel orderActivityModel = new OrderActivityModel();
-            Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaaaa = orderActivityModel
-                .getNotEmptyTablesOrdersHashMap();
             try {
                 ArrayList<OrderItem> orderItems = orderActivityModel
                     .getNotEmptyTablesOrdersHashMap()
@@ -86,8 +83,9 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
                 for (int i = 0; i < orderItemNames.size(); ++i) {
                     dishName = (String) ((ArrayList<?>) notifiable.get(key)).get(i);
                     for (int j = 0; j < orderItems.size(); ++j) {
-                        String aa = orderItems.get(j).getName() + OrderActivityModel.DOCUMENT_NAME_DELIMITER + orderItems.get(j).getCommentary();
-                        if ((orderItems.get(j).getName() + OrderActivityModel.DOCUMENT_NAME_DELIMITER + orderItems.get(j).getCommentary()).equals(dishName)) {
+                        if ((orderItems.get(j).getName()
+                            + OrderActivityModel.DOCUMENT_NAME_DELIMITER
+                            + orderItems.get(j).getCommentary()).equals(dishName)) {
                             orderItems.get(j).setReady(true);
                             model.getRecyclerViewAdapter().notifyItemChanged(j);
                         }
@@ -95,6 +93,7 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
                 }
             } catch (Exception e) {
                 Log.d(TAG, "DetailOrderItemsActivityPresenter.notifyOrderItems: " + e.getMessage());
+                break;
             }
         }
     }
