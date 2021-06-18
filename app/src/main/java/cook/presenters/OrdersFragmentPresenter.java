@@ -1,10 +1,10 @@
 package cook.presenters;
 
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.View;
 
 import com.example.testfirebase.DeleteOrderObservable;
-import com.example.testfirebase.SplashScreenActivity;
 import com.example.testfirebase.services.DocumentDishesListenerService;
 import com.example.testfirebase.services.DocumentOrdersListenerService;
 import com.example.testfirebase.order.OrderItem;
@@ -28,7 +28,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import interfaces.DeleteOrderInterface;
 import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
-import tools.Pair;
 
 import static registration.LogInActivity.TAG;
 
@@ -124,8 +123,11 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
     @Override
     public void deleteOrder(String tableName) {
         Map<String, ArrayList<OrderItem>> aaaa = orderActivityModel.getNotEmptyTablesOrdersHashMap();
+
+        model.getAdapter().setOrdersArrayList(new HashMap<>());
+        model.getAdapter().notifyDataSetChanged();
         model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
-        //model.getAdapter().notifyDataSetChanged();
+        model.getAdapter().notifyDataSetChanged();
     }
     private void notifyOrderItems(Map<String, Object> notifiable) {
         String key;
@@ -188,7 +190,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
     }
     @Override
     public void onResume() {
-        model.getAdapter().setAcceptOrderArrayList( tableInfo -> {
+        model.getAdapter().setAcceptOrderArrayListConsumer(tableInfo -> {
             view.startDetailOrderActivity(tableInfo);
         });
     }
