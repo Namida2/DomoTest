@@ -94,15 +94,12 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
                     ArrayList<String> namesArrayList = new ArrayList<>();
                     try {
                         namesArrayList = (ArrayList<String>) data.get(key);
-                    } catch (Exception e) {
-                        Log.d(TAG, "DocumentListenerService.onCreate: wrong entry format");
-                    }
+                    } catch (Exception e) { Log.d(TAG, "DocumentListenerService.onCreate: wrong entry format"); }
+                    if(namesArrayList == null) continue;
                     Set<String> items = new HashSet<>(namesArrayList);
                     try {
                         items.removeAll((Collection<?>) latestData.get(key));
-                    } catch (Exception e) {
-                        Log.d(TAG, "DocumentListenerService.onCreate: latestData does not contain key \"" + key + "\"");
-                    }
+                    } catch (Exception e) { Log.d(TAG, "DocumentListenerService.onCreate: latestData does not contain key \"" + key + "\""); }
                     newData.put(key, new ArrayList<>(items));
                 }
                 keys = newData.keySet();

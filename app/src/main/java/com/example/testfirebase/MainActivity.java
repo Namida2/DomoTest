@@ -17,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.concurrent.TimeUnit;
 
+import interfaces.DeleteOrderInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -24,7 +25,7 @@ import tools.Animations;
 
 import static registration.LogInActivity.TAG;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DeleteOrderInterface.Subscriber {
 
     private BottomNavigationView bottomNavigationView;
     private NavHostFragment navHostFragment;
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        DeleteOrderObservable.getObservable().subscribe(this);
         initialisation();
-
 
         disposable = getBottomAppBarObservable()
             .debounce(150, TimeUnit.MILLISECONDS)
@@ -71,14 +72,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, Thread.currentThread().getName());
             });
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         showBottomNavigationView();
         //bottomNavigationView.setSelectedItemId();
     }
-
     private Observable<Integer> getBottomAppBarObservable () {
         return Observable.create(emitter -> {
             bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -108,5 +107,10 @@ public class MainActivity extends AppCompatActivity {
                 hideShowBehavior.slideUp(bottomNavigationView);
             }
         }
+    }
+
+    @Override
+    public void deleteOrder(String tableName) {
+        showBottomNavigationView();
     }
 }

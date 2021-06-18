@@ -18,7 +18,9 @@ import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.jakewharton.rxbinding4.view.RxView;
 
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import dialogsTools.ErrorAlertDialog;
@@ -27,6 +29,7 @@ import interfaces.MenuDialogOrderActivityInterface;
 import interfaces.OrderActivityInterface;
 import interfaces.ToolsInterface;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import presenters.MenuDialogPresenter;
 import presenters.GuestCountDialogOrderActivityPresenter;
 import presenters.OrderActivityPresenter;
@@ -85,10 +88,13 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
 
         bottomAppBar = findViewById(R.id.bottom_app_bar);
         fba = findViewById(R.id.menu_floating_action_button);
-        fba.setOnClickListener(view -> { // add isExist
-            if(menuDialogView != null)
-                menuDialog.show(getSupportFragmentManager(), "");
-        });
+        RxView.clicks(fba)
+            .debounce(150, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(unit -> {
+                if(menuDialogView != null)
+                    menuDialog.show(getSupportFragmentManager(), "");
+            });
         bottomAppBar.setNavigationOnClickListener(view -> { // add isExist
             OrderMenuBottomSheetDialog dialog = OrderMenuBottomSheetDialog.getNewInstance(orderWasAccepted -> {
                 orderPresenter.acceptAndWriteOrderToDb(tableNumber, guestsCount);
@@ -152,7 +158,6 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        orderPresenter.orderRecyclerViewOnActivityDestroy(tableNumber);
         menuDialogPresenter.onDestroy();
         menuDialog = null;
         guestCountDialog = null;

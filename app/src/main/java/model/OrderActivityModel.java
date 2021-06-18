@@ -19,8 +19,8 @@ import tools.Pair;
 public class OrderActivityModel implements OrderActivityInterface.Model {
 
     // key, listItems, isAccepted
-    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap;
-    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyOrdersHashMap;
+    private static Map<String, ArrayList<OrderItem>> allTablesOrdersHashMap;
+    private static Map<String, ArrayList<OrderItem>> notEmptyOrdersHashMap;
     private static ArrayList<TableInfo> tablesInfo;
 
     private OrderRecyclerViewAdapter adapter;
@@ -31,58 +31,56 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
     public static final String DOCUMENT_TABLE = "table_";
     public static final String DOCUMENT_NAME_DELIMITER = "_";
     public static final String DOCUMENT_GUEST_COUNT_FIELD = "guestCount";
-    public static final String DOCUMENT_IS_COMPLETE_FIELD = "isComplete";
     public static final String DOCUMENT_READY_FIELD = "ready";
+    public static final String DOCUMENT_DELETE_ORDER_LISTENER = "delete_order_listener";
 
     public OrderActivityModel () {
         db = FirebaseFirestore.getInstance();
     }
     @Override
-    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap() {
+    public Map<String, ArrayList<OrderItem>> getNotEmptyTablesOrdersHashMap() {
         return notEmptyOrdersHashMap;
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getTablesWithAllReadyDishes() {
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> tablesWithAllReadyDishes = new HashMap<>();
-        notEmptyOrdersHashMap.forEach( (key, pair) -> {
+    public Map<String, ArrayList<OrderItem>> getTablesWithAllReadyDishes() {
+        Map<String, ArrayList<OrderItem>> tablesWithAllReadyDishes = new HashMap<>();
+        notEmptyOrdersHashMap.forEach( (key, orderItems) -> {
             boolean allReady = true;
-            for(int i = 0; i < pair.first.size(); ++i)
-                if(!pair.first.get(i).isReady()) allReady = false;
-            if(allReady) tablesWithAllReadyDishes.put(key, pair);
+            for(int i = 0; i < orderItems.size(); ++i)
+                if(!orderItems.get(i).isReady()) allReady = false;
+            if(allReady) tablesWithAllReadyDishes.put(key, orderItems);
         });
 
         return null;
     }
     @Override
-    public Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber) {
+    public ArrayList<OrderItem> getOrderInfo(int tableNumber) {
         String key = DOCUMENT_TABLE + tableNumber;
         if (allTablesOrdersHashMap.containsKey(key)) return allTablesOrdersHashMap.get(key);
         else {
-            Pair<ArrayList<OrderItem>, Boolean> orderInfo = new Pair<>(new ArrayList<>(), false);
-            allTablesOrdersHashMap.put(key, orderInfo);
-            return orderInfo;
+            ArrayList<OrderItem> arrayList = new ArrayList<>();
+            allTablesOrdersHashMap.put(key, arrayList);
+            return arrayList;
         }
     }
     @Override
     public ArrayList<OrderItem> getOrderItemsArrayList(int tableNumber) {
         if (allTablesOrdersHashMap.get(DOCUMENT_TABLE + tableNumber) == null) return null;
-        return allTablesOrdersHashMap.get(DOCUMENT_TABLE + tableNumber).first;
+        return allTablesOrdersHashMap.get(DOCUMENT_TABLE + tableNumber);
     }
     @Override
-    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getAllTablesOrdersHashMap() {
+    public Map<String, ArrayList<OrderItem>> getAllTablesOrdersHashMap() {
         return allTablesOrdersHashMap;
     }
     @Override
-    public void setAllTablesOrdersHashMap(Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap) {
+    public void setAllTablesOrdersHashMap(Map<String, ArrayList<OrderItem>> allTablesOrdersHashMap) {
         OrderActivityModel.allTablesOrdersHashMap = allTablesOrdersHashMap;
     }
     @Override
-    public void setNotEmptyTablesOrdersHashMap(Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap) {
+    public void setNotEmptyTablesOrdersHashMap(Map<String, ArrayList<OrderItem>> notEmptyTablesOrdersHashMap) {
         OrderActivityModel.notEmptyOrdersHashMap = notEmptyTablesOrdersHashMap;
     }
-
-
     @Override
     public FirebaseFirestore getDatabase() {
         return db;

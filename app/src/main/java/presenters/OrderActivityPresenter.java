@@ -12,6 +12,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,8 @@ import model.SplashScreenActivityModel;
 import model.TablesFragmentModel;
 import tools.Pair;
 import tools.UserData;
+
+import static registration.LogInActivity.TAG;
 
 public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerInterface.Subscriber,
     DocumentOrdersListenerInterface.Subscriber, DeleteOrderInterface.Subscriber {
@@ -62,7 +65,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
         model.getAdapter().addOrder(orderItem);
     }
     @Override
-    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap() {
+    public Map<String, ArrayList<OrderItem>> getNotEmptyTablesOrdersHashMap() {
         return model.getNotEmptyTablesOrdersHashMap();
     }
     @Override
@@ -90,7 +93,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
                 if (tablesInfo.size() == 0) {
                     for(int i = 1; i <= TABLE_COUNT; ++i) {
                         if (!model.getAllTablesOrdersHashMap().containsKey( OrderActivityModel.DOCUMENT_TABLE + i )) {
-                            model.getAllTablesOrdersHashMap().put(OrderActivityModel.DOCUMENT_TABLE + i, new Pair<>(new ArrayList<>(), false));
+                            model.getAllTablesOrdersHashMap().put(OrderActivityModel.DOCUMENT_TABLE + i, new ArrayList<>());
                         }
                     }
                     view.notifyMe();
@@ -105,7 +108,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
                             .get().addOnCompleteListener(task1 -> {
                             if(task1.isSuccessful()) {
                                 List<OrderItem> orderItemsList = task1.getResult().toObjects(OrderItem.class);
-                                model.getAllTablesOrdersHashMap().put( tableDocument.getTableName(), new Pair<>( new ArrayList<>(orderItemsList), true) );
+                                model.getAllTablesOrdersHashMap().put( tableDocument.getTableName(), new ArrayList<>(orderItemsList));
                             }
                             else  Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task1.getException());
                             model.getNotEmptyTablesOrdersHashMap().putAll(model.getAllTablesOrdersHashMap());
@@ -117,7 +120,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
                             if( model.getAllTablesOrdersHashMap().size() == collectionSize) {
                                 for(int i = 1; i <= TABLE_COUNT; ++i) {
                                     if (!model.getAllTablesOrdersHashMap().containsKey( OrderActivityModel.DOCUMENT_TABLE + i )) {
-                                        model.getAllTablesOrdersHashMap().put(OrderActivityModel.DOCUMENT_TABLE + i, new Pair<>(new ArrayList<>(), false));
+                                        model.getAllTablesOrdersHashMap().put(OrderActivityModel.DOCUMENT_TABLE + i, new ArrayList<>());
                                     }
                                 }
                                 Log.d(TAG, "OrderActivityPresenter.setModelDataState: COMPLETE");
@@ -157,9 +160,9 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
     }
     @Override
     public void acceptAndWriteOrderToDb(int tableNumber, int guestCount) {
-        model.getOrderInfo(tableNumber).second = true;
-        model.getOrderInfo(tableNumber).first = model.getAdapter().getOrderItemsArrayList();
-        ArrayList<OrderItem> orderItems = model.getOrderInfo(tableNumber).first;
+        model.getOrderInfo(tableNumber).clear();
+        model.getOrderInfo(tableNumber).addAll(model.getAdapter().getOrderItemsArrayList());
+        ArrayList<OrderItem> orderItems = model.getOrderInfo(tableNumber);
         Map<String, Object> tableInfoHashMap = new HashMap<>();
         tableInfoHashMap.put(OrderActivityModel.DOCUMENT_GUEST_COUNT_FIELD, guestCount);
         //tableInfoHashMap.put(OrderActivityModel.DOCUMENT_IS_COMPLETE_FIELD, false);
@@ -216,12 +219,6 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
         DocumentOrdersListenerService.getService().ordersSubscribe(this);
         Log.d(TAG, "Unsubscribe to services");
     }
-    @Override
-    public void orderRecyclerViewOnActivityDestroy(int tableNumber) {
-        if ( !model.getOrderInfo(tableNumber).second )
-            model.getAllTablesOrdersHashMap().get(OrderActivityModel.DOCUMENT_TABLE + tableNumber).first = new ArrayList<>();
-        view = null;
-    }
     //DocumentListenerServices
     @Override
     public void dishesNotifyMe(Object data) {
@@ -246,11 +243,11 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
         Iterator<String> iterator = keys.iterator();
         while(iterator.hasNext()) {
             key = iterator.next();
-            Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaa = model.getNotEmptyTablesOrdersHashMap();
+            Map<String, ArrayList<OrderItem>> aaa = model.getNotEmptyTablesOrdersHashMap();
             try {
                 ArrayList<OrderItem> orderItems = model
                     .getNotEmptyTablesOrdersHashMap()
-                    .get(key).first;
+                    .get(key);
                 orderItemNames = (ArrayList<Object>) notifiable.get(key);
                 for(int i = 0; i < orderItemNames.size(); ++i) {
                     dishName = (String) ((ArrayList<?>) notifiable.get(key)).get(i);
@@ -261,12 +258,14 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
                             orderItems.get(j).setReady(true);
                     }
                 }
-            } catch (Exception e) { break; }
+            } catch (Exception e) {
+                Log.d(TAG, "OrderActivityPresenter.notifyOrderItems: " + e.getMessage());
+            }
         }
     }
     @Override
     public void ordersNotifyMe(Object data) {
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> order = (Map<String, Pair<ArrayList<OrderItem>, Boolean>>) data;
+        Map<String, ArrayList<OrderItem>> order = (Map<String, ArrayList<OrderItem>>) data;
         TableInfo tableInfo = DocumentOrdersListenerService.getService().getTableInfo();
         if (!UserData.post.equals(SplashScreenActivityModel.WAITER_POST_NAME)) {
             String tableNumber = tableInfo.getTableName()
@@ -292,11 +291,14 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
 
     @Override
     public void deleteOrder(String tableName) {
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaaa = model.getNotEmptyTablesOrdersHashMap();
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> bbbbb = model.getAllTablesOrdersHashMap();
-        model.getAllTablesOrdersHashMap().get(tableName).first.clear();
-        model.getAllTablesOrdersHashMap().get(tableName).second = false;
-        model.getNotEmptyTablesOrdersHashMap().remove(tableName);
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> A = model.getNotEmptyTablesOrdersHashMap();
+        Map<String, ArrayList<OrderItem>> aaaa = model.getNotEmptyTablesOrdersHashMap();
+        Map<String, ArrayList<OrderItem>> bbbbb = model.getAllTablesOrdersHashMap();
+        try {
+            model.getAllTablesOrdersHashMap().get(tableName).clear();
+            model.getNotEmptyTablesOrdersHashMap().remove(tableName);
+        } catch (Exception e) {
+            Log.d(TAG, "OrderActivityPresenter.deleteOrder: " + e.getMessage());
+        }
+        Map<String, ArrayList<OrderItem>> A = model.getNotEmptyTablesOrdersHashMap();
     }
 }

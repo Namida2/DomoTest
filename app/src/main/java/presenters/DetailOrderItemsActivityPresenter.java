@@ -47,7 +47,7 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
         if(tableInfo.getTableName() == null)
             Log.d(TAG, "DetailOrderItemsActivityPresenter.getAdapter: table not found." );
         model.getRecyclerViewAdapter().setOrderItemsData(
-            orderActivityModel.getNotEmptyTablesOrdersHashMap().get(OrderActivityModel.DOCUMENT_TABLE + tableNumber).first,
+            orderActivityModel.getNotEmptyTablesOrdersHashMap().get(OrderActivityModel.DOCUMENT_TABLE + tableNumber),
             tableInfo
         );
         return model.getRecyclerViewAdapter();
@@ -78,7 +78,7 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
             try {
                 ArrayList<OrderItem> orderItems = orderActivityModel
                     .getNotEmptyTablesOrdersHashMap()
-                    .get(key).first;
+                    .get(key);
                 orderItemNames = (ArrayList<Object>) notifiable.get(key);
                 for (int i = 0; i < orderItemNames.size(); ++i) {
                     dishName = (String) ((ArrayList<?>) notifiable.get(key)).get(i);
@@ -93,7 +93,6 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
                 }
             } catch (Exception e) {
                 Log.d(TAG, "DetailOrderItemsActivityPresenter.notifyOrderItems: " + e.getMessage());
-                break;
             }
         }
     }

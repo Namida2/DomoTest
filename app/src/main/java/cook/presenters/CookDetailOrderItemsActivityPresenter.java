@@ -86,7 +86,7 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
             }
         }
         model.getRecyclerViewAdapter().setOrderItemsData(
-            orderActivityModel.getNotEmptyTablesOrdersHashMap().get(OrderActivityModel.DOCUMENT_TABLE + tableNumber).first,
+            orderActivityModel.getNotEmptyTablesOrdersHashMap().get(OrderActivityModel.DOCUMENT_TABLE + tableNumber),
             tableInfo
         );
         return model.getRecyclerViewAdapter();
@@ -120,7 +120,7 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
             try {
                 ArrayList<OrderItem> orderItems = orderActivityModel
                     .getNotEmptyTablesOrdersHashMap()
-                    .get(key).first;
+                    .get(key);
                 orderItemNames = (ArrayList<Object>) notifiable.get(key);
                 for (int i = 0; i < orderItemNames.size(); ++i) {
                     dishName = (String) ((ArrayList<?>) notifiable.get(key)).get(i);
@@ -135,7 +135,6 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
                 }
             } catch (Exception e) {
                 Log.d(TAG, "DetailOrderItemsActivityPresenter.notifyOrderItems: " + e.getMessage());
-                break;
             }
         }
     }

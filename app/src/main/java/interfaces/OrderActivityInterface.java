@@ -18,21 +18,20 @@ public interface OrderActivityInterface {
         void setAdapter(OrderRecyclerViewAdapter adapter);
         void setTableInfoArrayList(ArrayList<TableInfo> tablesInfo);
         ArrayList<OrderItem> getOrderItemsArrayList(int tableNumber);
-        Pair<ArrayList<OrderItem>, Boolean> getOrderInfo(int tableNumber);
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getAllTablesOrdersHashMap();
-        void setAllTablesOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> allTablesOrdersHashMap);
-        void setNotEmptyTablesOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> notEmptyTablesOrdersHashMap);
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap();
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getTablesWithAllReadyDishes();
+        ArrayList<OrderItem> getOrderInfo(int tableNumber);
+        Map<String, ArrayList<OrderItem>> getAllTablesOrdersHashMap();
+        void setAllTablesOrdersHashMap (Map<String, ArrayList<OrderItem>> allTablesOrdersHashMap);
+        void setNotEmptyTablesOrdersHashMap (Map<String, ArrayList<OrderItem>> notEmptyTablesOrdersHashMap);
+        Map<String, ArrayList<OrderItem>> getNotEmptyTablesOrdersHashMap();
+        Map<String, ArrayList<OrderItem>> getTablesWithAllReadyDishes();
     }
     interface View {
     }
     interface Presenter {
         void notifyAdapterDataSetChanged(OrderItem orderItem);
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getNotEmptyTablesOrdersHashMap();
+        Map<String, ArrayList<OrderItem>> getNotEmptyTablesOrdersHashMap();
         void setModelDataState(boolean needToNotifyView);
         OrderRecyclerViewAdapter getOrderRecyclerViewAdapter(int ableNumber);
-        void orderRecyclerViewOnActivityDestroy(int tableNumber);
         void acceptAndWriteOrderToDb(int tableNumber, int guestCount);
         ArrayList<TableInfo> getTableInfoArrayList();
         void onDestroy();

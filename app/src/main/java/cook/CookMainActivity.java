@@ -1,25 +1,30 @@
 package cook;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavHostController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.testfirebase.DeleteOrderObservable;
 import com.example.testfirebase.R;
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.concurrent.TimeUnit;
 
+import interfaces.DeleteOrderInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
-public class CookMainActivity extends AppCompatActivity {
+public class CookMainActivity extends AppCompatActivity implements DeleteOrderInterface.Subscriber {
 
     private BottomNavigationView bottomNavigationView;
     private NavHostFragment navHostFragment;
@@ -31,6 +36,7 @@ public class CookMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cook_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        DeleteOrderObservable.getObservable().subscribe(this);
         initialisation();
 
         disposable = getBottomAppBarObservable()
@@ -68,8 +74,14 @@ public class CookMainActivity extends AppCompatActivity {
                 return true;
             });
         });
-
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        showBottomNavigationView();
+    }
+
     private void initialisation () {
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
@@ -79,6 +91,23 @@ public class CookMainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if(disposable != null) disposable.dispose();
+    }
+    private void showBottomNavigationView () {
+        ViewGroup.LayoutParams layoutParams = bottomNavigationView.getLayoutParams();
+        if (layoutParams instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.Behavior behavior =
+                ((CoordinatorLayout.LayoutParams) layoutParams).getBehavior();
+            if (behavior instanceof HideBottomViewOnScrollBehavior) {
+                HideBottomViewOnScrollBehavior<BottomNavigationView> hideShowBehavior =
+                    (HideBottomViewOnScrollBehavior<BottomNavigationView>) behavior;
+                hideShowBehavior.slideUp(bottomNavigationView);
+            }
+        }
+    }
+
+    @Override
+    public void deleteOrder(String tableName) {
+        showBottomNavigationView();
     }
 }
 

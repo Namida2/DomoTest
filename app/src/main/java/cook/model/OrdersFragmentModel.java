@@ -17,7 +17,7 @@ public class OrdersFragmentModel implements OrdersFragmentInterface.Model {
 
     public static final char DELIMITER = '_';
 
-    private Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap;
+    private Map<String, ArrayList<OrderItem>> ordersHashMap;
     private CookTablesRecyclerViewAdapter adapter;
     private FirebaseFirestore db;
     private View view;
@@ -49,11 +49,11 @@ public class OrdersFragmentModel implements OrdersFragmentInterface.Model {
     }
 
     @Override
-    public void setOrdersHashMap(Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap) {
+    public void setOrdersHashMap(Map<String, ArrayList<OrderItem>> ordersHashMap) {
         this.ordersHashMap = ordersHashMap;
     }
     @Override
-    public Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap() {
+    public Map<String, ArrayList<OrderItem>> getOrdersHashMap() {
         return ordersHashMap;
     }
 }

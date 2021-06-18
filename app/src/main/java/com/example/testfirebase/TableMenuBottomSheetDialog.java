@@ -59,6 +59,7 @@ public class TableMenuBottomSheetDialog extends BottomSheetDialogFragment {
             .debounce(150, TimeUnit.MILLISECONDS)
             .subscribe(unit -> {
                 acceptAction.accept(ACTION_SHOW_DELETE_ORDER_DIALOG);
+                dismiss();
             });
         disposableShowDetailOrder = RxView.clicks(showDetailButton)
             .observeOn(AndroidSchedulers.mainThread())

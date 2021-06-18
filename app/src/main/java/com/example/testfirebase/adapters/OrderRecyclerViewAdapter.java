@@ -26,9 +26,9 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     private ArrayList<OrderItem> orderItemsArrayList;
 
     public void setOrderItemsArrayList(ArrayList<OrderItem> orderItemsArrayList) {
-        this.orderItemsArrayList = orderItemsArrayList;
+        this.orderItemsArrayList = new ArrayList<>();
+        this.orderItemsArrayList.addAll(orderItemsArrayList);
     }
-
     public ArrayList<OrderItem> getOrderItemsArrayList() {
         return orderItemsArrayList;
     }
@@ -73,8 +73,6 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     }
     public void addOrder(OrderItem order) {
         OrderActivityModel model = new OrderActivityModel();
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> orderItems = model.getAllTablesOrdersHashMap();
-        ArrayList<OrderItem> adapterItems = getOrderItemsArrayList();
         this.orderItemsArrayList.add(order);
         this.notifyDataSetChanged();
     }

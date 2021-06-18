@@ -59,7 +59,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     private static Disposable disposable;
     private static ListenerRegistration registration;
     private AtomicBoolean firstCall = new AtomicBoolean(true);
-    private static Map<String, Pair<ArrayList<OrderItem>, Boolean>> latestDishData;
+    private static Map<String, ArrayList<OrderItem>> latestDishData;
     private static TableInfo latestTableInfo;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -189,7 +189,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
                             latestTableInfo = tableInfo;
                             latestDishData = new HashMap<>(); // нужно tableInfo подписчикам
                             List<OrderItem> orderItemsList = task1.getResult().toObjects(OrderItem.class);
-                            latestDishData.put(tableInfo.getTableName(), new Pair<>(new ArrayList<>(orderItemsList), true));
+                            latestDishData.put(tableInfo.getTableName(), new ArrayList<>(orderItemsList));
                             if (needToNotify) ordersNotifyAllSubscribers(latestDishData);
                             else firstCall.set(false);
                         } else

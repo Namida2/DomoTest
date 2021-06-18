@@ -17,8 +17,8 @@ public interface OrdersFragmentInterface {
         void setView(android.view.View view);
         CookTablesRecyclerViewAdapter getAdapter();
         void setAdapter(CookTablesRecyclerViewAdapter adapter);
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> getOrdersHashMap ();
-        void setOrdersHashMap (Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap);
+        Map<String, ArrayList<OrderItem>> getOrdersHashMap ();
+        void setOrdersHashMap (Map<String, ArrayList<OrderItem>> ordersHashMap);
     }
     interface View {
         void startDetailOrderActivity(TableInfo tableInfo);

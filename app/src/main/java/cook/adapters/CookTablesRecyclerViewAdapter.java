@@ -4,6 +4,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,12 +35,12 @@ import tools.Pair;
 public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTablesRecyclerViewAdapter.ViewHolder> {
 
     private Consumer<TableInfo> acceptOrderArrayList;
-    private ArrayList<Pair<ArrayList<OrderItem>, Boolean>> ordersArrayList;
+    private ArrayList<ArrayList<OrderItem>> ordersArrayList;
     private ArrayList<String> tableNumbers;
 
     public CookTablesRecyclerViewAdapter () {}
 
-    public void setOrdersArrayList (Map<String, Pair<ArrayList<OrderItem>, Boolean>> ordersHashMap) {
+    public void setOrdersArrayList(Map<String, ArrayList<OrderItem>> ordersHashMap) {
         Set<String> keys = ordersHashMap.keySet();
         ordersArrayList = new ArrayList<>();
         tableNumbers = new ArrayList<>();
@@ -59,12 +60,14 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        public RelativeLayout containerLarge;
         public TextView completeStatusTextView;
         public TextView tableNumber;
         public ConstraintLayout container;
         public TextView preview;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
+            containerLarge = itemView.findViewById(R.id.order_item_container_large);
             completeStatusTextView = itemView.findViewById(R.id.complete_text_view);
             container = itemView.findViewById(R.id.table_container);
             tableNumber = itemView.findViewById(R.id.table_number);
@@ -75,13 +78,13 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         String stringPreview = "";
-        for(int i = 0; i < Math.min(ordersArrayList.get(position).first.size(), 5); ++i) {
-            String name = ordersArrayList.get(position).first.get(i).getName();
+        for(int i = 0; i < Math.min(ordersArrayList.get(position).size(), 5); ++i) {
+            String name = ordersArrayList.get(position).get(i).getName();
             stringPreview += name.length() > 16 ? name.substring(0, 16) + "...\n" : name + "\n" ;
         }
         holder.completeStatusTextView.setVisibility(View.GONE);
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> ooooo = new OrderActivityModel().getNotEmptyTablesOrdersHashMap();
-        if(allDishesReady(ordersArrayList.get(position).first))
+        Map<String, ArrayList<OrderItem>> ooooo = new OrderActivityModel().getNotEmptyTablesOrdersHashMap();
+        if(allDishesReady(ordersArrayList.get(position)))
             holder.completeStatusTextView.setVisibility(View.VISIBLE);
         holder.preview.setText(stringPreview);
         holder.tableNumber.setText(tableNumbers.get(position));
@@ -91,10 +94,10 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
             .subscribe(unit -> {
                 TableInfo tableInfo = new TableInfo();
                 tableInfo.setTableName(tableNumbers.get(position));
-                tableInfo.setIsComplete(allDishesReady(ordersArrayList.get(position).first));
+                tableInfo.setIsComplete(allDishesReady(ordersArrayList.get(position)));
                 acceptOrderArrayList.accept(tableInfo);
             });
-        Animations.Companion.startAnimationViewShowing(holder.container);
+        Animations.Companion.startAnimationViewShowing(holder.containerLarge);
     }
     private boolean allDishesReady (ArrayList<OrderItem> orderItems) {
         boolean allReady = true;

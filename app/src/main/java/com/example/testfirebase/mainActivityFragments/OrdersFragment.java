@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.testfirebase.DeleteOrderObservable;
 import com.example.testfirebase.DetailOrderActivity;
 import com.example.testfirebase.R;
 import com.example.testfirebase.TableMenuBottomSheetDialog;
@@ -23,6 +24,7 @@ import cook.interfaces.OrdersFragmentInterface;
 import cook.model.DetailOrderActivityModel;
 import cook.presenters.OrdersFragmentPresenter;
 import dialogsTools.AcceptOrCancelDialog;
+import interfaces.DeleteOrderInterface;
 
 public class OrdersFragment extends Fragment implements OrdersFragmentInterface.View {
 

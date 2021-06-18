@@ -4,12 +4,14 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.testfirebase.DeleteOrderObservable;
+import com.example.testfirebase.SplashScreenActivity;
 import com.example.testfirebase.services.DocumentDishesListenerService;
 import com.example.testfirebase.services.DocumentOrdersListenerService;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -19,9 +21,13 @@ import cook.interfaces.OrdersFragmentInterface;
 import cook.model.OrdersFragmentModel;
 import com.example.testfirebase.services.interfaces.DocumentDishesListenerInterface;
 import com.example.testfirebase.services.interfaces.DocumentOrdersListenerInterface;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import interfaces.DeleteOrderInterface;
 import model.OrderActivityModel;
+import model.SplashScreenActivityModel;
 import tools.Pair;
 
 import static registration.LogInActivity.TAG;
@@ -49,7 +55,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
     }
     @Override
     public void ordersNotifyMe(Object data) {
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> order = (Map<String, Pair<ArrayList<OrderItem>, Boolean>>) data;
+        Map<String, ArrayList<OrderItem>> order = (Map<String, ArrayList<OrderItem>>) data;
         TableInfo tableInfo = DocumentOrdersListenerService.getService().getTableInfo();
         try {
             orderActivityModel.getAllTablesOrdersHashMap().remove(tableInfo.getTableName());
@@ -70,19 +76,56 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
     @Override
     public void deleteOrderFromDatabase(String tableNumber) {
         String tableName = OrderActivityModel.DOCUMENT_TABLE + tableNumber;
-        model.getDatabase()
-            .collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
-            .document(tableName).delete().addOnCompleteListener(task -> {
-                if(task.isSuccessful())
-                    DeleteOrderObservable.getObservable().notifySubscribers(tableName);
-                else Log.d(TAG, "DetailOrderItemsActivityPresenter.deleteOrder: " + task.getException());
+        DocumentReference docRefOrdersTableName =  model.getDatabase()
+            .collection(OrderActivityModel.COLLECTION_ORDERS_NAME).document(tableName);
+
+        DocumentReference docRefListenersDishesListener = model.getDatabase()
+            .collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+            .document(SplashScreenActivityModel.DOCUMENT_DISHES_LISTENER_NAME);
+
+        DocumentReference docRefListenersDeleteOrderListener = model.getDatabase()
+            .collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+            .document(orderActivityModel.DOCUMENT_DELETE_ORDER_LISTENER);
+
+        Map<String, Object> deleteTableName = new HashMap<>();
+        deleteTableName.put(SplashScreenActivityModel.FIELD_TABLE_NAME, null);
+        docRefListenersDeleteOrderListener.set(deleteTableName);
+
+        model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME).document(tableName)
+            .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME)
+            .get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                ArrayList<DocumentSnapshot> documentSnapshots = new ArrayList<>();
+                for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                    documentSnapshots.add(documentSnapshot);
+                }
+                model.getDatabase().runTransaction(transaction -> { // не ходить лишний рах в бд, а взять локальные данные для удаления
+                    for(DocumentSnapshot documentSnapshot : documentSnapshots) {
+                        DocumentReference documentReference = model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME).document(tableName)
+                            .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME).document(documentSnapshot.getId());
+                        transaction.delete(documentReference);
+                    }
+                    DocumentReference documentReferenceDeleteOrder = model.getDatabase()
+                        .collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+                        .document(OrderActivityModel.DOCUMENT_DELETE_ORDER_LISTENER);
+                    transaction.delete(docRefOrdersTableName)
+                        .update(docRefListenersDishesListener, tableName, null)
+                        .update(docRefListenersDeleteOrderListener, SplashScreenActivityModel.FIELD_TABLE_NAME, tableName);
+                    return true;
+                });
+            }
+            else Log.d(TAG, "OrdersFragmentPresenter.deleteOrderFromDatabase: " + task.getException());
+        }).addOnCompleteListener(task -> {
+            if(task.isSuccessful())
+                Log.d(TAG, "OrdersFragmentPresenter.deleteOrderFromDatabase: SUCCESS");
+            else Log.d(TAG, "OrdersFragmentPresenter.deleteOrderFromDatabase: " + task.getException());
         });
     }
     @Override
     public void deleteOrder(String tableName) {
-        Map<String, Pair<ArrayList<OrderItem>, Boolean>> aaaa = orderActivityModel.getNotEmptyTablesOrdersHashMap();
+        Map<String, ArrayList<OrderItem>> aaaa = orderActivityModel.getNotEmptyTablesOrdersHashMap();
         model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
-        model.getAdapter().notifyDataSetChanged();
+        //model.getAdapter().notifyDataSetChanged();
     }
     private void notifyOrderItems(Map<String, Object> notifiable) {
         String key;
@@ -94,8 +137,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
             key = iterator.next();
             try {
                 ArrayList<OrderItem> orderItems = orderActivityModel
-                    .getNotEmptyTablesOrdersHashMap()
-                    .get(key).first;
+                    .getNotEmptyTablesOrdersHashMap().get(key);
                 orderItemNames = (ArrayList<Object>) notifiable.get(key);
                 for (int i = 0; i < orderItemNames.size(); ++i) {
                     dishName = (String) ((ArrayList<?>) notifiable.get(key)).get(i);
@@ -109,7 +151,6 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
                 }
             } catch (Exception e) {
                 Log.d(TAG, "DetailOrderItemsActivityPresenter.notifyOrderItems: " + e.getMessage());
-                break;
             }
         }
     }
@@ -145,7 +186,6 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
             model.getAdapter().notifyTable(key);
         }
     }
-
     @Override
     public void onResume() {
         model.getAdapter().setAcceptOrderArrayList( tableInfo -> {
