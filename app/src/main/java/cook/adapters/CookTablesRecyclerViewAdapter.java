@@ -38,8 +38,6 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
     private ArrayList<ArrayList<OrderItem>> ordersArrayList;
     private ArrayList<String> tableNumbers;
 
-    public CookTablesRecyclerViewAdapter () {}
-
     public void setOrdersArrayList(Map<String, ArrayList<OrderItem>> ordersHashMap) {
         Set<String> keys = ordersHashMap.keySet();
         ordersArrayList = new ArrayList<>();
@@ -50,6 +48,7 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
             tableNumbers.add( name.substring(name.indexOf(OrdersFragmentModel.DELIMITER) + 1) );
             ordersArrayList.add(ordersHashMap.get(name));
         }
+        this.notifyDataSetChanged();
     }
     public void setAcceptOrderArrayListConsumer(Consumer<TableInfo> acceptOrderArrayList) {
         this.acceptOrderArrayList = acceptOrderArrayList;
@@ -77,16 +76,16 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        String stringPreview = "";
+        StringBuilder stringPreview = new StringBuilder();
         for(int i = 0; i < Math.min(ordersArrayList.get(position).size(), 5); ++i) {
             String name = ordersArrayList.get(position).get(i).getName();
-            stringPreview += name.length() > 16 ? name.substring(0, 16) + "...\n" : name + "\n" ;
+            stringPreview.append(name.length() > 16 ? name.substring(0, 16) + "...\n" : name + "\n");
         }
         holder.completeStatusTextView.setVisibility(View.GONE);
         Map<String, ArrayList<OrderItem>> ooooo = new OrderActivityModel().getNotEmptyTablesOrdersHashMap();
         if(allDishesReady(ordersArrayList.get(position)))
             holder.completeStatusTextView.setVisibility(View.VISIBLE);
-        holder.preview.setText(stringPreview);
+        holder.preview.setText(stringPreview.toString());
         holder.tableNumber.setText(tableNumbers.get(position));
         RxView.clicks(holder.container)
             .debounce(150, TimeUnit.MILLISECONDS)

@@ -78,8 +78,9 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
             .setColor(getResources().getColor(R.color.fui_transparent))
             .setContentTitle("Служба уведоблений DOMO")
             .setDefaults(NotificationCompat.DEFAULT_SOUND)
-            .setAutoCancel(true)
+            .setAutoCancel(false)
             .addAction(null)
+            .setContentIntent(null)
             .build();
         startForeground(777, notification);
         disposable = getObservable()
@@ -132,15 +133,16 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
             .setColor(getResources().getColor(R.color.fui_transparent))
             .setContentTitle("Служба уведоблений DOMO")
             .setDefaults(NotificationCompat.DEFAULT_SOUND)
-            .setAutoCancel(true)
+            .setAutoCancel(false)
             .addAction(null)
+            .setContentIntent(null)
             .build();
         startForeground(777, notification);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     private Observable<Map<String, Object>> getObservable (){
@@ -188,8 +190,9 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
             .setContentTitle(title)
             .setContentText(name)
             .setDefaults(NotificationCompat.DEFAULT_SOUND)
-            .setAutoCancel(true)
+            .setAutoCancel(false)
             .addAction(null)
+            .setContentIntent(null)
             .build();
         notificationManager.notify(id++, notification); //important thing
     }

@@ -6,10 +6,14 @@ import model.ProfileFragmentModel;
 public class ProfileFragmentPresenter implements ProfileFragmentInterface.Presenter {
 
     private ProfileFragmentInterface.View view;
-    private ProfileFragmentInterface.Model model;
+    private static ProfileFragmentInterface.Model model;
 
     public ProfileFragmentPresenter(ProfileFragmentInterface.View view) {
         this.view = view;
+        if(model == null) {
+            model = new ProfileFragmentModel();
+            ProfileFragmentModel.NEED_NOTIFY.set(true);
+        }
     }
     @Override
     public void setAcceptIconState(boolean state) {

@@ -22,10 +22,10 @@ import static registration.LogInActivity.TAG;
 public class DeleteOrderObservable implements DeleteOrderInterface.Observable{
 
     private String tableName;
+    private OrderActivityModel model = new OrderActivityModel();
     private ArrayList<DeleteOrderInterface.Subscriber> subscribers = new ArrayList<>();
     private static final DeleteOrderObservable observable = new DeleteOrderObservable();
     // OrderActivityPresenter must be the first subscriber
-
 
     private DeleteOrderObservable () {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -39,6 +39,12 @@ public class DeleteOrderObservable implements DeleteOrderInterface.Observable{
                 if (value != null && value.exists()) {
                     if(value.get(SplashScreenActivityModel.FIELD_TABLE_NAME) != null) {
                         this.tableName = (String) value.get(SplashScreenActivityModel.FIELD_TABLE_NAME);
+                        try {
+                            model.getAllTablesOrdersHashMap().get(tableName).clear();
+                            model.getNotEmptyTablesOrdersHashMap().remove(tableName);
+                        } catch (Exception e) {
+                            Log.d(TAG, "OrderActivityPresenter.deleteOrder: " + e.getMessage());
+                        }
                         notifySubscribers(tableName);
                     }
                 }

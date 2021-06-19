@@ -124,6 +124,13 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
         Map<String, ArrayList<OrderItem>> aaaa = orderActivityModel.getNotEmptyTablesOrdersHashMap();
         model.getAdapter().setOrdersArrayList(new HashMap<>());
         model.getAdapter().notifyDataSetChanged();
+        try {
+            orderActivityModel.getAllTablesOrdersHashMap().get(tableName).clear();
+            orderActivityModel.getNotEmptyTablesOrdersHashMap().remove(tableName);
+        } catch (Exception e) {
+            Log.d(TAG, "OrdersFragmentPresenter.deleteOrder: " + e.getMessage());
+        }
+        Log.d(TAG, "getNotEmptyTablesOrdersHashMap: " + orderActivityModel.getNotEmptyTablesOrdersHashMap());
         model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
         model.getAdapter().notifyDataSetChanged();
     }

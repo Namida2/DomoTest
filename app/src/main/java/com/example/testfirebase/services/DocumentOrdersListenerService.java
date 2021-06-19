@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 import cook.model.OrdersFragmentModel;
+import interfaces.DeleteOrderInterface;
 import io.reactivex.rxjava3.disposables.Disposable;
 import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
@@ -41,7 +42,8 @@ import tools.Pair;
 
 import static registration.LogInActivity.TAG;
 
-public class DocumentOrdersListenerService extends Service implements DocumentOrdersListenerInterface.Observable {
+public class DocumentOrdersListenerService extends Service implements DocumentOrdersListenerInterface.Observable,
+    DeleteOrderInterface.Subscriber {
 
     private static int id = 1;
     private static final AtomicBoolean isExist = new AtomicBoolean(false);
@@ -76,8 +78,9 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
             .setColor(getResources().getColor(R.color.fui_transparent))
             .setContentTitle("Служба уведоблений DOMO")
             .setDefaults(NotificationCompat.DEFAULT_SOUND)
-            .setAutoCancel(true)
+            .setAutoCancel(false)
             .addAction(null)
+            .setContentIntent(null)
             .build();
         startForeground(777, notification);
         startDocumentListening();
@@ -146,8 +149,9 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
             .setContentTitle(title)
             .setContentText(name)
             .setDefaults(NotificationCompat.DEFAULT_SOUND)
-            .setAutoCancel(true)
+            .setAutoCancel(false)
             .addAction(null)
+            .setContentIntent(null)
             .build();
         notificationManager.notify(id++, notification); //important thing
     }
@@ -233,5 +237,10 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
         super.onDestroy();
         isExist.set(false);
         Log.d(TAG, "DocumentOrdersListenerService service: DESTROYED");
+    }
+
+    @Override
+    public void deleteOrder(String tableName) {
+        latestDishData.remove(tableName);
     }
 }

@@ -46,10 +46,9 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
     }
     @Override
     public void setDishState(ReadyDish readyDish) {
-        Log.d(TAG, Thread.currentThread().getName());
         Map<String, Object> readyHaspMap = new HashMap<>();
-        //readyDish.getOrderItem().setReady(true);
-        Log.d(TAG,"DetailOrderActivityPresenter.setDishState writing: " + readyDish.getOrderItem());
+        if (readyDish.getOrderItem().isReady()) return;
+        readyDish.getOrderItem().setReady(true);
 
         readyHaspMap.put(OrderActivityModel.DOCUMENT_READY_FIELD, false);
         model.getRecyclerViewAdapter().notifyItemChanged(readyDish.getPosition());
