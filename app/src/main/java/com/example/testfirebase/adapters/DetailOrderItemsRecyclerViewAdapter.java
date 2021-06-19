@@ -92,7 +92,7 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
             holder.commentaryTitle.setVisibility(View.GONE);
             holder.commentary.setVisibility(View.GONE);
         } else holder.commentary.setText(orderItemsArrayList.get(position).getCommentary() + " ");
-        Animations.Companion.startAnimationViewShowing(holder.container_large);
+        Animations.Companion.showView(holder.container_large);
         RxView.clicks(holder.container_large)
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
@@ -106,11 +106,6 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
 
             });
     }
-
-    public void setReadyStatus(OrderItem orderItem) {
-
-    }
-
 
     @Override
     public int getItemCount() {

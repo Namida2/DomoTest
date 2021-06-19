@@ -93,7 +93,7 @@ public class CookDetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapte
             holder.isReady.setVisibility(View.VISIBLE);
         else holder.isReady.setVisibility(View.GONE);
 
-        Animations.Companion.startAnimationViewShowing(holder.container_large);
+        Animations.Companion.showView(holder.container_large);
         RxView.clicks(holder.container_large)
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
@@ -109,7 +109,6 @@ public class CookDetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapte
                     new ReadyDish(orderItemsArrayList.get(position), tableInfo, position));
             });
     }
-
     @Override
     public int getItemCount() {
         return orderItemsArrayList.size();

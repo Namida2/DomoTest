@@ -1,6 +1,5 @@
 package cook.presenters;
 
-import android.util.ArrayMap;
 import android.util.Log;
 import android.view.View;
 
@@ -123,7 +122,6 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
     @Override
     public void deleteOrder(String tableName) {
         Map<String, ArrayList<OrderItem>> aaaa = orderActivityModel.getNotEmptyTablesOrdersHashMap();
-
         model.getAdapter().setOrdersArrayList(new HashMap<>());
         model.getAdapter().notifyDataSetChanged();
         model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());

@@ -1,7 +1,9 @@
 package cook.presenters;
 
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
+import com.example.testfirebase.DeleteOrderObservable;
 import com.example.testfirebase.services.DocumentDishesListenerService;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
@@ -19,12 +21,15 @@ import cook.adapters.CookDetailOrderItemsRecyclerViewAdapter;
 import cook.interfaces.CookDetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
 import com.example.testfirebase.services.interfaces.DocumentDishesListenerInterface;
+
+import interfaces.DeleteOrderInterface;
 import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
 
 import static registration.LogInActivity.TAG;
 
-public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderActivityInterface.Presenter, DocumentDishesListenerInterface.Subscriber {
+public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderActivityInterface.Presenter,
+    DocumentDishesListenerInterface.Subscriber, DeleteOrderInterface.Subscriber {
 
     private CookDetailOrderActivityInterface.View view;
     private static CookDetailOrderActivityInterface.Model model;
@@ -37,12 +42,15 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
             model.setRecyclerViewAdapter(adapter);
         }
         DocumentDishesListenerService.getService().dishesSubscribe(this);
+        DeleteOrderObservable.getObservable().subscribe(this);
     }
     @Override
     public void setDishState(ReadyDish readyDish) {
         Log.d(TAG, Thread.currentThread().getName());
         Map<String, Object> readyHaspMap = new HashMap<>();
         //readyDish.getOrderItem().setReady(true);
+        Log.d(TAG,"DetailOrderActivityPresenter.setDishState writing: " + readyDish.getOrderItem());
+
         readyHaspMap.put(OrderActivityModel.DOCUMENT_READY_FIELD, false);
         model.getRecyclerViewAdapter().notifyItemChanged(readyDish.getPosition());
         model.getDatabase()
@@ -137,5 +145,13 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
                 Log.d(TAG, "DetailOrderItemsActivityPresenter.notifyOrderItems: " + e.getMessage());
             }
         }
+    }
+
+    @Override
+    public void deleteOrder(String tableName) {
+        OrderActivityModel orderActivityModel = new OrderActivityModel();
+        Map<String, ArrayList<OrderItem>> aaaa = orderActivityModel.getNotEmptyTablesOrdersHashMap();
+        model.getRecyclerViewAdapter().setOrderItemsData(new ArrayList<>(), new TableInfo());
+        model.getRecyclerViewAdapter().notifyDataSetChanged();
     }
 }

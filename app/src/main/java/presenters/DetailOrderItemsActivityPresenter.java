@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import interfaces.DeleteOrderInterface;
 import interfaces.DetailOrderItemsActivityInterface;
 import com.example.testfirebase.services.interfaces.DocumentDishesListenerInterface;
 import model.DetailOrderItemsActivityModel;
@@ -19,7 +20,8 @@ import model.OrderActivityModel;
 
 import static registration.LogInActivity.TAG;
 
-public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivityInterface.Presenter, DocumentDishesListenerInterface.Subscriber {
+public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivityInterface.Presenter,
+    DocumentDishesListenerInterface.Subscriber, DeleteOrderInterface.Subscriber {
 
     private DetailOrderItemsActivityInterface.View view;
     private DetailOrderItemsActivityInterface.Model model;
@@ -95,5 +97,13 @@ public class DetailOrderItemsActivityPresenter implements DetailOrderItemsActivi
                 Log.d(TAG, "DetailOrderItemsActivityPresenter.notifyOrderItems: " + e.getMessage());
             }
         }
+    }
+
+    @Override
+    public void deleteOrder(String tableName) {
+        OrderActivityModel orderActivityModel = new OrderActivityModel();
+        Map<String, ArrayList<OrderItem>> aaaa = orderActivityModel.getNotEmptyTablesOrdersHashMap();
+        model.getRecyclerViewAdapter().setOrderItemsData(new ArrayList<>(), new TableInfo());
+        model.getRecyclerViewAdapter().notifyDataSetChanged();
     }
 }

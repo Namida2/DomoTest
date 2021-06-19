@@ -65,7 +65,7 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
         holder.weight.setText(orderItemsArrayList.get(position).getWeight());
         holder.cost.setText(orderItemsArrayList.get(position).getCost());
         holder.count.setText(orderItemsArrayList.get(position).getCount() + " шт");
-        Animations.Companion.startAnimationViewShowing(holder.container);
+        Animations.Companion.showView(holder.container);
     }
     @Override
     public int getItemCount() {

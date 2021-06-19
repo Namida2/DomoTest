@@ -114,7 +114,7 @@ public class MenuRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 menuItemViewHolder.name.setText(dish.getName());
                 menuItemViewHolder.weight.setText(dish.getWeight());
                 menuItemViewHolder.cost.setText(dish.getCost());
-                Animations.Companion.startAnimationViewShowing(menuItemViewHolder.menuItemContainer);
+                Animations.Companion.showView(menuItemViewHolder.menuItemContainer);
                 RxView.clicks(menuItemViewHolder.menuItemContainer)
                     .debounce(150, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())

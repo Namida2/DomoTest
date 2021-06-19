@@ -82,7 +82,6 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
             .addAction(null)
             .build();
         startForeground(777, notification);
-
         disposable = getObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.computation())
@@ -126,11 +125,24 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
         } catch (Exception e) { }
         Log.w(TAG, "DocumentDishesListenerService: Created");
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void myStartForeground() {
+        Notification notification = new NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_email)
+            .setColor(getResources().getColor(R.color.fui_transparent))
+            .setContentTitle("Служба уведоблений DOMO")
+            .setDefaults(NotificationCompat.DEFAULT_SOUND)
+            .setAutoCancel(true)
+            .addAction(null)
+            .build();
+        startForeground(777, notification);
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return Service.START_STICKY;
+        return super.onStartCommand(intent, flags, startId);
     }
+
     private Observable<Map<String, Object>> getObservable (){
         return Observable.create(emitter -> {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -153,7 +165,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
                         latestData = snapshot.getData();
                     firstCall.set(false);
                 });
-            if (post != null) Log.d(TAG, post.toString());
+            if (post != null) Log.d(TAG, post);
         });
     }
     private void createChannel (NotificationManager notificationManager) {
@@ -209,7 +221,9 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     public void onDestroy() {
         super.onDestroy();
         isExist.set(false);
-        Log.d(TAG, "DocumentDishesListenerService: destroyed");
+        getService().stopSelf();
+        unSubscribeFromDatabase();
+        Log.d(TAG, "DocumentDishesListenerService: Destroyed");
     }
     @Nullable
     @Override

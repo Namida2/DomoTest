@@ -97,7 +97,7 @@ public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTabl
                 tableInfo.setIsComplete(allDishesReady(ordersArrayList.get(position)));
                 acceptOrderArrayList.accept(tableInfo);
             });
-        Animations.Companion.startAnimationViewShowing(holder.containerLarge);
+        Animations.Companion.showView(holder.containerLarge);
     }
     private boolean allDishesReady (ArrayList<OrderItem> orderItems) {
         boolean allReady = true;

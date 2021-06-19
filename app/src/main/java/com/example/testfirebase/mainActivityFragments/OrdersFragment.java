@@ -47,13 +47,11 @@ public class OrdersFragment extends Fragment implements OrdersFragmentInterface.
         presenter.setModelState(contentView);
         return contentView;
     }
-
     @Override
     public void onResume() {
         super.onResume();
         presenter.onResume();
     }
-
     @Override
     public void startDetailOrderActivity(TableInfo tableInfo) {
         String tableName = DocumentDishesListenerService.TABLE + tableInfo.getTableName();

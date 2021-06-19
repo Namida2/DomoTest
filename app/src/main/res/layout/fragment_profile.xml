@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/container_constraint_layout">
 
     <ImageView
         android:id="@+id/imageView4"
@@ -14,7 +14,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/user_name_textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/user_name_textView" />
-
     <TextView
         android:id="@+id/user_name_textView"
         android:layout_width="0dp"
@@ -33,7 +32,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
         app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="wrap_content"
@@ -43,7 +41,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/user_email_textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/user_email_textView" />
-
     <TextView
         android:id="@+id/user_email_textView"
         android:layout_width="0dp"
@@ -96,16 +93,16 @@
         android:id="@+id/view3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/bg_table"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_post_textView" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/need_notify_constraint_layout"
         style="@style/tableStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -114,15 +111,18 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3">
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/accept_image_view"
             android:layout_width="24dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_accept"
-            android:visibility="invisible"
+            android:scaleX="0"
+            android:scaleY="0"
+            android:alpha="0"
             app:layout_constraintBottom_toBottomOf="@+id/textView5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView5"
@@ -141,7 +141,7 @@
             android:textColor="@color/white"
             android:textSize="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView7"
+            app:layout_constraintStart_toEndOf="@+id/accept_image_view"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -175,7 +175,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/need_notify_constraint_layout">
 
         <TextView
             android:layout_width="0dp"
