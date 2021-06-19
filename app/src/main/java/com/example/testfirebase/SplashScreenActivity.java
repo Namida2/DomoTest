@@ -45,14 +45,6 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        String COLLECTION_LISTENERS = "listeners";
-        String COLLECTION_ORDERS = "orders";
-        String DOCUMENT_DISHES_LISTENER = "dishes_listener";
-        String tableName = "table_7";
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference documentReferenceTableName = db.collection(COLLECTION_ORDERS).document(tableName);
-        DocumentReference documentReferenceListenersTable = db.collection(COLLECTION_LISTENERS).document(DOCUMENT_DISHES_LISTENER);
-
         if(!DocumentOrdersListenerService.isExist())
             try {
                 startService(new Intent(this, DocumentOrdersListenerService.class));

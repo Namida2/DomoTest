@@ -11,7 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.example.testfirebase.R;
+import com.jakewharton.rxbinding4.view.RxView;
+
 import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class ProfileFragment extends Fragment {
 
@@ -27,6 +32,14 @@ public class ProfileFragment extends Fragment {
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View contentView = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        RxView.clicks(contentView.findViewById(R.id.out_constraint_layout))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(unit -> {
+
+            });
+
+        return contentView;
     }
 }
