@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import cook.adapters.CookTablesRecyclerViewAdapter;
+import cook.adapters.CookOrdersRecyclerViewAdapter;
 import cook.interfaces.OrdersFragmentInterface;
 import cook.model.OrdersFragmentModel;
 import com.example.testfirebase.services.interfaces.DocumentDishesListenerInterface;
@@ -43,7 +43,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
         if(model == null) {
             model = new OrdersFragmentModel();
             model.setOrdersHashMap(orderActivityModel.getNotEmptyTablesOrdersHashMap());
-            model.setAdapter(new CookTablesRecyclerViewAdapter());
+            model.setAdapter(new CookOrdersRecyclerViewAdapter());
         }
         model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
         model.getAdapter().notifyDataSetChanged();
@@ -53,6 +53,8 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
     }
     @Override
     public void ordersNotifyMe(Object data) {
+        model.getAdapter().setOrdersArrayList(new HashMap<>());
+        model.getAdapter().notifyDataSetChanged();
         Map<String, ArrayList<OrderItem>> order = (Map<String, ArrayList<OrderItem>>) data;
         TableInfo tableInfo = DocumentOrdersListenerService.getService().getTableInfo();
         try {
@@ -83,40 +85,43 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
 
         DocumentReference docRefListenersDeleteOrderListener = model.getDatabase()
             .collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
-            .document(orderActivityModel.DOCUMENT_DELETE_ORDER_LISTENER);
+            .document(OrderActivityModel.DOCUMENT_DELETE_ORDER_LISTENER);
 
         Map<String, Object> deleteTableName = new HashMap<>();
         deleteTableName.put(SplashScreenActivityModel.FIELD_TABLE_NAME, null);
-        docRefListenersDeleteOrderListener.set(deleteTableName);
+        docRefListenersDeleteOrderListener.set(deleteTableName).addOnCompleteListener(taskNull -> {
+            if(taskNull.isSuccessful()) {
 
-        model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME).document(tableName)
-            .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME)
-            .get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                ArrayList<DocumentSnapshot> documentSnapshots = new ArrayList<>();
-                for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
-                    documentSnapshots.add(documentSnapshot);
-                }
-                model.getDatabase().runTransaction(transaction -> { // не ходить лишний рах в бд, а взять локальные данные для удаления
-                    for(DocumentSnapshot documentSnapshot : documentSnapshots) {
-                        DocumentReference documentReference = model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME).document(tableName)
-                            .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME).document(documentSnapshot.getId());
-                        transaction.delete(documentReference);
+                model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME).document(tableName)
+                    .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME)
+                    .get().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        ArrayList<DocumentSnapshot> documentSnapshots = new ArrayList<>();
+                        for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                            documentSnapshots.add(documentSnapshot);
+                        }
+                        model.getDatabase().runTransaction(transaction -> { // не ходить лишний рах в бд, а взять локальные данные для удаления
+                            for(DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                DocumentReference documentReference = model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME).document(tableName)
+                                    .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME).document(documentSnapshot.getId());
+                                transaction.delete(documentReference);
+                            }
+                            transaction.delete(docRefOrdersTableName)
+                                .update(docRefListenersDishesListener, tableName, null)
+                                .update(docRefListenersDeleteOrderListener, SplashScreenActivityModel.FIELD_TABLE_NAME, tableName);
+                            return true;
+                        });
                     }
-                    DocumentReference documentReferenceDeleteOrder = model.getDatabase()
-                        .collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
-                        .document(OrderActivityModel.DOCUMENT_DELETE_ORDER_LISTENER);
-                    transaction.delete(docRefOrdersTableName)
-                        .update(docRefListenersDishesListener, tableName, null)
-                        .update(docRefListenersDeleteOrderListener, SplashScreenActivityModel.FIELD_TABLE_NAME, tableName);
-                    return true;
+                    else Log.d(TAG, "OrdersFragmentPresenter.deleteOrderFromDatabase: " + task.getException());
+                }).addOnCompleteListener(task -> {
+                    if(task.isSuccessful())
+                        Log.d(TAG, "OrdersFragmentPresenter.deleteOrderFromDatabase: SUCCESS");
+                    else Log.d(TAG, "OrdersFragmentPresenter.deleteOrderFromDatabase: " + task.getException());
                 });
+
+            } else {
+                Log.d(TAG, "OrdersFragmentPresenter.deleteOrderFromDatabase: " + taskNull.getException());
             }
-            else Log.d(TAG, "OrdersFragmentPresenter.deleteOrderFromDatabase: " + task.getException());
-        }).addOnCompleteListener(task -> {
-            if(task.isSuccessful())
-                Log.d(TAG, "OrdersFragmentPresenter.deleteOrderFromDatabase: SUCCESS");
-            else Log.d(TAG, "OrdersFragmentPresenter.deleteOrderFromDatabase: " + task.getException());
         });
     }
     @Override
@@ -166,7 +171,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
         model.setView(view);
     }
     @Override
-    public CookTablesRecyclerViewAdapter getAdapter( ) {
+    public CookOrdersRecyclerViewAdapter getAdapter( ) {
         return model.getAdapter();
     }
     @Override

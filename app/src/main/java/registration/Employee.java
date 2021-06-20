@@ -6,6 +6,15 @@ public class Employee {
     private String email;
     private String password;
     private String post;
+    private Boolean permission;
+
+    public void setPermission(Boolean permission) {
+        this.permission = permission;
+    }
+
+    public Boolean getPermission() {
+        return permission;
+    }
 
     private static Employee employee = new Employee();
 
@@ -33,9 +42,6 @@ public class Employee {
         return password;
     }
 
-    public boolean anyFieldIsEmpty(){
-        return name.isEmpty() || email.isEmpty() || password.isEmpty();
-    }
 
     public void setPost(String post) {
         this.post = post;

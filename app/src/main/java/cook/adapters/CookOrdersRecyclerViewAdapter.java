@@ -30,9 +30,8 @@ import cook.model.OrdersFragmentModel;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import model.OrderActivityModel;
 import tools.Animations;
-import tools.Pair;
 
-public class CookTablesRecyclerViewAdapter extends RecyclerView.Adapter<CookTablesRecyclerViewAdapter.ViewHolder> {
+public class CookOrdersRecyclerViewAdapter extends RecyclerView.Adapter<CookOrdersRecyclerViewAdapter.ViewHolder> {
 
     private Consumer<TableInfo> acceptOrderArrayList;
     private ArrayList<ArrayList<OrderItem>> ordersArrayList;

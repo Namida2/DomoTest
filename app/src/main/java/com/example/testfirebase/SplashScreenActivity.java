@@ -1,6 +1,8 @@
 package com.example.testfirebase;
 
+import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -8,6 +10,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testfirebase.services.DocumentDishesListenerService;
@@ -59,6 +62,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         } else presenter = new SplashScreenActivityPresenter(this);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void setCurrentUserPost(String post) {
         UserData.post = post;
@@ -72,6 +76,16 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
             case SplashScreenActivityModel.WAITER_POST_NAME:
                 startNewActivity(MainActivity.class);
                 break;
+            case SplashScreenActivityModel.ADMINISTRATOR_POST_NAME:
+                DocumentDishesListenerService.getService().stopForeground(Service.STOP_FOREGROUND_DETACH);
+                DocumentDishesListenerService.unSubscribeFromDatabase();
+                DocumentDishesListenerService.getService().stopSelf();
+                DocumentOrdersListenerService.getService().stopForeground(Service.STOP_FOREGROUND_DETACH);
+                DocumentOrdersListenerService.unSubscribeFromDatabase();
+                DocumentOrdersListenerService.getService().stopSelf();
+                startNewActivity(administrator.MainActivity.class);
+                break;
+            default: createNewUser(); break;
         }
     }
     @Override

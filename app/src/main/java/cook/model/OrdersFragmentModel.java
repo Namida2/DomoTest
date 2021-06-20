@@ -2,23 +2,21 @@ package cook.model;
 
 import android.view.View;
 
-import com.example.testfirebase.mainActivityFragments.OrdersFragment;
 import com.example.testfirebase.order.OrderItem;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-import cook.adapters.CookTablesRecyclerViewAdapter;
+import cook.adapters.CookOrdersRecyclerViewAdapter;
 import cook.interfaces.OrdersFragmentInterface;
-import tools.Pair;
 
 public class OrdersFragmentModel implements OrdersFragmentInterface.Model {
 
     public static final char DELIMITER = '_';
 
     private Map<String, ArrayList<OrderItem>> ordersHashMap;
-    private CookTablesRecyclerViewAdapter adapter;
+    private CookOrdersRecyclerViewAdapter adapter;
     private FirebaseFirestore db;
     private View view;
 
@@ -27,11 +25,11 @@ public class OrdersFragmentModel implements OrdersFragmentInterface.Model {
     }
 
     @Override
-    public void setAdapter(CookTablesRecyclerViewAdapter adapter) {
+    public void setAdapter(CookOrdersRecyclerViewAdapter adapter) {
         this.adapter = adapter;
     }
     @Override
-    public CookTablesRecyclerViewAdapter getAdapter() {
+    public CookOrdersRecyclerViewAdapter getAdapter() {
         return adapter;
     }
     @Override

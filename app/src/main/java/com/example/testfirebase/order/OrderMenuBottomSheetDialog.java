@@ -38,7 +38,7 @@ public class OrderMenuBottomSheetDialog extends BottomSheetDialogFragment {
         BottomSheetDialog dialog = new BottomSheetDialog(getContext(), R.style.bottomSheetDialogStyle);
         View contentView = View.inflate(getContext(), R.layout.dialog_order_menu, null);
 
-        RxView.clicks(contentView.findViewById(R.id.delete_order_button))
+        RxView.clicks(contentView.findViewById(R.id.first_action))
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {

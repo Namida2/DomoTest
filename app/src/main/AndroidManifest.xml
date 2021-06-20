@@ -32,6 +32,7 @@
         <activity android:name="cook.CookMainActivity"/>
         <activity android:name="cook.CookDetailOrderActivity"/>
         <activity android:name="com.example.testfirebase.DetailOrderActivity"/>
+        <activity android:name="administrator.MainActivity"/>
 
         <service
             android:name="com.example.testfirebase.services.DocumentDishesListenerService"

@@ -3,6 +3,7 @@ package com.example.testfirebase.services;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.example.testfirebase.R;
+import com.example.testfirebase.SplashScreenActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -182,6 +184,9 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     }
     @Override
     public void dishesShowNotification(String title, String name) {
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_notification);
         Notification notification = new NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_accept)
@@ -192,7 +197,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
             .setDefaults(NotificationCompat.DEFAULT_SOUND)
             .setAutoCancel(false)
             .addAction(null)
-            .setContentIntent(null)
+            .setContentIntent(pendingIntent)
             .build();
         notificationManager.notify(id++, notification); //important thing
     }

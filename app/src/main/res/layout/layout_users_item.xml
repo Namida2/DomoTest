@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+style="@style/orderItemStyle"
+android:layout_marginTop="8dp"
+android:layout_marginBottom="8dp"
+android:layout_marginStart="8dp"
+android:layout_marginEnd="8dp"
+android:id="@+id/user_item_container_large">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/user_info_constraint_layout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        style="@style/tableStyle"
+        android:layout_margin="-8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/user_name_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_semi_bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="Nikita Makhno"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_accept"
+            app:layout_constraintBottom_toBottomOf="@+id/user_email_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/user_email_text_view" />
+
+        <TextView
+            android:id="@+id/user_email_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_light"
+            android:inputType=""
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="nikit.mahno@yandex.ru"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView5"
+            app:layout_constraintTop_toBottomOf="@+id/user_name_text_view" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_accept"
+            app:layout_constraintBottom_toBottomOf="@+id/user_post_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/user_post_text_view" />
+
+        <TextView
+            android:id="@+id/user_post_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="18dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_light"
+            android:inputType=""
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="Официант"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView6"
+            app:layout_constraintTop_toBottomOf="@+id/user_email_text_view" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_info_constraint_layout"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/montserrat_semi_bold"
+        android:text="Работать:"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/text2"
+        android:layout_toRightOf="@id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_info_constraint_layout"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/montserrat_light"
+        android:text="разрешено"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
+
+</RelativeLayout>
+
+

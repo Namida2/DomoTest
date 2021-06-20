@@ -35,7 +35,12 @@ public class CookOrdersFragment extends Fragment implements OrdersFragmentInterf
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View contentView = presenter.getView();
-        if(contentView != null) return contentView;
+        if(contentView != null) {
+            ( (RecyclerView)contentView.findViewById(R.id.orders_recycler_view) ).setAdapter(
+                presenter.getAdapter()
+            );
+            return contentView;
+        }
         contentView = inflater.inflate(R.layout.fragment_cook_orders, container, false);
         RecyclerView recyclerView = contentView.findViewById(R.id.orders_recycler_view);
         recyclerView.setAdapter(presenter.getAdapter());

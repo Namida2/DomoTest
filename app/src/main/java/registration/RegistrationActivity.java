@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 import interfaces.RegistrationActivityInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
-import presenters.RegistrationPresenter;
+import presenters.RegistrationActivityPresenter;
 
 import static registration.LogInActivity.TAG;
 import static tools.Network.isNetworkConnected;
@@ -50,7 +50,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     }
 
     private void initialisation() {
-        presenter = new RegistrationPresenter(this);
+        presenter = new RegistrationActivityPresenter(this);
         name = findViewById(R.id.name);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);

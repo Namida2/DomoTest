@@ -7,14 +7,13 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.testfirebase.MainActivity;
 import com.example.testfirebase.R;
 import com.example.testfirebase.SplashScreenActivity;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import dialogsTools.ErrorAlertDialog;
 import interfaces.PostActivityInterface;
-import presenters.PostPresenterPresenter;
+import presenters.PostActivityPresenter;
 
 import static tools.Network.isNetworkConnected;
 
@@ -31,7 +30,7 @@ public class PostActivity extends AppCompatActivity implements PostActivityInter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        presenter = new PostPresenterPresenter(this);
+        presenter = new PostActivityPresenter(this);
         RxView.clicks(findViewById(R.id.cook))
                 .subscribe(item -> checkNetworkConnection(COOK));
         RxView.clicks(findViewById(R.id.waiter))

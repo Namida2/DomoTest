@@ -46,8 +46,13 @@ public class SplashScreenActivityPresenter implements SplashScreenInterface.Pres
                 if(task.isSuccessful()) {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     Map<String, Object> currentUserData = documentSnapshot.getData();
-                    String post = (String) currentUserData.get(SplashScreenActivityModel.EMPLOYEES_FIELD_POST);
-                    view.setCurrentUserPost(post);
+                    try {
+                        String post = (String) currentUserData.get(SplashScreenActivityModel.EMPLOYEES_FIELD_POST);
+                        view.setCurrentUserPost(post);
+                    } catch (Exception e) {
+                        Log.d(TAG, "SplashScreenActivityPresenter.getCurrentUserPost" +  e.getMessage());
+                        view.setCurrentUserPost("");
+                    }
                 }
                 else {
                     Log.d(TAG, "SplashScreenActivityPresenter.getCurrentUserPost" +  task.getException().toString());

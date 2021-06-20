@@ -13,16 +13,15 @@ import registration.Employee;
 
 import static registration.LogInActivity.TAG;
 
-public class RegistrationPresenter implements RegistrationActivityInterface.Presenter {
+public class RegistrationActivityPresenter implements RegistrationActivityInterface.Presenter {
 
     private RegistrationActivityInterface.View view;
     private FirebaseAuth firebaseAuth;
 
-    public RegistrationPresenter (RegistrationActivityInterface.View view) {
+    public RegistrationActivityPresenter(RegistrationActivityInterface.View view) {
         this.view = view;
         this.firebaseAuth = FirebaseAuth.getInstance();
     }
-
     @Override
     public void createEmployee(String name, String email, String password, String confirmPassword) {
         if( isValid(email, password, confirmPassword) ) {
@@ -34,6 +33,7 @@ public class RegistrationPresenter implements RegistrationActivityInterface.Pres
                         employee.setName(name);
                         employee.setEmail(email);
                         employee.setPassword(password);
+                        employee.setPermission(false);
                         view.onSuccess();
                     } else {
                         Log.d(TAG, "EXIST EMAIL");

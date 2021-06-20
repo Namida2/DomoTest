@@ -7,16 +7,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Map;
 
-import cook.adapters.CookTablesRecyclerViewAdapter;
-import tools.Pair;
+import cook.adapters.CookOrdersRecyclerViewAdapter;
 
 public interface OrdersFragmentInterface {
     interface Model {
         android.view.View getView();
         FirebaseFirestore getDatabase();
         void setView(android.view.View view);
-        CookTablesRecyclerViewAdapter getAdapter();
-        void setAdapter(CookTablesRecyclerViewAdapter adapter);
+        CookOrdersRecyclerViewAdapter getAdapter();
+        void setAdapter(CookOrdersRecyclerViewAdapter adapter);
         Map<String, ArrayList<OrderItem>> getOrdersHashMap ();
         void setOrdersHashMap (Map<String, ArrayList<OrderItem>> ordersHashMap);
     }
@@ -27,7 +26,7 @@ public interface OrdersFragmentInterface {
         void onResume();
         void deleteOrderFromDatabase (String tableNumber);
         void setModelState(android.view.View view);
-        CookTablesRecyclerViewAdapter getAdapter ();
+        CookOrdersRecyclerViewAdapter getAdapter ();
         android.view.View getView();
         void setView(android.view.View view);
     }

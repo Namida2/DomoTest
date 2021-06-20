@@ -3,7 +3,9 @@ package com.example.testfirebase.services;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.example.testfirebase.R;
+import com.example.testfirebase.SplashScreenActivity;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
 import com.example.testfirebase.services.interfaces.DocumentOrdersListenerInterface;
@@ -142,6 +145,9 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     @Override
     public void ordersShowNotification(String title, String name) {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_notification);
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         Notification notification = new NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_accept)
             .setLargeIcon(icon)
@@ -150,8 +156,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
             .setContentText(name)
             .setDefaults(NotificationCompat.DEFAULT_SOUND)
             .setAutoCancel(false)
-            .addAction(null)
-            .setContentIntent(null)
+            .setContentIntent(pendingIntent)
             .build();
         notificationManager.notify(id++, notification); //important thing
     }

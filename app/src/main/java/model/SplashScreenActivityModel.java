@@ -18,6 +18,7 @@ public class SplashScreenActivityModel implements SplashScreenInterface.Model {
 
     public static final String COOK_POST_NAME = "Повар";
     public static final String WAITER_POST_NAME = "Официант";
+    public static final String ADMINISTRATOR_POST_NAME = "Администратор";
 
     private FirebaseFirestore db;
     private FirebaseAuth auth;

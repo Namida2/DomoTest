@@ -17,7 +17,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.jakewharton.rxbinding4.view.RxView;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -50,10 +49,10 @@ public class TableMenuBottomSheetDialog extends BottomSheetDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         BottomSheetDialog dialog = new BottomSheetDialog(getContext(), R.style.bottomSheetDialogStyle);
-        View contentView = View.inflate(getContext(), R.layout.dialog_table_menu, null);
-        Button showDeleteOrderDialogButton = contentView.findViewById(R.id.delete_order_button);
-        Button showDetailButton = contentView.findViewById(R.id.show_detail_button);
-        ((TextView) contentView.findViewById(R.id.table_name_text_view)).setText(tableName);
+        View contentView = View.inflate(getContext(), R.layout.dialog_two_actions, null);
+        Button showDeleteOrderDialogButton = contentView.findViewById(R.id.first_action);
+        Button showDetailButton = contentView.findViewById(R.id.second_action);
+        ((TextView) contentView.findViewById(R.id.title)).setText(tableName);
         disposableShowDeleteOrderDialog = RxView.clicks(showDeleteOrderDialogButton)
             .observeOn(AndroidSchedulers.mainThread())
             .debounce(150, TimeUnit.MILLISECONDS)
