@@ -1,5 +1,6 @@
 package cook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -19,10 +20,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.concurrent.TimeUnit;
 
+import dialogsTools.ErrorAlertDialog;
 import interfaces.DeleteOrderInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import tools.EmployeeData;
 
 public class CookMainActivity extends AppCompatActivity implements DeleteOrderInterface.Subscriber {
 
@@ -36,6 +39,7 @@ public class CookMainActivity extends AppCompatActivity implements DeleteOrderIn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cook_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getPermission();
         DeleteOrderObservable.getObservable().subscribe(this);
         initialisation();
 
@@ -108,6 +112,22 @@ public class CookMainActivity extends AppCompatActivity implements DeleteOrderIn
     @Override
     public void deleteOrder(String tableName) {
         showBottomNavigationView();
+    }
+
+    public boolean getPermission () {
+        if(!EmployeeData.permission && !ErrorAlertDialog.isIsExist()) {
+            ErrorAlertDialog dialog = ErrorAlertDialog.getNewInstance(ErrorAlertDialog.PERMISSION_ERROR);
+            dialog.setActionConsumer(finish -> {
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory( Intent.CATEGORY_HOME );
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+                finishAndRemoveTask();
+            });
+            dialog.show(getSupportFragmentManager(), "");
+            return false;
+        }
+        return true;
     }
 }
 

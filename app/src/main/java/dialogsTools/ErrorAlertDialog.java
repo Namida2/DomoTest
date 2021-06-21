@@ -34,7 +34,7 @@ public class ErrorAlertDialog extends DialogFragment {
     public static final int PERMISSION_ERROR = 7;
     public static final int SOMETHING_WRONG = 8;
 
-    private static Consumer<Object> acceptAction;
+    private Consumer<Object> acceptAction;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
     private static int dialogType;
 
@@ -46,7 +46,7 @@ public class ErrorAlertDialog extends DialogFragment {
         return errorAlertDialog;
     }
     public void setActionConsumer (Consumer<Object> acceptAction) {
-        ErrorAlertDialog.acceptAction = acceptAction;
+        this.acceptAction = acceptAction;
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
@@ -94,6 +94,10 @@ public class ErrorAlertDialog extends DialogFragment {
             case EMPTY_FIELD:
                 title.setText(R.string.error_alert_dialog_empty_field_title);
                 text.setText(R.string.error_alert_dialog_empty_field_text);
+                break;
+            case PERMISSION_ERROR:
+                title.setText(R.string.error_alert_dialog_permission_error_title);
+                text.setText(R.string.error_alert_dialog_permission_error_text);
                 break;
         }
         builder.setView(view);

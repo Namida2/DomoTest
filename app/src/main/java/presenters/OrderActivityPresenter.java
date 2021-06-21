@@ -3,6 +3,7 @@ package presenters;
 import android.util.Log;
 
 import com.example.testfirebase.DeleteOrderObservable;
+import com.example.testfirebase.order.OrderActivity;
 import com.example.testfirebase.services.DocumentDishesListenerService;
 import com.example.testfirebase.services.DocumentOrdersListenerService;
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
@@ -50,12 +51,26 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
             model = new OrderActivityModel();
             model.setAdapter(new OrderRecyclerViewAdapter());
         }
+        if(view.getClass() == OrderActivity.class)
+            model.getAdapter().setEditOrderConsumer(((OrderActivityInterface.View) view)::showEditOrderItemDialog);
+
         DocumentDishesListenerService.getService().dishesSubscribe(this);
         DocumentOrdersListenerService.getService().ordersSubscribe(this);
         DeleteOrderObservable.getObservable().subscribe(this);
         Log.d(TAG, "Subscribe to services: SUCCESS");
         Log.d(TAG, "OrderActivityPresenter: CREATED");
     }
+
+    @Override
+    public void notifyOrderItemDataSetChanged(OrderItem orderItem) {
+        model.getAdapter().notifyOrderItemDataSetChanged(orderItem);
+    }
+
+    @Override
+    public void removeOrderItem(OrderItem orderItem) {
+        model.getAdapter().removeOrderItem(orderItem);
+    }
+
     @Override
     public void notifyAdapterDataSetChanged(OrderItem orderItem) {
         model.getAdapter().addOrder(orderItem);

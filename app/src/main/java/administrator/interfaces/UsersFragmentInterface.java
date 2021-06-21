@@ -24,11 +24,13 @@ public interface UsersFragmentInterface {
         void onError(int errorCode);
     }
     interface Presenter {
-        void setUserPermission(Employee employee, boolean permission);
         void onResume();
         void setModelState();
-        void setView(android.view.View view);
         android.view.View getView();
+        void deleteUser(Employee employee);
+        void setView(android.view.View view);
         UsersRecyclerViewAdapter getAdapter();
+        void setUserPermission(Employee employee, boolean permission);
+
     }
 }

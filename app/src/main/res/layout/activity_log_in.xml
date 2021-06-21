@@ -99,7 +99,7 @@
 
             <Button
                 android:id="@+id/newAccountButton"
-                style="@style/emptyButtonStyle"
+                style="@style/empty_button_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="36dp"

@@ -74,7 +74,7 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.layout_detail_order_item, parent, false);
+        View view = layoutInflater.inflate(R.layout.layout_order_item, parent, false);
         return new ViewHolder(view);
     }
     @RequiresApi(api = Build.VERSION_CODES.N)

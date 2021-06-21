@@ -56,8 +56,7 @@ public class Employee {
         return employee.getName().equals(getName())
             && employee.getEmail().equals(getEmail())
             && employee.getPassword().equals(getPassword())
-            && employee.getPost().equals(getPost())
-            && employee.getPermission().equals(getPermission());
+            && employee.getPost().equals(getPost());
     }
 }
 

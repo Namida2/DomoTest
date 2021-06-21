@@ -21,6 +21,9 @@
     <string name="error_alert_dialog_empty_field_title">Пустое поле</string>
     <string name="error_alert_dialog_empty_field_text">Пожалуйста, заполните все поля.</string>
 
+    <string name="error_alert_dialog_permission_error_title">Отсутствует разрешение</string>
+    <string name="error_alert_dialog_permission_error_text">Пожалуйста, дождитесь, когда администратор разрешит вам продолжить работу. После этого попытайтесь войти в приложение DOMO еще раз.</string>
+
 
     <string name="table_menu_dialog_delete_order_text">Вы действительно хотите удалить этот столик?</string>
 </resources>

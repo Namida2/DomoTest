@@ -125,7 +125,9 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
 
         try {
             serviceCreatedConsumer.accept(true);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            Log.w(TAG, "DocumentDishesListenerService: " + e.getMessage());
+        }
         Log.w(TAG, "DocumentDishesListenerService: Created");
     }
     @RequiresApi(api = Build.VERSION_CODES.N)

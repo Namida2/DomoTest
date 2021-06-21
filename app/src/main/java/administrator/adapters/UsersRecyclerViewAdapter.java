@@ -2,6 +2,7 @@ package administrator.adapters;
 
 
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import java.util.function.Consumer;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import registration.Employee;
 import tools.Animations;
+
+import static registration.LogInActivity.TAG;
 
 public class UsersRecyclerViewAdapter extends RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder> {
 
@@ -100,6 +103,14 @@ public class UsersRecyclerViewAdapter extends RecyclerView.Adapter<UsersRecycler
         return employees.size();
     }
     public void setEmployeesPermission(Employee employee, boolean permission) {
-
+        if(employees.contains(employee)) {
+            for(int i = 0; i < employees.size(); ++i) {
+                if(employees.get(i).getEmail().equals(employee.getEmail())) {
+                    employees.get(i).setPermission(permission);
+                    this.notifyItemChanged(i);
+                    break;
+                }
+            }
+        } else Log.d(TAG, "UsersRecyclerViewAdapter.setEmployeesPermission: EMPLOYEE ISN'T EXIST" );
     }
 }

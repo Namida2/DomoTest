@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,19 +28,23 @@ import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
-public class AddDishAlertDialog extends DialogFragment {
-
-    private static Consumer<OrderItem> notifyOrderAdapterConsumer;
-    private static Consumer<Boolean> resetIsPressed;
+public class EditOrderDialog extends DialogFragment {
+    private static Consumer<OrderItem> notifyOrderDataChangedConsumer;
+    private static Consumer<OrderItem> removeOrderItemConsumer;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
-    private static Dish dish;
+    private static OrderItem orderItem;
 
-    public static AddDishAlertDialog getNewInstance (Consumer<OrderItem> consumer, Dish dish,  Consumer<Boolean> resetIsPressed) {
-        AddDishAlertDialog.dish = dish;
-        AddDishAlertDialog.resetIsPressed = resetIsPressed;
-        AddDishAlertDialog.notifyOrderAdapterConsumer = consumer;
-        AddDishAlertDialog dialog = new AddDishAlertDialog();
-        return dialog;
+    public static EditOrderDialog getNewInstance (OrderItem orderItem) {
+        isExist.set(true);
+        EditOrderDialog.orderItem = orderItem;
+        return new EditOrderDialog();
+    }
+
+    public void setNotifyOrderDataChangedConsumer (Consumer<OrderItem> notifyOrderDataChangedConsumer ) {
+        EditOrderDialog.notifyOrderDataChangedConsumer = notifyOrderDataChangedConsumer;
+    }
+    public void setRemoveOrderItemConsumer (Consumer<OrderItem> removeOrderItemConsumer ) {
+        EditOrderDialog.removeOrderItemConsumer = removeOrderItemConsumer;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -48,24 +53,34 @@ public class AddDishAlertDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.alertDialogStyle);
-        View contentView = View.inflate(getContext(), R.layout.dialog_add_dish, null);
+        View contentView = View.inflate(getContext(), R.layout.dialog_edit_order, null);
         TextView dishCount = contentView.findViewById(R.id.dish_count);
-        TextView commentary = contentView.findViewById(R.id.commentary);
+        EditText commentary = contentView.findViewById(R.id.commentary);
         TextView dishName = contentView.findViewById(R.id.dish_name);
-        Button addToOrderButton = contentView.findViewById(R.id.save_order_button);
-        dishName.setText(dish.getName().length() > 36 ?
-            dish.getName().substring(0, 36) + "..."
-            :dish.getName());
+        Button saveOderItem = contentView.findViewById(R.id.save_order_button);
+        Button removeOrderItem = contentView.findViewById(R.id.remove_order_button);
+        dishCount.setText(Integer.toString(orderItem.getCount()));
+        commentary.setText(orderItem.getCommentary());
+        dishName.setText(orderItem.getName().length() > 36 ?
+            orderItem.getName().substring(0, 36) + "..."
+            :orderItem.getName());
 
-        RxView.clicks(addToOrderButton)
+        RxView.clicks(saveOderItem)
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
-                OrderItem orderItem = new OrderItem(
-                    dish, commentary.getText().toString(),
-                    Integer.parseInt(dishCount.getText().toString()));
-                notifyOrderAdapterConsumer.accept(orderItem);
-                resetIsPressed.accept(false);
+                orderItem.setCount(rdishCount.getText());
+                notifyOrderDataChangedConsumer.accept(orderItem);
+                isExist.set(false);
+                this.dismiss();
+            });
+
+        RxView.clicks(removeOrderItem)
+            .debounce(150, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(unit -> {
+                removeOrderItemConsumer.accept(orderItem);
+                isExist.set(false);
                 this.dismiss();
             });
 
@@ -76,7 +91,7 @@ public class AddDishAlertDialog extends DialogFragment {
     @Override
     public void onDismiss(@NonNull @NotNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        resetIsPressed.accept(false);
+        isExist.set(false);
     }
     @Override
     public void onResume() {
@@ -87,7 +102,9 @@ public class AddDishAlertDialog extends DialogFragment {
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(layoutParams);
     }
-//    public static boolean isExit () {
-//        return isExist.get();
-//    }
+
+    public static boolean isExist() {
+        return isExist.get();
+    }
+
 }

@@ -74,7 +74,7 @@ public class CookDetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.layout_detail_order_item, parent, false);
+        View view = layoutInflater.inflate(R.layout.layout_order_item, parent, false);
         return new ViewHolder(view);
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -93,7 +93,6 @@ public class CookDetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapte
             holder.isReady.setVisibility(View.VISIBLE);
         else holder.isReady.setVisibility(View.GONE);
 
-        Animations.Companion.showView(holder.container_large);
         RxView.clicks(holder.container_large)
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
@@ -108,6 +107,7 @@ public class CookDetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapte
                 acceptDishConsumer.accept(
                     new ReadyDish(orderItemsArrayList.get(position), tableInfo, position));
             });
+        Animations.Companion.showView(holder.container_large);
     }
     @Override
     public int getItemCount() {

@@ -45,13 +45,14 @@ public class PostActivityPresenter implements PostActivityInterface.Presenter{
             if( task.isSuccessful() ){
                 Log.d(TAG, "The employee was registered.");
 
-                //documentEmployeesListener.update(UsersFragmentModel.FIELD_EMPLOYEE, null)
-                    //.addOnCompleteListener(taskNull -> {
-                        //if(taskNull.isSuccessful()) {
+                documentEmployeesListener.update(UsersFragmentModel.FIELD_EMPLOYEE, null)
+                    .addOnCompleteListener(taskNull -> {
+                        if(taskNull.isSuccessful()) {
                             db.runTransaction(transaction -> {
                                 transaction.set(documentEmployees, employee);
-                                transaction.update(documentEmployeesListener,
-                                    UsersFragmentModel.FIELD_EMPLOYEE, employee.getEmail());
+                                if(!post.equals(SplashScreenActivityModel.ADMINISTRATOR_POST_NAME))
+                                    transaction.update(documentEmployeesListener,
+                                        UsersFragmentModel.FIELD_EMPLOYEE, employee.getEmail());
                                 return true;
                             }).addOnCompleteListener(task1 -> {
                                 if(task1.isSuccessful()) {
@@ -60,8 +61,8 @@ public class PostActivityPresenter implements PostActivityInterface.Presenter{
                                 }
                                 else Log.d(TAG, "PostActivityPresenter.registration: " + task1.getException());
                             });
-                        //}  else Log.d(TAG, "PostActivityPresenter.registration: " + taskNull.getException());
-                   //});
+                        }  else Log.d(TAG, "PostActivityPresenter.registration: " + taskNull.getException());
+                   });
 
             }
             else {

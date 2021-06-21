@@ -30,7 +30,7 @@ public class UserMenuBottomSheetDialog extends BottomSheetDialogFragment {
 
     private static Employee employee;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
-    private static final String ACTION_SET_WORKING_STATE = "Разрешить работать с приложением";
+    private static final String ACTION_SET_WORKING_STATE = "Установить разрешение";
     private static final String ACTION_DELETE_EMPLOYEE = "Удалить работника";
 
     private Consumer<Boolean> firstActionConsumer;
@@ -63,7 +63,6 @@ public class UserMenuBottomSheetDialog extends BottomSheetDialogFragment {
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
-                employee.setPermission(!employee.getPermission());
                 firstActionConsumer.accept(!employee.getPermission());
                 isExist.set(false);
                 dismiss();

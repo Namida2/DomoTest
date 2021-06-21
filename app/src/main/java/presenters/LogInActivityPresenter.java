@@ -22,40 +22,24 @@ public class LogInActivityPresenter implements LogInActivityInterface.Presenter 
     @Override
     public void logIn(String email, String password) {
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(SplashScreenActivityModel.COLLECTION_EMPLOYEES_NAME)
-            .get().addOnCompleteListener(task1 -> {
-                if(task1.isSuccessful()) {
-                    if(task1.getResult().isEmpty()) {
-                        view.onError(ErrorAlertDialog.WRONG_EMAIL_OR_PASSWORD);
-                        return;
-                    }
-                    if( !isValid(email, password) ) {
-                        view.onError(ErrorAlertDialog.EMPTY_FIELD);
-                    }
-                    else {
-                        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                            if (task.isSuccessful())
-                                view.onSuccess();
-                            else {
-                                Log.d(TAG, "Wrong email or password." );
-                                Log.d(TAG, task.getException().toString() );
-                                view.onError(ErrorAlertDialog.WRONG_EMAIL_OR_PASSWORD);
-                            }
-                        });
-                    }
-                } else view.onError(ErrorAlertDialog.WRONG_EMAIL_OR_PASSWORD);
-        });
-
+        if( !isValid(email, password) )
+            view.onError(ErrorAlertDialog.EMPTY_FIELD);
+        else {
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (task.isSuccessful())
+                    view.onSuccess();
+                else {
+                    Log.d(TAG, "Wrong email or password." );
+                    Log.d(TAG, task.getException().toString() );
+                    view.onError(ErrorAlertDialog.WRONG_EMAIL_OR_PASSWORD);
+                }
+            });
+        }
     }
 
     @Override
     public boolean isValid(String email, String password) {
-        if(email.isEmpty() || password.isEmpty() || email.contains(" ") || password.contains(" ")) {
-            return false;
-        }
-        return true;
+        return !email.isEmpty() && !password.isEmpty() && !email.contains(" ") && !password.contains(" ");
     }
-
 
 }

@@ -7,6 +7,6 @@ public interface EmployeePermissionInterface {
         void unSubscribe(EmployeePermissionInterface.Subscriber subscriber);
     }
     interface Subscriber {
-        void acceptPermission(String employeeEmail, boolean permission);
+        boolean acceptPermission(String employeeEmail, boolean permission);
     }
 }

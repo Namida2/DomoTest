@@ -9,20 +9,19 @@ import java.util.ArrayList;
 import administrator.interfaces.EmployeePermissionInterface;
 import dialogsTools.ErrorAlertDialog;
 import model.SplashScreenActivityModel;
+import registration.Employee;
 import tools.Constants;
 import tools.EmployeeData;
 
 import static registration.LogInActivity.TAG;
 
-public class EmployeePermissionObservable implements EmployeePermissionInterface.Observable {
+public class EmployeePermissionObservable {
 
-    private ArrayList<EmployeePermissionInterface.Subscriber> subscribers = new ArrayList<>();
-    private EmployeePermissionObservable observable = new EmployeePermissionObservable();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String employeeEmail;
-    private boolean permission;
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static String employeeEmail = "";
+    private static boolean permission;
 
-    EmployeePermissionObservable () {
+    public EmployeePermissionObservable () {
         startListeningDocument();
     }
     private void startListeningDocument () {
@@ -37,37 +36,12 @@ public class EmployeePermissionObservable implements EmployeePermissionInterface
                     if(value.get(Constants.FIELD_EMPLOYEE) != null && value.get(Constants.FIELD_PERMISSION) != null) {
                         this.employeeEmail = (String) value.get(Constants.FIELD_EMPLOYEE);
                         this.permission = (boolean) value.get(Constants.FIELD_PERMISSION);
-                        if(EmployeeData.email.equals(employeeEmail) || !permission)
-                            notifySubscribers();
+                        if(employeeEmail.equals(EmployeeData.email))
+                            EmployeeData.permission = permission;
                     }
                     Log.d(TAG, "EmployeePermissionObservable.startListeningDocument: " + employeeEmail + ", " + permission);
                 }
             });
     }
-    public EmployeePermissionObservable getObservable() {
-        return observable;
-    }
-    @Override
-    public void notifySubscribers() {
-        for(EmployeePermissionInterface.Subscriber subscriber : subscribers) {
-            subscriber.acceptPermission(employeeEmail, permission);
-        }
-    }
-    @Override
-    public void subscribe(EmployeePermissionInterface.Subscriber newSubscriber) {
-        for(int i = 0; i < subscribers.size(); ++i) {
-            EmployeePermissionInterface.Subscriber subscriber = subscribers.get(i);
-            if(newSubscriber.getClass() == subscriber.getClass()) {
-                subscribers.remove(i);
-                break;
-            }
-        }
-        subscribers.add(newSubscriber);
-        if(EmployeeData.email.equals(employeeEmail) || !permission)
-            newSubscriber.acceptPermission(employeeEmail, permission);
-    }
-    @Override
-    public void unSubscribe(EmployeePermissionInterface.Subscriber subscriber) {
-        subscribers.remove(subscriber);
-    }
+
 }

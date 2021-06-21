@@ -24,7 +24,9 @@ import cook.interfaces.OrdersFragmentInterface;
 import cook.model.DetailOrderActivityModel;
 import cook.presenters.OrdersFragmentPresenter;
 import dialogsTools.AcceptOrCancelDialog;
+import dialogsTools.ErrorAlertDialog;
 import interfaces.DeleteOrderInterface;
+import tools.EmployeeData;
 
 public class OrdersFragment extends Fragment implements OrdersFragmentInterface.View {
 
@@ -33,6 +35,7 @@ public class OrdersFragment extends Fragment implements OrdersFragmentInterface.
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         presenter = new OrdersFragmentPresenter(this);
+        getPermission();
         super.onCreate(savedInstanceState);
     }
     @Nullable
@@ -54,6 +57,7 @@ public class OrdersFragment extends Fragment implements OrdersFragmentInterface.
     }
     @Override
     public void startDetailOrderActivity(TableInfo tableInfo) {
+        if(!getPermission()) return;
         String tableName = DocumentDishesListenerService.TABLE + tableInfo.getTableName();
         if (tableInfo.isOrderComplete()) {
             TableMenuBottomSheetDialog tableMenuBottomSheetDialog = TableMenuBottomSheetDialog.getNewInstance(action -> {
@@ -61,7 +65,7 @@ public class OrdersFragment extends Fragment implements OrdersFragmentInterface.
                     case TableMenuBottomSheetDialog.ACTION_SHOW_DELETE_ORDER_DIALOG: {
                         AcceptOrCancelDialog acceptOrCancelDialog = new AcceptOrCancelDialog(
                             response -> {
-                                if((boolean) response)
+                                if((boolean)response && getPermission())
                                     presenter.deleteOrderFromDatabase(tableInfo.getTableName());
                             }, tableName,
                             getResources().getString(R.string.table_menu_dialog_delete_order_text)
@@ -82,5 +86,21 @@ public class OrdersFragment extends Fragment implements OrdersFragmentInterface.
             intent.putExtra(DetailOrderActivityModel.EXTRA_TAG, tableInfo.getTableName());
             getActivity().startActivity(intent);
         }
+    }
+
+    public boolean getPermission() {
+        if(!EmployeeData.permission && !ErrorAlertDialog.isIsExist()) {
+            ErrorAlertDialog dialog = ErrorAlertDialog.getNewInstance(ErrorAlertDialog.PERMISSION_ERROR);
+            dialog.setActionConsumer(finish -> {
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory( Intent.CATEGORY_HOME );
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+                getActivity().finishAndRemoveTask();
+            });
+            dialog.show(getActivity().getSupportFragmentManager(), "");
+            return false;
+        }
+        return true;
     }
 }

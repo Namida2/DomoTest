@@ -26,8 +26,11 @@ public interface OrderActivityInterface {
         Map<String, ArrayList<OrderItem>> getTablesWithAllReadyDishes();
     }
     interface View {
+        void showEditOrderItemDialog(OrderItem orderItem);
     }
     interface Presenter {
+        void notifyOrderItemDataSetChanged (OrderItem orderItem);
+        void removeOrderItem (OrderItem orderItem);
         void notifyAdapterDataSetChanged(OrderItem orderItem);
         Map<String, ArrayList<OrderItem>> getNotEmptyTablesOrdersHashMap();
         void setModelDataState(boolean needToNotifyView);

@@ -1,5 +1,7 @@
 package com.example.testfirebase;
 
+
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,24 +9,25 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavHostController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.testfirebase.services.DocumentDishesListenerService;
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.concurrent.TimeUnit;
 
+import dialogsTools.ErrorAlertDialog;
 import interfaces.DeleteOrderInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
-import model.ProfileFragmentModel;
-import tools.Animations;
+
+import tools.EmployeeData;
 
 import static registration.LogInActivity.TAG;
 
@@ -35,10 +38,14 @@ public class MainActivity extends AppCompatActivity implements DeleteOrderInterf
     private NavHostController navHostController;
     private Disposable disposable;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getPermission();
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         DeleteOrderObservable.getObservable().subscribe(this);
         initialisation();
@@ -111,9 +118,24 @@ public class MainActivity extends AppCompatActivity implements DeleteOrderInterf
             }
         }
     }
-
     @Override
     public void deleteOrder(String tableName) {
         showBottomNavigationView();
+    }
+
+    public boolean getPermission () {
+        if(!EmployeeData.permission && !ErrorAlertDialog.isIsExist()) {
+            ErrorAlertDialog dialog = ErrorAlertDialog.getNewInstance(ErrorAlertDialog.PERMISSION_ERROR);
+            dialog.setActionConsumer(finish -> {
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory( Intent.CATEGORY_HOME );
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+                finishAndRemoveTask();
+            });
+            dialog.show(getSupportFragmentManager(), "");
+            return false;
+        }
+        return true;
     }
 }

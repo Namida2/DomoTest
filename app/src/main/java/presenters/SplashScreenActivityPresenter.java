@@ -9,10 +9,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Map;
 
+import administrator.interfaces.EmployeePermissionInterface;
+import dialogsTools.ErrorAlertDialog;
 import interfaces.OrderActivityInterface;
 import interfaces.SplashScreenInterface;
 import interfaces.ToolsInterface;
 import model.SplashScreenActivityModel;
+import registration.Employee;
+import tools.Constants;
+import tools.EmployeeData;
 
 import static registration.LogInActivity.TAG;
 
@@ -48,6 +53,9 @@ public class SplashScreenActivityPresenter implements SplashScreenInterface.Pres
                     Map<String, Object> currentUserData = documentSnapshot.getData();
                     try {
                         String post = (String) currentUserData.get(SplashScreenActivityModel.EMPLOYEES_FIELD_POST);
+                        EmployeeData.permission = (boolean) currentUserData.get(Constants.FIELD_PERMISSION);
+                        EmployeeData.name = (String) currentUserData.get(Constants.FIELD_NAME);
+                        EmployeeData.email = currentUser.getEmail();
                         view.setCurrentUserPost(post);
                     } catch (Exception e) {
                         Log.d(TAG, "SplashScreenActivityPresenter.getCurrentUserPost" +  e.getMessage());
@@ -59,4 +67,6 @@ public class SplashScreenActivityPresenter implements SplashScreenInterface.Pres
                 }
         });
     }
+
+
 }

@@ -15,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.testfirebase.services.DocumentDishesListenerService;
 import com.example.testfirebase.services.DocumentOrdersListenerService;
 
+import administrator.EmployeePermissionObservable;
 import cook.CookMainActivity;
+import dialogsTools.ErrorAlertDialog;
 import interfaces.SplashScreenInterface;
 import model.SplashScreenActivityModel;
 import presenters.SplashScreenActivityPresenter;
@@ -33,6 +35,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        new EmployeePermissionObservable();
         if(!DocumentOrdersListenerService.isExist())
             try {
                 startService(new Intent(this, DocumentOrdersListenerService.class));
@@ -45,6 +48,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
                 startService(new Intent(this, DocumentDishesListenerService.class));
             } catch (Exception e) {Log.d(TAG, "SplashScreenActivity: " + e.getMessage());}
         } else presenter = new SplashScreenActivityPresenter(this);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -54,23 +58,39 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         DocumentDishesListenerService.setPost(post);
         switch (post) {
             case SplashScreenActivityModel.COOK_POST_NAME:
+                if( !getPermission()) {
+                    unSubscribeFromServices();
+                    return;
+                }
                 startNewActivity(CookMainActivity.class);
                 //DocumentDishesListenerService.unSubscribeFromDatabase();
                 //stopService(new Intent(this, DocumentDishesListenerService.class));
                 break;
             case SplashScreenActivityModel.WAITER_POST_NAME:
+                if( !getPermission()) {
+                    unSubscribeFromServices();
+                    return;
+                }
                 startNewActivity(MainActivity.class);
                 break;
             case SplashScreenActivityModel.ADMINISTRATOR_POST_NAME:
-                DocumentDishesListenerService.getService().stopForeground(Service.STOP_FOREGROUND_DETACH);
-                DocumentDishesListenerService.unSubscribeFromDatabase();
-                DocumentDishesListenerService.getService().stopSelf();
-                DocumentOrdersListenerService.getService().stopForeground(Service.STOP_FOREGROUND_DETACH);
-                DocumentOrdersListenerService.unSubscribeFromDatabase();
-                DocumentOrdersListenerService.getService().stopSelf();
+                unSubscribeFromServices();
                 startNewActivity(administrator.MainActivity.class);
                 break;
             default: createNewUser(); break;
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void unSubscribeFromServices() {
+        try {
+            DocumentDishesListenerService.getService().stopForeground(Service.STOP_FOREGROUND_DETACH);
+            DocumentDishesListenerService.unSubscribeFromDatabase();
+            DocumentDishesListenerService.getService().stopSelf();
+            DocumentOrdersListenerService.getService().stopForeground(Service.STOP_FOREGROUND_DETACH);
+            DocumentOrdersListenerService.unSubscribeFromDatabase();
+            DocumentOrdersListenerService.getService().stopSelf();
+        } catch (Exception e ) {
+            Log.d(TAG, "unSubscribeFromServices: " + e.getMessage());
         }
     }
     @Override
@@ -84,4 +104,21 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
             SplashScreenActivity.this.finish();
         }, 80);
     }
+
+    public boolean getPermission () {
+        if(!EmployeeData.permission && !ErrorAlertDialog.isIsExist()) {
+            ErrorAlertDialog dialog = ErrorAlertDialog.getNewInstance(ErrorAlertDialog.PERMISSION_ERROR);
+            dialog.setActionConsumer(finish -> {
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory( Intent.CATEGORY_HOME );
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+                finishAndRemoveTask();
+            });
+            dialog.show(getSupportFragmentManager(), "");
+            return false;
+        }
+        return true;
+    }
+
 }

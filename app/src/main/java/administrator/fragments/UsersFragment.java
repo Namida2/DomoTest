@@ -51,7 +51,7 @@ public class UsersFragment extends Fragment implements UsersFragmentInterface.Vi
                 presenter.setUserPermission(employee, permission);
             });
             dialog.setSecondActionConsumer(employee1 -> {
-               // presenter.deleteEmployee;
+                presenter.deleteUser(employee);
             });
             dialog.show(getActivity().getSupportFragmentManager(), "");
         }

@@ -63,7 +63,9 @@ public class LogInActivity extends AppCompatActivity implements LogInActivityInt
 
     @Override
     public void onSuccess() {
-        startActivity(new Intent(this, SplashScreenActivity.class));
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     @Override

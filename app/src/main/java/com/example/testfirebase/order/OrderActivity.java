@@ -1,5 +1,7 @@
 package com.example.testfirebase.order;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -8,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +36,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import presenters.MenuDialogPresenter;
 import presenters.GuestCountDialogOrderActivityPresenter;
 import presenters.OrderActivityPresenter;
+import tools.EmployeeData;
 import tools.Pair;
 
 import static com.example.testfirebase.mainActivityFragments.TablesFragment.EXTRA_TAG;
@@ -59,15 +63,17 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     private int tableNumber;
     private int guestsCount;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        getPermission();
         initialisation();
 
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initialisation () {
         tableNumber = getIntent().getIntExtra(EXTRA_TAG, 0);
         tableNumberTextView = findViewById(R.id.table_number);
@@ -91,11 +97,13 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
+                if(!getPermission()) return;
                 if(menuDialogView != null)
                     menuDialog.show(getSupportFragmentManager(), "");
             });
         bottomAppBar.setNavigationOnClickListener(view -> { // add isExist
             OrderMenuBottomSheetDialog dialog = OrderMenuBottomSheetDialog.getNewInstance(orderWasAccepted -> {
+                if(!getPermission()) return;
                 orderPresenter.acceptAndWriteOrderToDb(tableNumber, guestsCount);
                 finish();
             });
@@ -164,5 +172,35 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         menuDialogPresenter = null;
         guestsCountDialogPresenter = null;
         orderPresenter = null;
+    }
+
+    public boolean getPermission () {
+        if(!EmployeeData.permission && !ErrorAlertDialog.isIsExist()) {
+            ErrorAlertDialog dialog = ErrorAlertDialog.getNewInstance(ErrorAlertDialog.PERMISSION_ERROR);
+            dialog.setActionConsumer(finish -> {
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory( Intent.CATEGORY_HOME );
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+                finishAndRemoveTask();
+            });
+            dialog.show(getSupportFragmentManager(), "");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void showEditOrderItemDialog(OrderItem orderItem) {
+        if(!EditOrderDialog.isExist()) {
+            EditOrderDialog dialog = EditOrderDialog.getNewInstance(orderItem);
+            dialog.setNotifyOrderDataChangedConsumer(newOrderItem -> {
+                orderPresenter.notifyOrderItemDataSetChanged(orderItem);
+            });
+            dialog.setRemoveOrderItemConsumer(removableOrderItem -> {
+                orderPresenter.removeOrderItem(orderItem);
+            });
+            dialog.show(getSupportFragmentManager(), "");
+        }
     }
 }

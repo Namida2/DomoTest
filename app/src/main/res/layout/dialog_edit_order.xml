@@ -104,12 +104,13 @@
         android:drawableEnd="@drawable/ic_arrow_right_white"
         android:gravity="left|center"
         android:paddingStart="24dp"
-        android:text="Добавить в заказ"
+        android:text="Сохранить итзменения"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/commentary" />
 
     <Button
+        android:id="@+id/remove_order_button"
         style="@style/empty_button_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -117,7 +118,7 @@
         android:layout_marginBottom="16dp"
         android:gravity="left|center"
         android:paddingStart="24dp"
-        android:text="Показать описание"
+        android:text="Удалить из заказа"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

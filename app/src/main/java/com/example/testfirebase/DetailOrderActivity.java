@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import cook.model.DetailOrderActivityModel;
 
+import dialogsTools.ErrorAlertDialog;
 import interfaces.DetailOrderItemsActivityInterface;
 import presenters.DetailOrderItemsActivityPresenter;
+import tools.EmployeeData;
 
 public class DetailOrderActivity extends AppCompatActivity implements DetailOrderItemsActivityInterface.View {
 
@@ -22,6 +24,7 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_order);
+        getPermission();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         initialization();
     }
@@ -40,5 +43,21 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
     protected void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();
+    }
+
+    public boolean getPermission () {
+        if(!EmployeeData.permission && !ErrorAlertDialog.isIsExist()) {
+            ErrorAlertDialog dialog = ErrorAlertDialog.getNewInstance(ErrorAlertDialog.PERMISSION_ERROR);
+            dialog.setActionConsumer(finish -> {
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory( Intent.CATEGORY_HOME );
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+                finishAndRemoveTask();
+            });
+            dialog.show(getSupportFragmentManager(), "");
+            return false;
+        }
+        return true;
     }
 }
