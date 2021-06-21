@@ -8,34 +8,19 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.WindowManager;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testfirebase.services.DocumentDishesListenerService;
 import com.example.testfirebase.services.DocumentOrdersListenerService;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.Transaction;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 
 import cook.CookMainActivity;
 import interfaces.SplashScreenInterface;
-import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
 import presenters.SplashScreenActivityPresenter;
 import registration.LogInActivity;
-import tools.UserData;
+import tools.EmployeeData;
 
 import static registration.LogInActivity.TAG;
 
@@ -65,7 +50,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void setCurrentUserPost(String post) {
-        UserData.post = post;
+        EmployeeData.post = post;
         DocumentDishesListenerService.setPost(post);
         switch (post) {
             case SplashScreenActivityModel.COOK_POST_NAME:

@@ -99,4 +99,7 @@ public class UsersRecyclerViewAdapter extends RecyclerView.Adapter<UsersRecycler
     public int getItemCount() {
         return employees.size();
     }
+    public void setEmployeesPermission(Employee employee, boolean permission) {
+
+    }
 }

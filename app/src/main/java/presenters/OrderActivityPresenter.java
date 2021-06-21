@@ -12,7 +12,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,10 +29,7 @@ import io.reactivex.rxjava3.core.Observable;
 import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
 import model.TablesFragmentModel;
-import tools.Pair;
-import tools.UserData;
-
-import static registration.LogInActivity.TAG;
+import tools.EmployeeData;
 
 public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerInterface.Subscriber,
     DocumentOrdersListenerInterface.Subscriber, DeleteOrderInterface.Subscriber {
@@ -267,7 +263,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
     public void ordersNotifyMe(Object data) {
         Map<String, ArrayList<OrderItem>> order = (Map<String, ArrayList<OrderItem>>) data;
         TableInfo tableInfo = DocumentOrdersListenerService.getService().getTableInfo();
-        if (!UserData.post.equals(SplashScreenActivityModel.WAITER_POST_NAME)) {
+        if (!EmployeeData.post.equals(SplashScreenActivityModel.WAITER_POST_NAME)) {
             String tableNumber = tableInfo.getTableName()
                 .substring(tableInfo.getTableName()
                 .indexOf(OrdersFragmentModel.DELIMITER) + 1);

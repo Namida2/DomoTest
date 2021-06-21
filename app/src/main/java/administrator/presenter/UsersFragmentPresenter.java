@@ -32,9 +32,9 @@ public class UsersFragmentPresenter implements UsersFragmentInterface.Presenter 
         startDocumentEmployeesListener();
         onResume();
     }
-
     @Override
     public void setUserPermission(Employee employee, boolean permission) {
+        model.getAdapter()
         DocumentReference docRefEmployee = model.getDatabase()
             .collection(SplashScreenActivityModel.COLLECTION_EMPLOYEES_NAME)
             .document(employee.getEmail());
@@ -48,6 +48,7 @@ public class UsersFragmentPresenter implements UsersFragmentInterface.Presenter 
                     model.getDatabase().runTransaction(transaction -> {
                         transaction.update(docRefEmployee, Constants.FIELD_PERMISSION, permission);
                         transaction.update(docRefPermissionListener, Constants.FIELD_EMPLOYEE, employee.getEmail());
+                        transaction.update(docRefPermissionListener, Constants.FIELD_PERMISSION, permission);
                         return true;
                     }).addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
@@ -57,7 +58,6 @@ public class UsersFragmentPresenter implements UsersFragmentInterface.Presenter 
                 } else Log.d(TAG, "UsersFragmentPresenter.setUserPermission: " + taskNull.getException());
             });
     }
-
     @Override
     public void onResume() {
         model.getAdapter().setActionsConsumer(employee -> {

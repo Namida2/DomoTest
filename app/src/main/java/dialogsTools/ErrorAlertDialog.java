@@ -2,6 +2,7 @@ package dialogsTools;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.testfirebase.R;
@@ -16,6 +18,7 @@ import com.jakewharton.rxbinding4.view.RxView;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
@@ -28,7 +31,10 @@ public class ErrorAlertDialog extends DialogFragment {
     public static final int EMAIL_ALREADY_EXIST = 4;
     public static final int WRONG_EMAIL_OR_PASSWORD = 5;
     public static final int EMPTY_FIELD = 6;
+    public static final int PERMISSION_ERROR = 7;
+    public static final int SOMETHING_WRONG = 8;
 
+    private static Consumer<Object> acceptAction;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
     private static int dialogType;
 
@@ -39,6 +45,10 @@ public class ErrorAlertDialog extends DialogFragment {
         errorAlertDialog.setCancelable(false);
         return errorAlertDialog;
     }
+    public void setActionConsumer (Consumer<Object> acceptAction) {
+        ErrorAlertDialog.acceptAction = acceptAction;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -51,6 +61,7 @@ public class ErrorAlertDialog extends DialogFragment {
             debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
+                if(acceptAction != null) acceptAction.accept(new Object());
                 dismiss();
                 isExist.set(false);
             });

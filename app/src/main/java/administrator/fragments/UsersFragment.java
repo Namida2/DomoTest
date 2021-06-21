@@ -43,12 +43,17 @@ public class UsersFragment extends Fragment implements UsersFragmentInterface.Vi
         presenter.setView(contentView);
         return contentView;
     }
-
     @Override
     public void showEmployeeDialog(Employee employee) {
         if(!UserMenuBottomSheetDialog.isExit()) {
-            UserMenuBottomSheetDialog.getNewInstance(employee.getName())
-                .show(getActivity().getSupportFragmentManager(), "");
+            UserMenuBottomSheetDialog dialog = UserMenuBottomSheetDialog.getNewInstance(employee);
+            dialog.setFirstActionConsumer(permission -> {
+                presenter.setUserPermission(employee, permission);
+            });
+            dialog.setSecondActionConsumer(employee1 -> {
+               // presenter.deleteEmployee;
+            });
+            dialog.show(getActivity().getSupportFragmentManager(), "");
         }
     }
     @Override
@@ -59,7 +64,6 @@ public class UsersFragment extends Fragment implements UsersFragmentInterface.Vi
             ErrorAlertDialog.getNewInstance(errorCode)
                 .show(getActivity().getSupportFragmentManager(), "");
     }
-
     @Override
     public void onResume() {
         super.onResume();
