@@ -41,7 +41,10 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
             model.getMenu(),
             model.getCategoryNames()
         );
-        adapter.setAcceptDishConsumer(view::showMenuItemDishDialog);
+        adapter.setAcceptDishConsumer(orderItem -> {
+            if(orderItem == null) return;
+            view.showMenuItemDishDialog(orderItem);
+        });
         model.setMenuItemAdapter(adapter);
         view.onMenuDialogModelComplete(model.getMenuItemAdapter());
     }

@@ -55,7 +55,7 @@ public class OrderActivityModel implements OrderActivityInterface.Model {
         return null;
     }
     @Override
-    public ArrayList<OrderItem> getOrderInfo(int tableNumber) {
+    public ArrayList<OrderItem> getOrderItems(int tableNumber) {
         String key = DOCUMENT_TABLE + tableNumber;
         if (allTablesOrdersHashMap.containsKey(key)) return allTablesOrdersHashMap.get(key);
         else {

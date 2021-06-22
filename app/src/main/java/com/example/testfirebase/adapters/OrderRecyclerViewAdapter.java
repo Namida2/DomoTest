@@ -85,6 +85,8 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
         holder.cost.setText(orderItemsArrayList.get(position).getCost());
         holder.count.setText(orderItemsArrayList.get(position).getCount() + " шт");
 
+        holder.commentaryTitle.setVisibility(View.VISIBLE);
+        holder.commentary.setVisibility(View.VISIBLE);
         if (orderItemsArrayList.get(position).getCommentary().equals("")) {
             holder.commentaryTitle.setVisibility(View.GONE);
             holder.commentary.setVisibility(View.GONE);
@@ -118,7 +120,12 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     }
     public void notifyOrderItemDataSetChanged (OrderItem orderItem) {
         for(int i = 0; i < orderItemsArrayList.size(); ++i) {
-            if(orderItemsArrayList.get(i).getName().equals(orderItem.getName())) {
+            if( (orderItemsArrayList.get(i).getName()
+                + OrderActivityModel.DOCUMENT_NAME_DELIMITER
+                + orderItemsArrayList.get(i).getCommentary())
+                .equals(orderItem.getName()
+                    + OrderActivityModel.DOCUMENT_NAME_DELIMITER
+                    + orderItem.getCommentary())) {
                 this.notifyItemChanged(i);
                 break;
             }
@@ -126,7 +133,12 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     }
     public void removeOrderItem (OrderItem orderItem) {
         for(int i = 0; i < orderItemsArrayList.size(); ++i) {
-            if(orderItemsArrayList.get(i).getName().equals(orderItem.getName())) {
+            if( (orderItemsArrayList.get(i).getName()
+                + OrderActivityModel.DOCUMENT_NAME_DELIMITER
+                + orderItemsArrayList.get(i).getCommentary())
+                .equals(orderItem.getName()
+                    + OrderActivityModel.DOCUMENT_NAME_DELIMITER
+                    + orderItem.getCommentary())) {
                 orderItemsArrayList.remove(i);
                 this.notifyDataSetChanged();
                 break;

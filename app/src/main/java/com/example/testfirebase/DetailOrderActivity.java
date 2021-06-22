@@ -3,6 +3,7 @@ package com.example.testfirebase;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,8 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
 
     private DetailOrderItemsActivityInterface.Presenter presenter;
     private String tableNumber;
+    private TextView title;
+    private final String TABLE = "Столик ";
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -32,6 +35,8 @@ public class DetailOrderActivity extends AppCompatActivity implements DetailOrde
         Intent intent = getIntent();
         tableNumber = intent.getStringExtra(DetailOrderActivityModel.EXTRA_TAG);
         presenter = new DetailOrderItemsActivityPresenter(this);
+        title = findViewById(R.id.title);
+        title.setText(TABLE + tableNumber);
         setViewData();
     }
     @Override

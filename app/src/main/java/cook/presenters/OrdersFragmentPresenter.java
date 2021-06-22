@@ -45,7 +45,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
             model.setOrdersHashMap(orderActivityModel.getNotEmptyTablesOrdersHashMap());
             model.setAdapter(new CookOrdersRecyclerViewAdapter());
         }
-        model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
+        model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap(), orderActivityModel.getTableInfoArrayList());
         model.getAdapter().notifyDataSetChanged();
         DocumentOrdersListenerService.getService().ordersSubscribe(this);
         DocumentDishesListenerService.getService().dishesSubscribe(this);
@@ -53,7 +53,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
     }
     @Override
     public void ordersNotifyMe(Object data) {
-        model.getAdapter().setOrdersArrayList(new HashMap<>());
+        model.getAdapter().setOrdersArrayList(new HashMap<>(), new ArrayList<>());
         model.getAdapter().notifyDataSetChanged();
         Map<String, ArrayList<OrderItem>> order = (Map<String, ArrayList<OrderItem>>) data;
         TableInfo tableInfo = DocumentOrdersListenerService.getService().getTableInfo();
@@ -69,7 +69,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
         orderActivityModel.getTableInfoArrayList().add(tableInfo);
         orderActivityModel.getAllTablesOrdersHashMap().putAll(order);
         orderActivityModel.getNotEmptyTablesOrdersHashMap().putAll(order);
-        model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
+        model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap(), orderActivityModel.getTableInfoArrayList());
         model.getAdapter().notifyDataSetChanged();
     }
 
@@ -127,7 +127,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
     @Override
     public void deleteOrder(String tableName) {
         Map<String, ArrayList<OrderItem>> aaaa = orderActivityModel.getNotEmptyTablesOrdersHashMap();
-        model.getAdapter().setOrdersArrayList(new HashMap<>());
+        model.getAdapter().setOrdersArrayList(new HashMap<>(), new ArrayList<>());
         model.getAdapter().notifyDataSetChanged();
         try {
             orderActivityModel.getAllTablesOrdersHashMap().get(tableName).clear();
@@ -136,7 +136,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
             Log.d(TAG, "OrdersFragmentPresenter.deleteOrder: " + e.getMessage());
         }
         Log.d(TAG, "getNotEmptyTablesOrdersHashMap: " + orderActivityModel.getNotEmptyTablesOrdersHashMap());
-        model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap());
+        model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap(), orderActivityModel.getTableInfoArrayList());
         model.getAdapter().notifyDataSetChanged();
     }
     private void notifyOrderItems(Map<String, Object> notifiable) {
@@ -185,7 +185,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
     @Override
     public void dishesNotifyMe(Object data) {
         Map<String, Object> notifiable = (Map<String, Object>) data;
-        model.getAdapter().setOrdersArrayList(new OrderActivityModel().getNotEmptyTablesOrdersHashMap());
+        model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap(), orderActivityModel.getTableInfoArrayList());
         for(String key : notifiable.keySet()) {
             model.getAdapter().notifyTable(key);
         }
@@ -193,7 +193,7 @@ public class OrdersFragmentPresenter implements OrdersFragmentInterface.Presente
     @Override
     public void dishesSetLatestData(Map<String, Object> latestData) {
         notifyOrderItems(latestData);
-        model.getAdapter().setOrdersArrayList(new OrderActivityModel().getNotEmptyTablesOrdersHashMap());
+        model.getAdapter().setOrdersArrayList(orderActivityModel.getNotEmptyTablesOrdersHashMap(), orderActivityModel.getTableInfoArrayList());
         for(String key : latestData.keySet()) {
             model.getAdapter().notifyTable(key);
         }

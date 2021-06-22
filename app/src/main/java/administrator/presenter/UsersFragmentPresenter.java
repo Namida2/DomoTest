@@ -33,8 +33,9 @@ public class UsersFragmentPresenter implements UsersFragmentInterface.Presenter 
         if(model == null) {
             model = new UsersFragmentModel();
             model.setAdapter(new UsersRecyclerViewAdapter());
+            startDocumentEmployeesListener();
+            setModelState();
         }
-        startDocumentEmployeesListener();
         onResume();
     }
     @Override

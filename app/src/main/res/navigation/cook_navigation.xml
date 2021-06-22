@@ -10,9 +10,6 @@
         android:label="CookOrdersFragment"
         tools:layout="@layout/fragment_cook_orders">
         <action
-            android:id="@+id/action_cookOrdersFragment_to_cookChecksFragment"
-            app:destination="@id/cookChecksFragment" />
-        <action
             android:id="@+id/action_cookOrdersFragment_to_cookProfileFragment"
             app:destination="@id/cookProfileFragment" />
     </fragment>
@@ -23,19 +20,6 @@
         <action
             android:id="@+id/action_cookProfileFragment_to_cookOrdersFragment"
             app:destination="@id/cookOrdersFragment" />
-        <action
-            android:id="@+id/action_cookProfileFragment_to_cookChecksFragment"
-            app:destination="@id/cookChecksFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/cookChecksFragment"
-        android:name="cook.fragments.CookChecksFragment"
-        android:label="CookChecksFragment" >
-        <action
-            android:id="@+id/action_cookChecksFragment_to_cookProfileFragment"
-            app:destination="@id/cookProfileFragment" />
-        <action
-            android:id="@+id/action_cookChecksFragment_to_cookOrdersFragment"
-            app:destination="@id/cookOrdersFragment" />
-    </fragment>
+
 </navigation>

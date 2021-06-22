@@ -5,19 +5,19 @@
     <item
         android:id="@+id/tablesFragment"
         android:icon="@drawable/ic_tables"
-        android:title="Столики"
+        android:title="@string/tables"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/ordersFragment"
         android:icon="@drawable/ic_orders"
-        android:title="Заказы"
+        android:title="@string/orders"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_profile"
-        android:title="Профиль"
+        android:title="@string/profile"
         app:showAsAction="always"/>
 
 </menu>

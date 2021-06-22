@@ -9,8 +9,9 @@ import com.example.testfirebase.services.DocumentOrdersListenerService;
 import com.example.testfirebase.adapters.OrderRecyclerViewAdapter;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +32,8 @@ import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
 import model.TablesFragmentModel;
 import tools.EmployeeData;
+
+import static registration.LogInActivity.TAG;
 
 public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerInterface.Subscriber,
     DocumentOrdersListenerInterface.Subscriber, DeleteOrderInterface.Subscriber {
@@ -171,53 +174,69 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
     }
     @Override
     public void acceptAndWriteOrderToDb(int tableNumber, int guestCount) {
-        model.getOrderInfo(tableNumber).clear();
-        model.getOrderInfo(tableNumber).addAll(model.getAdapter().getOrderItemsArrayList());
-        ArrayList<OrderItem> orderItems = model.getOrderInfo(tableNumber);
+        ArrayList<OrderItem> aldOrderItems = new ArrayList<>();
+        aldOrderItems.addAll(model.getOrderItems(tableNumber));
+        ArrayList<OrderItem> newOrderItems = model.getAdapter().getOrderItemsArrayList();
+        if (model.getAdapter().getOrderItemsArrayList().size() == 0) return;
+        model.getOrderItems(tableNumber).clear();
+        model.getOrderItems(tableNumber).addAll(model.getAdapter().getOrderItemsArrayList());
+        ArrayList<OrderItem> orderItems = model.getOrderItems(tableNumber);
         Map<String, Object> tableInfoHashMap = new HashMap<>();
         tableInfoHashMap.put(OrderActivityModel.DOCUMENT_GUEST_COUNT_FIELD, guestCount);
-        //tableInfoHashMap.put(OrderActivityModel.DOCUMENT_IS_COMPLETE_FIELD, false);
-        // данные из адаптера не совпадают с данными из основного списка
-        model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
-            .document(OrderActivityModel.DOCUMENT_TABLE + tableNumber)
-            .set(tableInfoHashMap).addOnCompleteListener(guestCountTask -> {
-                if(guestCountTask.isSuccessful()) {
-                    for(int i = 0; i < orderItems.size(); ++i) {
-                        OrderItem orderItem = orderItems.get(i);
-                        model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
-                            .document(OrderActivityModel.DOCUMENT_TABLE + tableNumber)
-                            .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME)
-                            .document(orderItem.getName()
-                                + OrderActivityModel.DOCUMENT_NAME_DELIMITER
-                                + orderItem.getCommentary())
-                            .set(orderItem, SetOptions.merge()).addOnCompleteListener(task -> {
-                            if(task.isSuccessful())
-                                Log.d(TAG, orderItem.getName()
-                                    + OrderActivityModel.DOCUMENT_NAME_DELIMITER
-                                    + orderItem.getCommentary() + ": SUCCESS");
-                            else Log.d(TAG, "OrderActivityPresenter.writeOrderToDb: " + task.getException());
-                        });
-                    }
-                }
-                else Log.d(TAG, "OrderActivityPresenter.writeOrderToDb: " + guestCountTask.getException());
-        });
+
+        DocumentReference docRefOrderInfo = model.getDatabase()
+            .collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
+            .document(OrderActivityModel.DOCUMENT_TABLE + tableNumber);
+
+        DocumentReference docRefOrdersListener = model.getDatabase()
+            .collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
+            .document(SplashScreenActivityModel.DOCUMENT_ORDERS_LISTENER_NAME);
+
         Map<String, Object> data = new HashMap<>();
         data.put(SplashScreenActivityModel.FIELD_FIELD_TABLE_NAME, null);
-        model.getDatabase()
-            .collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
-            .document(SplashScreenActivityModel.DOCUMENT_ORDERS_LISTENER_NAME)
-            .set(data).addOnCompleteListener(task -> {
-                if(task.isSuccessful()) {
-                    data.put(SplashScreenActivityModel.FIELD_FIELD_TABLE_NAME, OrderActivityModel.DOCUMENT_TABLE + tableNumber);
-                    model.getDatabase()
-                        .collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
-                        .document(SplashScreenActivityModel.DOCUMENT_ORDERS_LISTENER_NAME)
-                        .set(data).addOnCompleteListener(task1 -> {
-                        if(task.isSuccessful()) {
-                            Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: SUCCESS");
+        docRefOrdersListener.set(data).addOnCompleteListener(taskNull -> {
+            if(taskNull.isSuccessful()) {
+
+                model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
+                    .document(OrderActivityModel.DOCUMENT_TABLE + tableNumber)
+                    .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME)
+                    .get().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        ArrayList<DocumentSnapshot> documentSnapshots = new ArrayList<>();
+                        for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                            documentSnapshots.add(documentSnapshot);
                         }
-                    });
-                }
+                        model.getDatabase().runTransaction(transaction -> {
+                            for(DocumentSnapshot documentSnapshot : documentSnapshots) {
+                                DocumentReference documentReference = model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
+                                    .document(OrderActivityModel.DOCUMENT_TABLE + tableNumber)
+                                    .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME).document(documentSnapshot.getId());
+                                transaction.delete(documentReference);
+                            }
+                            transaction.set(docRefOrderInfo, tableInfoHashMap);
+                            for(int i = 0; i < orderItems.size(); ++i) {
+                                OrderItem orderItem = orderItems.get(i);
+                                transaction.set(model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
+                                    .document(OrderActivityModel.DOCUMENT_TABLE + tableNumber)
+                                    .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME)
+                                    .document(orderItem.getName()
+                                        + OrderActivityModel.DOCUMENT_NAME_DELIMITER
+                                        + orderItem.getCommentary()), orderItem);
+                            }
+                            data.put(SplashScreenActivityModel.FIELD_FIELD_TABLE_NAME, OrderActivityModel.DOCUMENT_TABLE + tableNumber);
+                            docRefOrdersListener.set(data);
+                            return true;
+                        });
+                    }
+                    else Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: " + task.getException());
+                }).addOnCompleteListener(task -> {
+                    if(task.isSuccessful())
+                        Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: SUCCESS");
+                    else Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: " + task.getException());
+                });
+
+
+            } else Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: " + taskNull.getException());
         });
     }
     @Override

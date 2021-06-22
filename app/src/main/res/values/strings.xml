@@ -26,4 +26,8 @@
 
 
     <string name="table_menu_dialog_delete_order_text">Вы действительно хотите удалить этот столик?</string>
+    <string name="tables">Столики</string>
+    <string name="orders">Заказы</string>
+    <string name="profile">Профиль</string>
+    <string name="employees">Работники</string>
 </resources>

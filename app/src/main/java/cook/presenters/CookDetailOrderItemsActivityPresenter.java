@@ -71,8 +71,7 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
                         )).addOnCompleteListener(taskNotify -> {
                             if(task.isSuccessful()) {
                                 Log.d(TAG,"DetailOrderActivityPresenter.setDishState notify: SUCCESS" );
-                            }
-                            else Log.d(TAG, "DetailOrderActivityPresenter.setDishState error: " + taskNotify.getException());
+                            } else Log.d(TAG, "DetailOrderActivityPresenter.setDishState error: " + taskNotify.getException());
                     });
                 } else {
                     Log.d(TAG,"DetailOrderActivityPresenter.setDishState error: " + task.getException() );

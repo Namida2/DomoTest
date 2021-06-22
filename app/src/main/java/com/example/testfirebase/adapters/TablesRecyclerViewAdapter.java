@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.disposables.Disposable;
+import tools.Animations;
 
 import static registration.LogInActivity.TAG;
 
@@ -70,6 +71,7 @@ public class TablesRecyclerViewAdapter extends RecyclerView.Adapter<TablesRecycl
                 Log.d(TAG, "TablesRecyclerViewAdapter.onBindViewHolder: " + error.getMessage());
             }, () -> {
             });
+        Animations.Companion.showView(holder.container);
     }
 
     @Override

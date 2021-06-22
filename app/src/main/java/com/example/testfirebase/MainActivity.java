@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -37,17 +38,16 @@ public class MainActivity extends AppCompatActivity implements DeleteOrderInterf
     private NavHostFragment navHostFragment;
     private NavHostController navHostController;
     private Disposable disposable;
+    private TextView title;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        getPermission();
-
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         DeleteOrderObservable.getObservable().subscribe(this);
+        getPermission();
         initialisation();
 
         disposable = getBottomAppBarObservable()
@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements DeleteOrderInterf
                                     null
                                     //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
                                 );
+                        title.setText(getResources().getString(R.string.tables));
                         break;
                     case R.id.ordersFragment:
                         if(currentDestination.getId() != R.id.ordersFragment)
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements DeleteOrderInterf
                                     null
                                     //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
                             );
+                        title.setText(getResources().getString(R.string.orders));
                         break;
                     case R.id.profileFragment:
                         if(currentDestination.getId() != R.id.profileFragment)
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements DeleteOrderInterf
                                     null
                                     //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
                             );
+                        title.setText(getResources().getString(R.string.profile));
                         break;
                 }
             }, error -> {
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements DeleteOrderInterf
         });
     }
     private void initialisation () {
+        title = findViewById(R.id.title);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         navHostController = (NavHostController) navHostFragment.getNavController();

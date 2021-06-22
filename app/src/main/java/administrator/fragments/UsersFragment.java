@@ -34,7 +34,6 @@ public class UsersFragment extends Fragment implements UsersFragmentInterface.Vi
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        presenter.setModelState();
         View contentView = presenter.getView();
         if(contentView != null) return contentView;
         contentView = inflater.inflate(R.layout.fragment_administrator_users, container, false);

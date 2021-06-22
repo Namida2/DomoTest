@@ -39,6 +39,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import model.ProfileFragmentModel;
 import model.SplashScreenActivityModel;
 
 import static registration.LogInActivity.TAG;
@@ -51,6 +52,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
 
     private static NotificationChannel channel;
     private static String channelId = "Domo_dishes";
+    private static String group = "group";
     private static String channelName = "DomoDishChannel";
     public static String TABLE = "Столик ";
     private static String READY_TO_SERVE = "готово к подаче";
@@ -75,16 +77,8 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
         notificationManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         createChannel(notificationManager);
 
-        Notification notification = new NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_email)
-            .setColor(getResources().getColor(R.color.fui_transparent))
-            .setContentTitle("Служба уведоблений DOMO")
-            .setDefaults(NotificationCompat.DEFAULT_SOUND)
-            .setAutoCancel(false)
-            .addAction(null)
-            .setContentIntent(null)
-            .build();
-        startForeground(777, notification);
+        myStartForeground();
+
         disposable = getObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.computation())
@@ -130,25 +124,13 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
         }
         Log.w(TAG, "DocumentDishesListenerService: Created");
     }
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void myStartForeground() {
-        Notification notification = new NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_email)
-            .setColor(getResources().getColor(R.color.fui_transparent))
-            .setContentTitle("Служба уведоблений DOMO")
-            .setDefaults(NotificationCompat.DEFAULT_SOUND)
-            .setAutoCancel(false)
-            .addAction(null)
-            .setContentIntent(null)
-            .build();
-        startForeground(777, notification);
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private Observable<Map<String, Object>> getObservable (){
         return Observable.create(emitter -> {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -197,6 +179,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
             .setContentTitle(title)
             .setContentText(name)
             .setDefaults(NotificationCompat.DEFAULT_SOUND)
+            .setGroup(group)
             .setAutoCancel(false)
             .addAction(null)
             .setContentIntent(pendingIntent)
@@ -218,7 +201,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
             }
         }
         subscribers.add(subscriber);
-        subscriber.dishesSetLatestData(latestData);
+        if (latestData != null) subscriber.dishesSetLatestData(latestData);
     }
     public static void setPost (String post) {
         DocumentDishesListenerService.post = post;
@@ -227,6 +210,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     public void dishesUnSubscribe(DocumentDishesListenerInterface.Subscriber subscriber) {
         subscribers.remove(subscriber);
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -246,17 +230,34 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     public static DocumentDishesListenerService getService() {
         return service;
     }
-    @Nullable
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
 
     public static void unSubscribeFromDatabase() {
         try {
-            disposable.dispose();
             registration.remove();
+            disposable.dispose();
         } catch (Exception e) {
             Log.d(TAG, "unSubscribeFromDatabase: " + e.getMessage() );
         }
     }
     public static void setServiceCreatedConsumer (Consumer<Boolean> serviceCreatedConsumer) {
         DocumentDishesListenerService.serviceCreatedConsumer = serviceCreatedConsumer;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void myStartForeground() {
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        ProfileFragmentModel.NEED_NOTIFY.set(true);
+        Notification notification = new NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_email)
+            .setColor(getResources().getColor(R.color.fui_transparent))
+            .setContentTitle("Служба уведоблений DOMO")
+            .setDefaults(NotificationCompat.DEFAULT_SOUND)
+            .setAutoCancel(false)
+            .setContentIntent(pendingIntent)
+            .build();
+        startForeground(777, notification);
     }
 }

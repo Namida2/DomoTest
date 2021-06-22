@@ -36,16 +36,25 @@ public class CookOrdersRecyclerViewAdapter extends RecyclerView.Adapter<CookOrde
     private Consumer<TableInfo> acceptOrderArrayList;
     private ArrayList<ArrayList<OrderItem>> ordersArrayList;
     private ArrayList<String> tableNumbers;
+    private ArrayList<TableInfo> myTableInfoArrayList;
 
-    public void setOrdersArrayList(Map<String, ArrayList<OrderItem>> ordersHashMap) {
+    public void setOrdersArrayList(Map<String, ArrayList<OrderItem>> ordersHashMap, ArrayList<TableInfo> tableInfoArrayList) {
+        if(ordersHashMap == null) return;
         Set<String> keys = ordersHashMap.keySet();
         ordersArrayList = new ArrayList<>();
         tableNumbers = new ArrayList<>();
+        myTableInfoArrayList = new ArrayList<>();
         Iterator<String> iterator = keys.iterator();
         while (iterator.hasNext()) {
             String name = iterator.next();
             tableNumbers.add( name.substring(name.indexOf(OrdersFragmentModel.DELIMITER) + 1) );
             ordersArrayList.add(ordersHashMap.get(name));
+            for(int i = 0; i < tableInfoArrayList.size(); ++i) {
+                if(tableInfoArrayList.get(i).getTableName().equals(name)) {
+                    myTableInfoArrayList.add(tableInfoArrayList.get(i));
+                    break;
+                }
+            }
         }
         this.notifyDataSetChanged();
     }
@@ -63,6 +72,7 @@ public class CookOrdersRecyclerViewAdapter extends RecyclerView.Adapter<CookOrde
         public TextView tableNumber;
         public ConstraintLayout container;
         public TextView preview;
+        public TextView guestCount;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             containerLarge = itemView.findViewById(R.id.order_item_container_large);
@@ -70,6 +80,7 @@ public class CookOrdersRecyclerViewAdapter extends RecyclerView.Adapter<CookOrde
             container = itemView.findViewById(R.id.table_container);
             tableNumber = itemView.findViewById(R.id.table_number);
             preview = itemView.findViewById(R.id.preview);
+            guestCount = itemView.findViewById(R.id.guests_count);
         }
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -95,7 +106,8 @@ public class CookOrdersRecyclerViewAdapter extends RecyclerView.Adapter<CookOrde
                 tableInfo.setIsComplete(allDishesReady(ordersArrayList.get(position)));
                 acceptOrderArrayList.accept(tableInfo);
             });
-        Animations.Companion.showView(holder.containerLarge);
+        holder.guestCount.setText(Integer.toString((int) myTableInfoArrayList.get(position).getGuestCount()));
+        //Animations.Companion.showView(holder.containerLarge);
     }
     private boolean allDishesReady (ArrayList<OrderItem> orderItems) {
         boolean allReady = true;

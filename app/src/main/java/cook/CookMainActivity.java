@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +34,7 @@ public class CookMainActivity extends AppCompatActivity implements DeleteOrderIn
     private NavHostFragment navHostFragment;
     private NavHostController navHostController;
     private Disposable disposable;
+    private TextView title;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -55,18 +57,14 @@ public class CookMainActivity extends AppCompatActivity implements DeleteOrderIn
                                 null
                                 //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
                             );
-                        break;
-                    case R.id.cookChecksFragment:
-                        if(currentDestination.getId() != R.id.cookChecksFragment)
-                            navHostController.navigate(R.id.cookChecksFragment,
-                                null,
-                                new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
+                        title.setText(getResources().getString(R.string.orders));
                         break;
                     case R.id.cookProfileFragment:
                         if(currentDestination.getId() != R.id.cookProfileFragment)
                             navHostController.navigate(R.id.cookProfileFragment,
                                 null,
                                 new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build());
+                        title.setText(getResources().getString(R.string.profile));
                         break;
                 }
             });
@@ -87,6 +85,7 @@ public class CookMainActivity extends AppCompatActivity implements DeleteOrderIn
     }
 
     private void initialisation () {
+        title = findViewById(R.id.title);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         navHostController = (NavHostController) navHostFragment.getNavController();

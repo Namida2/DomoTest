@@ -55,6 +55,7 @@ public class SplashScreenActivityPresenter implements SplashScreenInterface.Pres
                         String post = (String) currentUserData.get(SplashScreenActivityModel.EMPLOYEES_FIELD_POST);
                         EmployeeData.permission = (boolean) currentUserData.get(Constants.FIELD_PERMISSION);
                         EmployeeData.name = (String) currentUserData.get(Constants.FIELD_NAME);
+                        EmployeeData.password = (String) currentUserData.get(Constants.FIELD_PASSWORD);
                         EmployeeData.email = currentUser.getEmail();
                         view.setCurrentUserPost(post);
                     } catch (Exception e) {

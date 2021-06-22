@@ -30,24 +30,32 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
 
     private SplashScreenInterface.Presenter presenter;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         new EmployeePermissionObservable();
+
         if(!DocumentOrdersListenerService.isExist())
             try {
                 startService(new Intent(this, DocumentOrdersListenerService.class));
             } catch (Exception e) {Log.d(TAG, "SplashScreenActivity: " + e.getMessage());}
+        else DocumentOrdersListenerService.getService().myStartForeground();
         if(!DocumentDishesListenerService.isExist()) {
             DocumentDishesListenerService.setServiceCreatedConsumer(isCreated -> {
                 presenter = new SplashScreenActivityPresenter(this);
             });
             try {
                 startService(new Intent(this, DocumentDishesListenerService.class));
-            } catch (Exception e) {Log.d(TAG, "SplashScreenActivity: " + e.getMessage());}
-        } else presenter = new SplashScreenActivityPresenter(this);
+            } catch (Exception e) {
+                Log.d(TAG, "SplashScreenActivity: " + e.getMessage());
+            }
+        } else {
+            DocumentDishesListenerService.getService().myStartForeground();
+            presenter = new SplashScreenActivityPresenter(this);
+        }
 
     }
 

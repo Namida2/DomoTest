@@ -39,6 +39,7 @@ import cook.model.OrdersFragmentModel;
 import interfaces.DeleteOrderInterface;
 import io.reactivex.rxjava3.disposables.Disposable;
 import model.OrderActivityModel;
+import model.ProfileFragmentModel;
 import model.SplashScreenActivityModel;
 import presenters.OrderActivityPresenter;
 import tools.Pair;
@@ -54,6 +55,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     private static final String channelId = "Domo_orders";
     private static final String channelName = "DomoOrderChannel";
     private static final String TABLE = "Столик ";
+    private static String group = "group";
     private static final String READY_TO_SERVE = "готово к подаче";
     public static final String NEW_ORDER = "Новый заказ";
 
@@ -61,7 +63,6 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     private static ArrayList<DocumentOrdersListenerInterface.Subscriber> subscribers;
 
     private static DocumentOrdersListenerService service;
-    private static Disposable disposable;
     private static ListenerRegistration registration;
     private AtomicBoolean firstCall = new AtomicBoolean(true);
     private static Map<String, ArrayList<OrderItem>> latestDishData;
@@ -134,7 +135,6 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
                     }
                     Log.d(TAG, "Current data: " + snapshot.getData());
                     try {
-                        Log.d(TAG, "Current data: " + disposable.toString());
                         Log.d(TAG, "Current data: " + registration.toString());
                     } catch (Exception e) {}
                 } else {
@@ -154,6 +154,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
             .setColor(getResources().getColor(R.color.fui_transparent))
             .setContentTitle(title)
             .setContentText(name)
+            .setGroup(group)
             .setDefaults(NotificationCompat.DEFAULT_SOUND)
             .setAutoCancel(false)
             .setContentIntent(pendingIntent)
@@ -212,7 +213,6 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
     }
     public static void unSubscribeFromDatabase() {
         try {
-            disposable.dispose();
             registration.remove();
         } catch (Exception e) {
             Log.d(TAG, "unSubscribeFromDatabase: " + e.getMessage() );
@@ -243,9 +243,26 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
         isExist.set(false);
         Log.d(TAG, "DocumentOrdersListenerService service: DESTROYED");
     }
-
     @Override
     public void deleteOrder(String tableName) {
         latestDishData.remove(tableName);
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void myStartForeground() {
+        ProfileFragmentModel.NEED_NOTIFY.set(true);
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        Notification notification = new NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_email)
+            .setColor(getResources().getColor(R.color.fui_transparent))
+            .setContentTitle("Служба уведоблений DOMO")
+            .setDefaults(NotificationCompat.DEFAULT_SOUND)
+            .setAutoCancel(false)
+            .setContentIntent(pendingIntent)
+            .build();
+        startForeground(777, notification);
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.example.testfirebase.order;
 
+import androidx.annotation.Nullable;
+
 public class OrderItem {
     private String name;
     private String categoryName;
@@ -73,5 +75,18 @@ public class OrderItem {
     }
     public void setReady(boolean ready) {
         this.ready = ready;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return (name + commentary).hashCode();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj == null || obj.getClass() != TableInfo.class) return false;
+        OrderItem orderItem = (OrderItem) obj;
+        return (name + commentary).equals(orderItem.getName() + orderItem.getCommentary());
     }
 }

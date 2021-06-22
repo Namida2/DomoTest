@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -25,6 +26,8 @@ public class CookDetailOrderActivity extends AppCompatActivity implements CookDe
 
     private CookDetailOrderActivityInterface.Presenter presenter;
     private String tableNumber;
+    private TextView title;
+    private final String TABLE = "Столик ";
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -39,6 +42,8 @@ public class CookDetailOrderActivity extends AppCompatActivity implements CookDe
         Intent intent = getIntent();
         tableNumber = intent.getStringExtra(DetailOrderActivityModel.EXTRA_TAG);
         presenter = new CookDetailOrderItemsActivityPresenter(this);
+        title = findViewById(R.id.title);
+        title.setText(TABLE + tableNumber);
         setViewData();
     }
     @RequiresApi(api = Build.VERSION_CODES.N)

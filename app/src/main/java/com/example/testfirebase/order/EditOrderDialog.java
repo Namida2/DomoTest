@@ -39,14 +39,12 @@ public class EditOrderDialog extends DialogFragment {
         EditOrderDialog.orderItem = orderItem;
         return new EditOrderDialog();
     }
-
     public void setNotifyOrderDataChangedConsumer (Consumer<OrderItem> notifyOrderDataChangedConsumer ) {
         EditOrderDialog.notifyOrderDataChangedConsumer = notifyOrderDataChangedConsumer;
     }
     public void setRemoveOrderItemConsumer (Consumer<OrderItem> removeOrderItemConsumer ) {
         EditOrderDialog.removeOrderItemConsumer = removeOrderItemConsumer;
     }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @NotNull
@@ -69,7 +67,8 @@ public class EditOrderDialog extends DialogFragment {
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
-                orderItem.setCount(rdishCount.getText());
+                orderItem.setCount(Integer.parseInt(dishCount.getText().toString()));
+                orderItem.setCommentary(commentary.getText().toString());
                 notifyOrderDataChangedConsumer.accept(orderItem);
                 isExist.set(false);
                 this.dismiss();
@@ -102,9 +101,7 @@ public class EditOrderDialog extends DialogFragment {
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(layoutParams);
     }
-
     public static boolean isExist() {
         return isExist.get();
     }
-
 }

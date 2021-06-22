@@ -85,6 +85,9 @@ public class CookDetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapte
         holder.weight.setText(orderItemsArrayList.get(position).getWeight());
         holder.cost.setText(orderItemsArrayList.get(position).getCost());
         holder.count.setText(orderItemsArrayList.get(position).getCount() + " шт");
+
+        holder.commentaryTitle.setVisibility(View.VISIBLE);
+        holder.commentary.setVisibility(View.VISIBLE);
         if (orderItemsArrayList.get(position).getCommentary().equals("")) {
             holder.commentaryTitle.setVisibility(View.GONE);
             holder.commentary.setVisibility(View.GONE);
