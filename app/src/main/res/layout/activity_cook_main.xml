@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
-            android:text="Столики"
+            android:text="@string/orders"
             android:gravity="center"
             android:fontFamily="@font/montserrat_semi_bold"
             android:textColor="@color/white"

@@ -1,12 +1,15 @@
 package com.example.testfirebase.order;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -75,6 +78,18 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initialisation () {
+
+        ImageView avatarImageView = findViewById(R.id.guest_avatar);
+        int avatarId = (int) (Math.random() * 6);
+        switch (avatarId) {
+            case 0: avatarImageView.setImageResource(R.drawable.ic_avatar_0); break;
+            case 1: avatarImageView.setImageResource(R.drawable.ic_avatar_1); break;
+            case 2: avatarImageView.setImageResource(R.drawable.ic_avatar_2); break;
+            case 3: avatarImageView.setImageResource(R.drawable.ic_avatar_3); break;
+            case 4: avatarImageView.setImageResource(R.drawable.ic_avatar_4); break;
+            case 5: avatarImageView.setImageResource(R.drawable.ic_avatar_5); break;
+        }
+
         tableNumber = getIntent().getIntExtra(EXTRA_TAG, 0);
         tableNumberTextView = findViewById(R.id.table_number);
         tableNumberTextView.setText(Integer.toString(tableNumber));
@@ -173,7 +188,6 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         guestsCountDialogPresenter = null;
         orderPresenter = null;
     }
-
     public boolean getPermission () {
         if(!EmployeeData.permission && !ErrorAlertDialog.isIsExist()) {
             ErrorAlertDialog dialog = ErrorAlertDialog.getNewInstance(ErrorAlertDialog.PERMISSION_ERROR);
@@ -189,7 +203,6 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         }
         return true;
     }
-
     @Override
     public void showEditOrderItemDialog(OrderItem orderItem) {
         if(!EditOrderDialog.isExist()) {

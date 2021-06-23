@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                                 null
                                 //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
                             );
-                        title.setText(getResources().getString(R.string.profile));
+                        title.setText(getResources().getString(R.string.employees));
                         break;
                     case R.id.administratorProfileFragment:
                         if(currentDestination.getId() != R.id.administratorProfileFragment)
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                                 null
                                 //new NavOptions.Builder().setEnterAnim(R.anim.fragment_show).build()
                             );
+                        title.setText(getResources().getString(R.string.profile));
                         break;
                 }
             }, error -> {
