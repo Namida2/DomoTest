@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.services.DocumentOrdersListenerService;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -11,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import cook.model.OrdersFragmentModel;
 import interfaces.DeleteOrderInterface;
@@ -39,6 +41,8 @@ public class DeleteOrderObservable implements DeleteOrderInterface.Observable{
                 if (value != null && value.exists()) {
                     if(value.get(SplashScreenActivityModel.FIELD_TABLE_NAME) != null) {
                         this.tableName = (String) value.get(SplashScreenActivityModel.FIELD_TABLE_NAME);
+                        Map<String, ArrayList<OrderItem>> aaaa = model.getNotEmptyTablesOrdersHashMap();
+                        Map<String, ArrayList<OrderItem>> bbbbb = model.getAllTablesOrdersHashMap();
                         try {
                             model.getAllTablesOrdersHashMap().get(tableName).clear();
                             model.getNotEmptyTablesOrdersHashMap().remove(tableName);

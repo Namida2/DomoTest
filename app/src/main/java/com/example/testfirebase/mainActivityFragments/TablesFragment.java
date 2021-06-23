@@ -3,6 +3,8 @@ package com.example.testfirebase.mainActivityFragments;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,8 +16,11 @@ import android.view.ViewGroup;
 import com.example.testfirebase.R;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import interfaces.TablesFragmentInterface;
 import presenters.TablesFragmentPresenter;
+import tools.Animations;
 
 public class TablesFragment extends Fragment implements TablesFragmentInterface.MyView {
 
@@ -38,6 +43,12 @@ public class TablesFragment extends Fragment implements TablesFragmentInterface.
         presenter.setModelState(contentView);
         return contentView;
     }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        Animations.Companion.showView(view);
+    }
+
     @Override
     public void startNewActivity(Class activity, int tableNumber) {
         getActivity().startActivity(new Intent( getContext(), activity).putExtra(EXTRA_TAG, tableNumber) );

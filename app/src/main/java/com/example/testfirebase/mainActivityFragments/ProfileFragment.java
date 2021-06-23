@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment implements ProfileFragmentInterfac
             .debounce(100, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
-                if (presenter.getAcceptIconState()){
+                if (presenter.getAcceptIconState()) {
                     presenter.setAcceptIconState(false);
                     Animations.Companion.showView(acceptImageView);
                     DocumentDishesListenerService.getService().stopForeground(Service.STOP_FOREGROUND_DETACH);

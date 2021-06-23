@@ -39,7 +39,7 @@ public class CookOrdersRecyclerViewAdapter extends RecyclerView.Adapter<CookOrde
     private ArrayList<TableInfo> myTableInfoArrayList;
 
     public void setOrdersArrayList(Map<String, ArrayList<OrderItem>> ordersHashMap, ArrayList<TableInfo> tableInfoArrayList) {
-        if(ordersHashMap == null) return;
+        //if(ordersHashMap == null) return;
         Set<String> keys = ordersHashMap.keySet();
         ordersArrayList = new ArrayList<>();
         tableNumbers = new ArrayList<>();
@@ -107,7 +107,7 @@ public class CookOrdersRecyclerViewAdapter extends RecyclerView.Adapter<CookOrde
                 acceptOrderArrayList.accept(tableInfo);
             });
         holder.guestCount.setText(Integer.toString((int) myTableInfoArrayList.get(position).getGuestCount()));
-        //Animations.Companion.showView(holder.containerLarge);
+        Animations.Companion.showView(holder.containerLarge);
     }
     private boolean allDishesReady (ArrayList<OrderItem> orderItems) {
         boolean allReady = true;
