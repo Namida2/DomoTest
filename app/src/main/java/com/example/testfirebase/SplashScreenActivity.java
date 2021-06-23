@@ -87,6 +87,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
                 break;
             default: createNewUser(); break;
         }
+        DeleteOrderObservable.getObservable().startDocumentListening();
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void unSubscribeFromServices() {

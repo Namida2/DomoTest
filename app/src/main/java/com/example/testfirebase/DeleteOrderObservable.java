@@ -29,7 +29,7 @@ public class DeleteOrderObservable implements DeleteOrderInterface.Observable{
     private static final DeleteOrderObservable observable = new DeleteOrderObservable();
     // OrderActivityPresenter must be the first subscriber
 
-    private DeleteOrderObservable () {
+    public void startDocumentListening() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
             .document(OrderActivityModel.DOCUMENT_DELETE_ORDER_LISTENER)
