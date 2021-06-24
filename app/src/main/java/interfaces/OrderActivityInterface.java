@@ -26,6 +26,7 @@ public interface OrderActivityInterface {
         Map<String, ArrayList<OrderItem>> getTablesWithAllReadyDishes();
     }
     interface View {
+        void onError(int errorCode);
         void showEditOrderItemDialog(OrderItem orderItem);
     }
     interface Presenter {

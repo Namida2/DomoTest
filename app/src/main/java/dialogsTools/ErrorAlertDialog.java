@@ -33,6 +33,7 @@ public class ErrorAlertDialog extends DialogFragment {
     public static final int EMPTY_FIELD = 6;
     public static final int PERMISSION_ERROR = 7;
     public static final int SOMETHING_WRONG = 8;
+    public static final int DISH_ALREADY_ADDED = 9;
 
     private Consumer<Object> acceptAction;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
@@ -98,6 +99,10 @@ public class ErrorAlertDialog extends DialogFragment {
             case PERMISSION_ERROR:
                 title.setText(R.string.error_alert_dialog_permission_error_title);
                 text.setText(R.string.error_alert_dialog_permission_error_text);
+                break;
+            case DISH_ALREADY_ADDED:
+                title.setText(R.string.error_alert_dialog_dish_already_added_title);
+                text.setText(R.string.error_alert_dialog_dish_already_added_text);
                 break;
         }
         builder.setView(view);

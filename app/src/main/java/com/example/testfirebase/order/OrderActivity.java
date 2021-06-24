@@ -203,12 +203,19 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         }
         return true;
     }
+
+    @Override
+    public void onError(int errorCode) {
+        if(!ErrorAlertDialog.isIsExist())
+            ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
+    }
+
     @Override
     public void showEditOrderItemDialog(OrderItem orderItem) {
         if(!EditOrderDialog.isExist()) {
             EditOrderDialog dialog = EditOrderDialog.getNewInstance(orderItem);
             dialog.setNotifyOrderDataChangedConsumer(newOrderItem -> {
-                orderPresenter.notifyOrderItemDataSetChanged(orderItem);
+                orderPresenter.notifyOrderItemDataSetChanged(newOrderItem);
             });
             dialog.setRemoveOrderItemConsumer(removableOrderItem -> {
                 orderPresenter.removeOrderItem(orderItem);

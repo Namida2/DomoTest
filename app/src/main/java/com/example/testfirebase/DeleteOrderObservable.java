@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import cook.model.OrdersFragmentModel;
 import interfaces.DeleteOrderInterface;
@@ -23,6 +24,7 @@ import static registration.LogInActivity.TAG;
 
 public class DeleteOrderObservable implements DeleteOrderInterface.Observable{
 
+    private AtomicBoolean firstCall;
     private String tableName;
     private OrderActivityModel model = new OrderActivityModel();
     private ArrayList<DeleteOrderInterface.Subscriber> subscribers = new ArrayList<>();
@@ -30,6 +32,7 @@ public class DeleteOrderObservable implements DeleteOrderInterface.Observable{
     // OrderActivityPresenter must be the first subscriber
 
     public void startDocumentListening() {
+        firstCall = new AtomicBoolean(true);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
             .document(OrderActivityModel.DOCUMENT_DELETE_ORDER_LISTENER)
@@ -38,8 +41,8 @@ public class DeleteOrderObservable implements DeleteOrderInterface.Observable{
                     Log.d(TAG, "DeleteOrderObservable.DeleteOrderObservable: " + error.getMessage());
                     return;
                 }
-                if (value != null && value.exists()) {
-                    if(value.get(SplashScreenActivityModel.FIELD_TABLE_NAME) != null) {
+                if (value != null && value.exists() && value.get(SplashScreenActivityModel.FIELD_TABLE_NAME) != null) {
+                    if(!firstCall.get()) {
                         this.tableName = (String) value.get(SplashScreenActivityModel.FIELD_TABLE_NAME);
                         Map<String, ArrayList<OrderItem>> aaaa = model.getNotEmptyTablesOrdersHashMap();
                         Map<String, ArrayList<OrderItem>> bbbbb = model.getAllTablesOrdersHashMap();
@@ -51,6 +54,7 @@ public class DeleteOrderObservable implements DeleteOrderInterface.Observable{
                         }
                         notifySubscribers(tableName);
                     }
+                    firstCall.set(false);
                 }
             });
     }

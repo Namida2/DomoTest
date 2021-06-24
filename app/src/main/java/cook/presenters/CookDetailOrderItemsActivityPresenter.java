@@ -7,6 +7,8 @@ import com.example.testfirebase.DeleteOrderObservable;
 import com.example.testfirebase.services.DocumentDishesListenerService;
 import com.example.testfirebase.order.OrderItem;
 import com.example.testfirebase.order.TableInfo;
+import com.example.testfirebase.services.DocumentOrdersListenerService;
+import com.example.testfirebase.services.interfaces.DocumentOrdersListenerInterface;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.SetOptions;
 
@@ -22,14 +24,16 @@ import cook.interfaces.CookDetailOrderActivityInterface;
 import cook.model.DetailOrderActivityModel;
 import com.example.testfirebase.services.interfaces.DocumentDishesListenerInterface;
 
+import cook.model.OrdersFragmentModel;
 import interfaces.DeleteOrderInterface;
 import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
+import tools.EmployeeData;
 
 import static registration.LogInActivity.TAG;
 
 public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderActivityInterface.Presenter,
-    DocumentDishesListenerInterface.Subscriber, DeleteOrderInterface.Subscriber {
+    DocumentDishesListenerInterface.Subscriber, DocumentOrdersListenerInterface.Subscriber, DeleteOrderInterface.Subscriber {
 
     private CookDetailOrderActivityInterface.View view;
     private static CookDetailOrderActivityInterface.Model model;
@@ -42,13 +46,14 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
             model.setRecyclerViewAdapter(adapter);
         }
         DocumentDishesListenerService.getService().dishesSubscribe(this);
+        DocumentOrdersListenerService.getService().ordersSubscribe(this);
         DeleteOrderObservable.getObservable().subscribe(this);
     }
     @Override
     public void setDishState(ReadyDish readyDish) {
         Map<String, Object> readyHaspMap = new HashMap<>();
-        if (readyDish.getOrderItem().isReady()) return;
-        readyDish.getOrderItem().setReady(true);
+//        if (readyDish.getOrderItem().isReady()) return;
+//        readyDish.getOrderItem().setReady(true);
 
         readyHaspMap.put(OrderActivityModel.DOCUMENT_READY_FIELD, false);
         model.getRecyclerViewAdapter().notifyItemChanged(readyDish.getPosition());
@@ -150,6 +155,32 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
         OrderActivityModel orderActivityModel = new OrderActivityModel();
         Map<String, ArrayList<OrderItem>> aaaa = orderActivityModel.getNotEmptyTablesOrdersHashMap();
         model.getRecyclerViewAdapter().setOrderItemsData(new ArrayList<>(), new TableInfo());
+        model.getRecyclerViewAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void ordersNotifyMe(Object data) {
+        String tableName = OrderActivityModel.DOCUMENT_TABLE + view.getTableNumber();
+        OrderActivityModel orderActivityModel = new OrderActivityModel();
+        Map<String, ArrayList<OrderItem>> order = (Map<String, ArrayList<OrderItem>>) data;
+        TableInfo tableInfo = DocumentOrdersListenerService.getService().getTableInfo();
+        try {
+            orderActivityModel.getAllTablesOrdersHashMap().remove(tableInfo.getTableName());
+            orderActivityModel.getNotEmptyTablesOrdersHashMap().remove(tableInfo.getTableName());
+        } catch (Exception e) {}
+        for(int i = 0; i < orderActivityModel.getTableInfoArrayList().size(); ++i) {
+            if (orderActivityModel.getTableInfoArrayList().get(i).getTableName().equals(tableInfo.getTableName())) {
+                orderActivityModel.getTableInfoArrayList().remove(i); break;
+            }
+        }
+        orderActivityModel.getTableInfoArrayList().add(tableInfo);
+        orderActivityModel.getAllTablesOrdersHashMap().putAll(order);
+        orderActivityModel.getNotEmptyTablesOrdersHashMap().putAll(order);
+
+        model.getRecyclerViewAdapter().setOrderItemsData(
+            orderActivityModel.getNotEmptyTablesOrdersHashMap().get(tableName),
+            tableInfo
+        );
         model.getRecyclerViewAdapter().notifyDataSetChanged();
     }
 }

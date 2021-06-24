@@ -46,6 +46,12 @@ public class CookDetailOrderActivity extends AppCompatActivity implements CookDe
         title.setText(TABLE + tableNumber);
         setViewData();
     }
+
+    @Override
+    public String getTableNumber() {
+        return tableNumber;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void showSetDishReadyDialog(ReadyDish dishData) {

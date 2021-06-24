@@ -15,6 +15,17 @@ public class OrderItem {
 
     public OrderItem () {} // for FirebaseFirestore
 
+    public void copy (OrderItem orderItem) {
+        this.name = orderItem.name;
+        this.categoryName = orderItem.categoryName;
+        this.cost = orderItem.cost;
+        this.weight = orderItem.weight;
+        this.description = orderItem.description;
+        this.ready = orderItem.ready;
+        this.commentary = orderItem.commentary;
+        this.count = orderItem.count;
+    }
+
     public OrderItem (Dish dish, String commentary, int count) {
         this.name = dish.getName();
         this.categoryName = dish.getCategoryName();
@@ -85,7 +96,7 @@ public class OrderItem {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if(obj == null || obj.getClass() != TableInfo.class) return false;
+        if(obj == null || obj.getClass() != OrderItem.class) return false;
         OrderItem orderItem = (OrderItem) obj;
         return (name + commentary).equals(orderItem.getName() + orderItem.getCommentary());
     }

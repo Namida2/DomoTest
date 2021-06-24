@@ -32,7 +32,7 @@ public class EditOrderDialog extends DialogFragment {
     private static Consumer<OrderItem> notifyOrderDataChangedConsumer;
     private static Consumer<OrderItem> removeOrderItemConsumer;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
-    private static OrderItem orderItem;
+    private static OrderItem orderItem = new OrderItem();
 
     public static EditOrderDialog getNewInstance (OrderItem orderItem) {
         isExist.set(true);

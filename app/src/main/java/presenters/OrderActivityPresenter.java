@@ -24,6 +24,7 @@ import cook.model.OrdersFragmentModel;
 import com.example.testfirebase.services.interfaces.DocumentDishesListenerInterface;
 import com.example.testfirebase.services.interfaces.DocumentOrdersListenerInterface;
 
+import dialogsTools.ErrorAlertDialog;
 import interfaces.DeleteOrderInterface;
 import interfaces.OrderActivityInterface;
 import interfaces.ToolsInterface;
@@ -32,8 +33,6 @@ import model.OrderActivityModel;
 import model.SplashScreenActivityModel;
 import model.TablesFragmentModel;
 import tools.EmployeeData;
-
-import static registration.LogInActivity.TAG;
 
 public class OrderActivityPresenter implements OrderActivityInterface.Presenter, DocumentDishesListenerInterface.Subscriber,
     DocumentOrdersListenerInterface.Subscriber, DeleteOrderInterface.Subscriber {
@@ -76,7 +75,11 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
 
     @Override
     public void notifyAdapterDataSetChanged(OrderItem orderItem) {
-        model.getAdapter().addOrder(orderItem);
+        if ( !model.getAdapter().getOrderItemsArrayList().contains(orderItem))
+            model.getAdapter().addOrderItem(orderItem);
+        else if (view.getClass() == OrderActivity.class) {
+            ((OrderActivityInterface.View) view ).onError(ErrorAlertDialog.DISH_ALREADY_ADDED);
+        }
     }
     @Override
     public Map<String, ArrayList<OrderItem>> getNotEmptyTablesOrdersHashMap() {

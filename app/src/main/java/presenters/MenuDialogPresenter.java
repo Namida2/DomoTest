@@ -46,7 +46,11 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
             view.showMenuItemDishDialog(orderItem);
         });
         model.setMenuItemAdapter(adapter);
-        view.onMenuDialogModelComplete(model.getMenuItemAdapter());
+        try {
+            view.onMenuDialogModelComplete(model.getMenuItemAdapter());
+        } catch (Exception e) {
+            Log.d(TAG, "MenuDialogPresenter.setModelViewState: " + e.getMessage());
+        }
     }
     @Override
     public void onResume () {

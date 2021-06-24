@@ -12,6 +12,7 @@ public interface CookDetailOrderActivityInterface {
         CookDetailOrderItemsRecyclerViewAdapter getRecyclerViewAdapter();
     }
     interface View {
+        String getTableNumber();
         void showSetDishReadyDialog (ReadyDish dishData);
         void setViewData();
         void onError(int errorCode);

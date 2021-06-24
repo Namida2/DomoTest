@@ -114,7 +114,7 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     public int getItemCount() {
         return orderItemsArrayList.size();
     }
-    public void addOrder(OrderItem order) {
+    public void addOrderItem(OrderItem order) {
         this.orderItemsArrayList.add(order);
         this.notifyDataSetChanged();
     }
