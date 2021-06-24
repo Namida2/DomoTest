@@ -67,7 +67,14 @@ public class EditOrderDialog extends DialogFragment {
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
-                orderItem.setCount(Integer.parseInt(dishCount.getText().toString()));
+                int count;
+                try {
+                    count = Integer.parseInt(dishCount.getText().toString());
+                    if(count == 0) count = 1;
+                } catch (Exception e) {
+                    count = 1;
+                }
+                orderItem.setCount(count);
                 orderItem.setCommentary(commentary.getText().toString());
                 notifyOrderDataChangedConsumer.accept(orderItem);
                 isExist.set(false);

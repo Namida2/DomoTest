@@ -61,9 +61,15 @@ public class AddDishAlertDialog extends DialogFragment {
             .debounce(150, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
+                int count;
+                try {
+                    count = Integer.parseInt(dishCount.getText().toString());
+                    if(count == 0) count = 1;
+                } catch (Exception e) {
+                    count = 1;
+                }
                 OrderItem orderItem = new OrderItem(
-                    dish, commentary.getText().toString(),
-                    Integer.parseInt(dishCount.getText().toString()));
+                    dish, commentary.getText().toString(), count);
                 notifyOrderAdapterConsumer.accept(orderItem);
                 resetIsPressed.accept(false);
                 this.dismiss();

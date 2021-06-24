@@ -227,14 +227,15 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
                                         + orderItem.getCommentary()), orderItem);
                             }
                             data.put(SplashScreenActivityModel.FIELD_FIELD_TABLE_NAME, OrderActivityModel.DOCUMENT_TABLE + tableNumber);
-                            docRefOrdersListener.set(data);
+                            transaction.set(docRefOrdersListener, data);
                             return true;
                         });
                     }
                     else Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: " + task.getException());
                 }).addOnCompleteListener(task -> {
-                    if(task.isSuccessful())
+                    if(task.isSuccessful()) {
                         Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: SUCCESS");
+                    }
                     else Log.d(TAG, "OrderActivityPresenter.acceptAndWriteOrderToDb: " + task.getException());
                 });
 
