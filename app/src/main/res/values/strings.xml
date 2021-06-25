@@ -27,6 +27,9 @@
     <string name="error_alert_dialog_dish_already_added_title">Это блюдо уже добавлено</string>
     <string name="error_alert_dialog_dish_already_added_text">Если необходимо изменить количество порций этого блюда, воспользуйтесь меню редактирования.</string>
 
+    <string name="error_alert_dialog_wrong_administrator_password_title">Ошибка</string>
+    <string name="error_alert_dialog_wrong_administrator_password_text">Неверный пароль администратора</string>
+
     <string name="table_menu_dialog_delete_order_text">Вы действительно хотите удалить этот столик?</string>
     <string name="tables">Столики</string>
     <string name="orders">Заказы</string>

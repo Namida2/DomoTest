@@ -1,12 +1,11 @@
 package com.example.testfirebase.order;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -16,7 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testfirebase.R;
@@ -43,6 +44,7 @@ import tools.EmployeeData;
 import tools.Pair;
 
 import static com.example.testfirebase.mainActivityFragments.TablesFragment.EXTRA_TAG;
+import static registration.LogInActivity.TAG;
 
 
 public class OrderActivity extends AppCompatActivity implements GuestCountDialogOrderActivityInterface.Activity.MyView,
@@ -74,7 +76,6 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getPermission();
         initialisation();
-
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initialisation () {
@@ -99,7 +100,11 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         setGuestCountDialogView();
         guestCountDialog = new GuestsCountBottomSheetDialog(guestCountDialogView);
         new Handler().postDelayed(() -> {
-            guestCountDialog.show(getSupportFragmentManager(), "");
+            try {
+                guestCountDialog.show(getSupportFragmentManager(), "");
+            } catch (Exception e) {
+                Log.d(TAG,"OrderActivity.initialisation: " + e.getMessage());
+            }
         }, 10);
 
         menuDialogPresenter = new MenuDialogPresenter(this);
@@ -142,18 +147,37 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     }
     //----------MENU
     @Override
-    public void onMenuDialogModelComplete(MenuRecyclerViewAdapter adapter) {
+    public RecyclerView onMenuDialogModelComplete(MenuRecyclerViewAdapter adapter) {
         View contentView = View.inflate(this, R.layout.dialog_menu, null);
+        FloatingActionButton fba = contentView.findViewById(R.id.floating_action_button);
         RecyclerView recyclerView = contentView.findViewById(R.id.menu_recycler_view);
         recyclerView.setAdapter(adapter);
         menuDialog = new MenuBottomSheetDialog(contentView);
         this.menuDialogView = contentView;
+        RxView.clicks(fba)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(unit -> {
+               RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(this);
+                smoothScroller.setTargetPosition(0);
+                recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);
+            });
+        return recyclerView;
     }
     @Override
     public void onMenuDialogError(int errorCode) {
         if(!ErrorAlertDialog.isIsExist())
             ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
     }
+
+    @Override
+    public RecyclerView getCategoryNamesRecyclerView() {
+        View view = View.inflate(this, R.layout.layout_category_names_container, null);
+        RecyclerView recyclerView = view.findViewById(R.id.category_name_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.HORIZONTAL, false));
+        return recyclerView;
+    }
+
     @Override
     public void showMenuItemDishDialog(Dish dish) {
         AddDishAlertDialog dialog = AddDishAlertDialog.getNewInstance( orderItem -> {
@@ -203,13 +227,11 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
         }
         return true;
     }
-
     @Override
     public void onError(int errorCode) {
         if(!ErrorAlertDialog.isIsExist())
             ErrorAlertDialog.getNewInstance(errorCode).show(getSupportFragmentManager(), "");
     }
-
     @Override
     public void showEditOrderItemDialog(OrderItem orderItem) {
         if(!EditOrderDialog.isExist()) {

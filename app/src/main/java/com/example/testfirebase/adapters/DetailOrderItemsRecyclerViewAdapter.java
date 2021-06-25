@@ -50,7 +50,7 @@ public class DetailOrderItemsRecyclerViewAdapter extends RecyclerView.Adapter<De
             super(itemView);
             container_large = itemView.findViewById(R.id.order_item_container_large);
             container = itemView.findViewById(R.id.order_item_container);
-            categoryName = itemView.findViewById(R.id.category_name);
+            categoryName = itemView.findViewById(R.id.line);
             name = itemView.findViewById(R.id.dish_name);
             weight = itemView.findViewById(R.id.dish_weight);
             cost = itemView.findViewById(R.id.dish_cost);

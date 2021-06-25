@@ -26,12 +26,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
+import dialogsTools.ErrorAlertDialog;
 import interfaces.ProfileFragmentInterface;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import presenters.ProfileFragmentPresenter;
 import registration.LogInActivity;
 import tools.Animations;
 import tools.EmployeeData;
+import tools.Network;
 
 import static registration.LogInActivity.TAG;
 
@@ -66,10 +68,20 @@ public class AdministratorProfileFragment extends Fragment implements ProfileFra
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                 firebaseAuth.signInWithEmailAndPassword(EmployeeData.email, EmployeeData.password).addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
-                        firebaseAuth.signOut();
-                        Intent logInActivity = new Intent(getContext(), LogInActivity.class);
-                        startActivity(logInActivity);
-                    } else  Log.d(TAG, "ProfileFragment.onCreateView" +  task.getException().toString());
+                        if(Network.isNetworkConnected(getContext())) {
+                            firebaseAuth.signOut();
+                            Intent logInActivity = new Intent(getContext(), LogInActivity.class);
+                            startActivity(logInActivity);
+                        } else if(!ErrorAlertDialog.isIsExist())
+                                ErrorAlertDialog.getNewInstance(ErrorAlertDialog.INTERNET_CONNECTION)
+                                    .show(getActivity().getSupportFragmentManager(), "");
+                    } else {
+                        if(!ErrorAlertDialog.isIsExist()) {
+                            ErrorAlertDialog.getNewInstance(ErrorAlertDialog.INTERNET_CONNECTION)
+                                .show(getActivity().getSupportFragmentManager(), "");
+                        }
+                        Log.d(TAG, "ProfileFragment.onCreateView" + task.getException().toString());
+                    }
                 });
             });
         //Animations.Companion.showView(constraintLayout);

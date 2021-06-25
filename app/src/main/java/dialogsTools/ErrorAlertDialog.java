@@ -34,6 +34,7 @@ public class ErrorAlertDialog extends DialogFragment {
     public static final int PERMISSION_ERROR = 7;
     public static final int SOMETHING_WRONG = 8;
     public static final int DISH_ALREADY_ADDED = 9;
+    public static final int WRONG_ADMINISTRATOR_PASSWORD = 10;
 
     private Consumer<Object> acceptAction;
     private static AtomicBoolean isExist = new AtomicBoolean(false);
@@ -103,6 +104,10 @@ public class ErrorAlertDialog extends DialogFragment {
             case DISH_ALREADY_ADDED:
                 title.setText(R.string.error_alert_dialog_dish_already_added_title);
                 text.setText(R.string.error_alert_dialog_dish_already_added_text);
+                break;
+            case WRONG_ADMINISTRATOR_PASSWORD:
+                title.setText(R.string.error_alert_dialog_wrong_administrator_password_title);
+                text.setText(R.string.error_alert_dialog_wrong_administrator_password_text);
                 break;
         }
         builder.setView(view);

@@ -2,8 +2,12 @@ package presenters;
 
 import android.util.Log;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.testfirebase.adapters.CategoryNamesRecyclerViewAdapter;
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.order.Dish;
+import com.google.firebase.auth.GithubAuthCredential;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -33,25 +37,39 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
         if (model == null) {
             model = new MenuDialogModel();
             setModelDataState();
-        } else view.onMenuDialogModelComplete(model.getMenuItemAdapter());
+        } else {
+            RecyclerView menuRecyclerView = view.onMenuDialogModelComplete(model.getMenuItemAdapter());
+            model.getCategoryNamesAdapter().setMenuRecyclerView(menuRecyclerView);
+        }
     }
     @Override
     public void setModelViewState() {
+        CategoryNamesRecyclerViewAdapter categoryNamesRecyclerViewAdapter = new CategoryNamesRecyclerViewAdapter(
+            model.getCategoryNames()
+        );
+        RecyclerView recyclerView = view.getCategoryNamesRecyclerView();
+        recyclerView.setAdapter(categoryNamesRecyclerViewAdapter);
         MenuRecyclerViewAdapter adapter = new MenuRecyclerViewAdapter(
             model.getMenu(),
-            model.getCategoryNames()
+            model.getCategoryNames(),
+            recyclerView
         );
         adapter.setAcceptDishConsumer(orderItem -> {
             if(orderItem == null) return;
             view.showMenuItemDishDialog(orderItem);
         });
         model.setMenuItemAdapter(adapter);
+        model.setCategoryNamesAdapter(categoryNamesRecyclerViewAdapter);
         try {
-            view.onMenuDialogModelComplete(model.getMenuItemAdapter());
+            RecyclerView menuRecyclerView = view.onMenuDialogModelComplete(model.getMenuItemAdapter());
+            categoryNamesRecyclerViewAdapter.setMenuRecyclerView(menuRecyclerView);
         } catch (Exception e) {
             Log.d(TAG, "MenuDialogPresenter.setModelViewState: " + e.getMessage());
         }
+
     }
+
+
     @Override
     public void onResume () {
         if (model.getMenuItemAdapter() != null)

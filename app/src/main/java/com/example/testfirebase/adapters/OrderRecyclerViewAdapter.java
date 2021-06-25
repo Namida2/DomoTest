@@ -54,7 +54,7 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             container = itemView.findViewById(R.id.order_item_container);
-            categoryName = itemView.findViewById(R.id.category_name);
+            categoryName = itemView.findViewById(R.id.line);
             name = itemView.findViewById(R.id.dish_name);
             weight = itemView.findViewById(R.id.dish_weight);
             cost = itemView.findViewById(R.id.dish_cost);

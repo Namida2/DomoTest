@@ -31,7 +31,7 @@ public class RegistrationActivityPresenter implements RegistrationActivityInterf
                         Log.d(TAG, "NEW EMAIL");
                         Employee employee = Employee.getEmployee();
                         employee.setName(name);
-                        employee.setEmail(email);
+                        employee.setEmail(email.toLowerCase());
                         employee.setPassword(password);
                         employee.setPermission(false);
                         view.onSuccess();

@@ -25,7 +25,7 @@ public class LogInActivityPresenter implements LogInActivityInterface.Presenter 
         if( !isValid(email, password) )
             view.onError(ErrorAlertDialog.EMPTY_FIELD);
         else {
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            firebaseAuth.signInWithEmailAndPassword(email.toLowerCase(), password).addOnCompleteListener(task -> {
                 if (task.isSuccessful())
                     view.onSuccess();
                 else {

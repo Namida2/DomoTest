@@ -1,6 +1,7 @@
 package model;
 
 
+import com.example.testfirebase.adapters.CategoryNamesRecyclerViewAdapter;
 import com.example.testfirebase.adapters.MenuRecyclerViewAdapter;
 import com.example.testfirebase.order.Dish;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,6 +20,8 @@ public class MenuDialogModel implements MenuDialogOrderActivityInterface.Model {
     public static final String DISHES_COLLECTION_NAME = "dishes";
 
     private MenuRecyclerViewAdapter adapter;
+    private CategoryNamesRecyclerViewAdapter categoryNamesRecyclerViewAdapter;
+
 
     private Map<String, List<Dish>> menu;
     private ArrayList<DishCategoryInfo<String, Integer>> categoryNames;
@@ -29,6 +32,14 @@ public class MenuDialogModel implements MenuDialogOrderActivityInterface.Model {
         db = FirebaseFirestore.getInstance();
     }
 
+    @Override
+    public void setCategoryNamesAdapter(CategoryNamesRecyclerViewAdapter adapter) {
+        this.categoryNamesRecyclerViewAdapter = adapter;
+    }
+    @Override
+    public CategoryNamesRecyclerViewAdapter getCategoryNamesAdapter() {
+        return categoryNamesRecyclerViewAdapter;
+    }
     @Override
     public MenuRecyclerViewAdapter getMenuItemAdapter() {
         return adapter;
