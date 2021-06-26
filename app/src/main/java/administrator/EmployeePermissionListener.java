@@ -4,27 +4,22 @@ import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-
-import administrator.interfaces.EmployeePermissionInterface;
-import dialogsTools.ErrorAlertDialog;
 import model.SplashScreenActivityModel;
-import registration.Employee;
 import tools.Constants;
 import tools.EmployeeData;
 
 import static registration.LogInActivity.TAG;
 
-public class EmployeePermissionObservable {
+public class EmployeePermissionListener {
 
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static String employeeEmail = "";
     private static boolean permission;
 
-    public EmployeePermissionObservable () {
-        startListeningDocument();
+    public EmployeePermissionListener() {
+        startDocumentListening();
     }
-    private void startListeningDocument () {
+    private void startDocumentListening() {
         db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)
             .document(Constants.DOCUMENT_PERMISSION_LISTENER)
             .addSnapshotListener( (value, error) -> {

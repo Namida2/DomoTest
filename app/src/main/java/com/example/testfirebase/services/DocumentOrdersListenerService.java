@@ -171,7 +171,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
             notificationManager.createNotificationChannel(channel);
         }
     }
-    public void readTableData(Object data, boolean needToNotify) {
+    public void readTableData(Object data, boolean needNotify) {
         String tableName = (String) data;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         try {
@@ -198,7 +198,7 @@ public class DocumentOrdersListenerService extends Service implements DocumentOr
                             latestDishData = new HashMap<>(); // нужно tableInfo подписчикам
                             List<OrderItem> orderItemsList = task1.getResult().toObjects(OrderItem.class);
                             latestDishData.put(tableInfo.getTableName(), new ArrayList<>(orderItemsList));
-                            if (needToNotify) ordersNotifyAllSubscribers(latestDishData);
+                            if (needNotify) ordersNotifyAllSubscribers(latestDishData);
                             else firstCall.set(false);
                         } else
                             Log.d(TAG, "OrderActivityPresenter.setModelDataState: " + task1.getException());

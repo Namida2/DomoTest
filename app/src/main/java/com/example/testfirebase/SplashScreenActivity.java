@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.testfirebase.services.DocumentDishesListenerService;
 import com.example.testfirebase.services.DocumentOrdersListenerService;
 
-import administrator.EmployeePermissionObservable;
+import administrator.EmployeePermissionListener;
 import cook.CookMainActivity;
 import dialogsTools.ErrorAlertDialog;
 import interfaces.SplashScreenInterface;
@@ -36,7 +36,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashScr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        new EmployeePermissionObservable();
+        new EmployeePermissionListener();
 
         if(!DocumentOrdersListenerService.isExist())
             try {

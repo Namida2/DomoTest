@@ -79,7 +79,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
 
         myStartForeground();
 
-        disposable = getObservable()
+        disposable = getDocumentListenerObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.computation())
             .subscribe(data -> {
@@ -131,7 +131,7 @@ public class DocumentDishesListenerService extends Service implements DocumentDi
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private Observable<Map<String, Object>> getObservable (){
+    private Observable<Map<String, Object>> getDocumentListenerObservable() {
         return Observable.create(emitter -> {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             registration = db.collection(SplashScreenActivityModel.COLLECTION_LISTENERS_NAME)

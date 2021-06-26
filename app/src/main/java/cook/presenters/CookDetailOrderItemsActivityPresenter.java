@@ -54,7 +54,6 @@ public class CookDetailOrderItemsActivityPresenter implements CookDetailOrderAct
         Map<String, Object> readyHaspMap = new HashMap<>();
 //        if (readyDish.getOrderItem().isReady()) return;
 //        readyDish.getOrderItem().setReady(true);
-
         readyHaspMap.put(OrderActivityModel.DOCUMENT_READY_FIELD, false);
         model.getRecyclerViewAdapter().notifyItemChanged(readyDish.getPosition());
         model.getDatabase()

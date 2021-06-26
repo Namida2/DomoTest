@@ -199,7 +199,6 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
         data.put(SplashScreenActivityModel.FIELD_FIELD_TABLE_NAME, null);
         docRefOrdersListener.set(data).addOnCompleteListener(taskNull -> {
             if(taskNull.isSuccessful()) {
-
                 model.getDatabase().collection(OrderActivityModel.COLLECTION_ORDERS_NAME)
                     .document(OrderActivityModel.DOCUMENT_TABLE + tableNumber)
                     .collection(OrderActivityModel.COLLECTION_ORDER_ITEMS_NAME)

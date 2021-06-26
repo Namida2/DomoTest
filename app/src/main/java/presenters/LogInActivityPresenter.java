@@ -21,7 +21,6 @@ public class LogInActivityPresenter implements LogInActivityInterface.Presenter 
 
     @Override
     public void logIn(String email, String password) {
-
         if( !isValid(email, password) )
             view.onError(ErrorAlertDialog.EMPTY_FIELD);
         else {

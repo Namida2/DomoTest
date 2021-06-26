@@ -68,8 +68,6 @@ public class MenuDialogPresenter implements MenuDialogOrderActivityInterface.Pre
         }
 
     }
-
-
     @Override
     public void onResume () {
         if (model.getMenuItemAdapter() != null)
