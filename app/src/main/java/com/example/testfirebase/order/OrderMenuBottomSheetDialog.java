@@ -24,10 +24,12 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 public class OrderMenuBottomSheetDialog extends BottomSheetDialogFragment {
 
     private static Consumer<Boolean> orderWasAccepted;
+    private static Consumer<Boolean> showChangeGuestsCountDialog;
 
-    public static OrderMenuBottomSheetDialog getNewInstance (Consumer<Boolean> orderWasAccepted) {
+    public static OrderMenuBottomSheetDialog getNewInstance (Consumer<Boolean> orderWasAccepted, Consumer<Boolean> showChangeGuestsCountDialog) {
         OrderMenuBottomSheetDialog dialog = new OrderMenuBottomSheetDialog();
         OrderMenuBottomSheetDialog.orderWasAccepted = orderWasAccepted;
+        OrderMenuBottomSheetDialog.showChangeGuestsCountDialog = showChangeGuestsCountDialog;
         return dialog;
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -43,6 +45,14 @@ public class OrderMenuBottomSheetDialog extends BottomSheetDialogFragment {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(unit -> {
                 orderWasAccepted.accept(true);
+                dismiss();
+            });
+
+        RxView.clicks(contentView.findViewById(R.id.second_action))
+            .debounce(150, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(unit -> {
+                showChangeGuestsCountDialog.accept(true);
                 dismiss();
             });
 

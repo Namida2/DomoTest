@@ -84,7 +84,10 @@ public class AdministratorProfileFragment extends Fragment implements ProfileFra
                     }
                 });
             });
-        //Animations.Companion.showView(constraintLayout);
         return contentView;
+    }
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        Animations.Companion.showView(view);
     }
 }

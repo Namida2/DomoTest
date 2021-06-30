@@ -177,6 +177,7 @@ public class OrderActivityPresenter implements OrderActivityInterface.Presenter,
     }
     @Override
     public void acceptAndWriteOrderToDb(int tableNumber, int guestCount) {
+        if (guestCount == 0) guestCount = 1;
         ArrayList<OrderItem> aldOrderItems = new ArrayList<>();
         aldOrderItems.addAll(model.getOrderItems(tableNumber));
         ArrayList<OrderItem> newOrderItems = model.getAdapter().getOrderItemsArrayList();

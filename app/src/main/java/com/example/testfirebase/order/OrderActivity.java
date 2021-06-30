@@ -51,7 +51,6 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
     MenuDialogOrderActivityInterface.View, OrderActivityInterface.View, ToolsInterface.Notifiable {
 
     private OrderActivityInterface.Presenter orderPresenter;
-    private Consumer<Pair<OrderItem, String>> notifyOrderAdapterConsumer;
 
     private GuestCountDialogOrderActivityInterface.Activity.Presenter guestsCountDialogPresenter;
     private MenuDialogOrderActivityInterface.Presenter menuDialogPresenter;
@@ -121,11 +120,13 @@ public class OrderActivity extends AppCompatActivity implements GuestCountDialog
                 if(menuDialogView != null)
                     menuDialog.show(getSupportFragmentManager(), "");
             });
-        bottomAppBar.setNavigationOnClickListener(view -> { // add isExist
+        bottomAppBar.setNavigationOnClickListener(view -> {
+            if(!getPermission()) return;
             OrderMenuBottomSheetDialog dialog = OrderMenuBottomSheetDialog.getNewInstance(orderWasAccepted -> {
-                if(!getPermission()) return;
                 orderPresenter.acceptAndWriteOrderToDb(tableNumber, guestsCount);
                 finish();
+            }, showGuestsCountDialog -> {
+                guestCountDialog.show(getSupportFragmentManager(), "");
             });
             dialog.show(getSupportFragmentManager(), "");
         });

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,5 +37,10 @@ public class GuestsCountBottomSheetDialog extends BottomSheetDialogFragment {
     @Override
     public void onDismiss(@NonNull @NotNull DialogInterface dialog) {
         super.onDismiss(dialog);
+        if (contentView.getParent() != null)
+            ((ViewGroup) contentView.getParent() ).removeView(contentView);
+
     }
+
+
 }
