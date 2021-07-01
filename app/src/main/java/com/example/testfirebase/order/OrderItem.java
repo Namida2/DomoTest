@@ -26,10 +26,6 @@ public class OrderItem {
         this.count = orderItem.count;
     }
 
-    public int getInt () {
-        return 9;
-    }
-
     public OrderItem (Dish dish, String commentary, int count) {
         this.name = dish.getName();
         this.categoryName = dish.getCategoryName();
